@@ -1,52 +1,72 @@
 """
 STAGE 1: DOCUMENT PARSING
---------------------------
-Goal: Take an uploaded resume file (PDF or DOCX) and turn it into plain text
-that the rest of the pipeline can work with.
+-------------------------
+Reads PDF and DOCX resumes and converts them into plain text.
 
-Nothing in this file understands "skills" or "PII" — it only reads files.
+PDF parsing uses PyMuPDF.
+DOCX parsing uses python-docx.
+
+No LLM or external API is used here.
 """
+
 import os
-import pdfplumber
+import pymupdf
 import docx
 
 
 def parse_pdf(filepath: str) -> str:
-    """Read a PDF file page by page and join all the text together."""
+    """Extract text from PDF using PyMuPDF."""
+
     text_parts = []
-    with pdfplumber.open(filepath) as pdf:
-        for page in pdf.pages:
-            page_text = page.extract_text()  # returns None if a page has no extractable text
-            if page_text:
+
+    with pymupdf.open(filepath) as pdf:
+        for page in pdf:
+            page_text = page.get_text("text")
+
+            if page_text and page_text.strip():
                 text_parts.append(page_text)
+
     return "\n".join(text_parts)
 
 
 def parse_docx(filepath: str) -> str:
-    """Read a DOCX file paragraph by paragraph and join the text together."""
+    """Extract text from DOCX using python-docx."""
+
     document = docx.Document(filepath)
-    return "\n".join(p.text for p in document.paragraphs if p.text.strip())
+
+    return "\n".join(
+        paragraph.text
+        for paragraph in document.paragraphs
+        if paragraph.text.strip()
+    )
 
 
 def parse_resume(filepath: str) -> str:
-    """
-    Main entry point for Stage 1.
-    Looks at the file extension and calls the right parser.
-    Raises a clear error if the file is missing or unsupported.
-    """
+    """Main document parsing function."""
+
     if not os.path.exists(filepath):
-        raise FileNotFoundError(f"File not found: {filepath}")
+        raise FileNotFoundError(
+            f"File not found: {filepath}"
+        )
 
     ext = filepath.lower().rsplit(".", 1)[-1]
 
     if ext == "pdf":
         text = parse_pdf(filepath)
+
     elif ext == "docx":
         text = parse_docx(filepath)
+
     else:
-        raise ValueError(f"Unsupported file type '.{ext}'. Only .pdf and .docx are supported.")
+        raise ValueError(
+            f"Unsupported file type '.{ext}'. "
+            "Only .pdf and .docx are supported."
+        )
 
     if not text.strip():
-        raise ValueError(f"No readable text found in '{filepath}'. The file may be a scanned image without OCR.")
+        raise ValueError(
+            f"No readable text found in '{filepath}'. "
+            "The file may be scanned or image-based."
+        )
 
     return text

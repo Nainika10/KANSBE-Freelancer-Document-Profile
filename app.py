@@ -3,6 +3,9 @@ DEMO UI — Streamlit front-end for the existing pipeline.
 
 This file does NOT contain any extraction, detection, or validation
 logic of its own. It only:
+
+This file does NOT contain any extraction, detection, or validation
+logic of its own. It only:
   1. Lets the user upload a file through a browser
   2. Saves it to a temporary path
   3. Calls run_pipeline() from pipeline.py (the existing, tested logic)
@@ -104,10 +107,10 @@ def render_resume(client_view: dict):
 
     html = ['<div class="resume-box">']
 
-    # NOTE: the pipeline's whitelist schema does not extract a name or job
-    # title field at all (by design — see extractor.py / extractor_fallback.py
-    # schema). We never invent one, so no centered name/title header is
-    # shown here — only what the data actually supports.
+   # NOTE: the pipeline's whitelist schema does not extract a name or job
+   # title field at all (by design — see extractor_fallback.py schema).
+   # We never invent one, so no centered name/title header is shown here —
+   # only what the data actually supports.
 
     # ---- SKILLS ----
     if skills:
