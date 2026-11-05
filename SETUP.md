@@ -30,7 +30,13 @@ npm install
 npm start          # node server.js
 ```
 
-Create `backend/mycontacts-backend/.env` (not committed):
+Copy the template and fill in your own values:
+
+```bash
+cp backend/mycontacts-backend/.env.example backend/mycontacts-backend/.env
+```
+
+`backend/mycontacts-backend/.env`:
 
 ```env
 PORT=5001
@@ -113,12 +119,42 @@ localhost = "http://localhost:5001/api";
 
 ---
 
-## 4. Test the flow
+## 4. Demo data (one command)
+
+The repository has no database, so seed one demo client + freelancer + project + stored Client View:
+
+```bash
+cd backend/mycontacts-backend
+node seed-demo.js
+```
+
+This is **idempotent** and only touches records with the `DEMO` ids. It prints the login details when done:
+
+```
+email:    demo.client@example.com
+password: Demo@12345
+```
+
+Remove the demo records again:
+
+```bash
+node seed-demo.js --cleanup
+```
+
+---
+
+## 5. Test the flow
 
 1. Start **backend** (`:5001`), **docgen** (`:8002`), **frontend** (`:4200`).
-2. Log in as a **client**.
-3. Open a project → freelancer card → **View Resume** (under *Key Skills*).
-4. The page shows only the whitelisted sections; empty sections are hidden.
+2. Log in as a **client** with the demo account above.
+3. Open:
+
+   ```
+   http://localhost:4200/home/freelancer-list/P-DEMO-0001
+   ```
+
+4. On the freelancer card, click **View Resume** (under *Key Skills*).
+5. The page shows only the whitelisted sections; empty sections are hidden.
 
 ### Endpoints
 
