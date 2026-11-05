@@ -1,0 +1,59 @@
+/* ============================================================
+   POPPINS FONT STANDARDIZATION (400 REGULAR)
+   ============================================================ */
+:host {
+  font-family: 'Poppins', sans-serif !important;
+}
+
+:host *:not(i):not([class*="fa-"]):not([class*="bi-"]):not(.material-icons):not([class*="material-"]) {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 400;
+}
+
+h1, h2, h3, h4, h5, h6,
+input, textarea, select, button,
+.form-control, label, p,
+span:not(.material-icons):not([class*="material-"]):not([class*="fa-"]):not([class*="bi-"]),
+a, li, td, th {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 400;
+}
+
+.material-icons,
+.material-icons-outlined,
+.material-symbols-outlined,
+[class*="material-icons"],
+[class*="material-symbols"] {
+  font-family: 'Material Icons' !important;
+  font-weight: normal !important;
+  font-style: normal !important;
+  display: inline-block;
+  line-height: 1;
+  text-transform: none;
+  letter-spacing: normal;
+  word-wrap: normal;
+  white-space: nowrap;
+  direction: ltr;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+
+
+/* blogs.component.css */
+.blog-content p {
+  margin-bottom: 1.5rem;
+  color: #4a4a4a;
+}
+.blog-content .lead {
+  font-size: 1.25rem;
+  font-weight: 400;
+  color: #1a1a1a;
+  line-height: 1.7;
+}
+.hover-red:hover {
+  color: #dc3545 !important;
+}
+.tracking-wider {
+  letter-spacing: 1px;
+}

@@ -1,0 +1,643 @@
+<app-header></app-header>
+
+<div class="seo-page-wrapper">
+    <!-- Back Button Navigation -->
+    <div class="back-navigation-container">
+        <button class="btn-back-pill" (click)="navigateToBlogs()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
+                stroke-linejoin="round" class="back-arrow">
+                <line x1="19" y1="12" x2="5" y2="12"></line>
+                <polyline points="12 19 5 12 12 5"></polyline>
+            </svg>
+            <span>Back</span>
+        </button>
+    </div>
+
+    <!-- Section 1: Hero -->
+    <section class="hero-section">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-10">
+                    <h1 class="hero-title" *ngIf="!isGlobal">SEO EXPERTS <br> IN INDIA</h1>
+                    <div *ngIf="isGlobal">
+                        <h1 class="hero-title">SEO EXPERTS</h1>
+                        <h2 class="hero-subheading">AND HOW TO CHOOSE THE RIGHT ONE.</h2>
+                    </div>
+                    <p class="hero-description" *ngIf="!isGlobal">
+                        Growing online today is not just about having a website – it's about being discoverable. Search
+                        Engine
+                        Optimization (SEO) plays a major role in helping businesses appear in search results, attract
+                        the right
+                        audience, and build long-term visibility. But finding the right SEO expert in India can be
+                        confusing,
+                        especially with so many options promising quick results.
+                        <br><br>
+                        <strong>The real challenge isn't finding SEO specialists it's finding the right one who focuses
+                            on
+                            sustainable growth</strong>
+                    </p>
+                    <p class="hero-description" *ngIf="isGlobal">
+                        Before focusing on rankings, it's important to understand how SEO works and what your business
+                        actually needs.
+                        <br><br>
+                        <strong>SEO is not about quick visibility. It is about building a consistent and long term
+                            presence that survives algorithm shifts and market noise.</strong>
+                    </p>
+                    <button class="btn btn-hero" (click)="joinAsClient()">
+                        Create an Account <i class="bi bi-arrow-right ms-2"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 2: Comparison -->
+    <section class="comparison-section py-5">
+        <div class="container">
+            <div class="comparison-card">
+                <div class="comparison-content">
+                    <!-- Left: Problem -->
+                    <div class="problem-side">
+                        <div class="accent-title-box">
+                            <h2 *ngIf="!isGlobal">WHY ENDLESS SEARCHING <br> DOESN'T WORK.</h2>
+                            <h2 *ngIf="isGlobal">WHY THIS DECISION<br>MATTERS.</h2>
+                        </div>
+                        <p class="small-label mb-4" *ngIf="!isGlobal">Most platforms require you to:</p>
+                        <div *ngIf="!isGlobal">
+                            <div class="list-item">
+                                <span class="idx">01</span>
+                                <span class="text">COMPARE HUNDREDS OF PROFILES</span>
+                            </div>
+                            <div class="list-item">
+                                <span class="idx">02</span>
+                                <span class="text">EVALUATE UNCLEAR CLAIMS</span>
+                            </div>
+                            <div class="list-item">
+                                <span class="idx">03</span>
+                                <span class="text">MAKE DECISIONS WITHOUT CLARITY</span>
+                            </div>
+                            <p class="problem-footer-text">
+                                This leads to confusion and poor outcomes.
+                            </p>
+                        </div>
+                        <p *ngIf="isGlobal"
+                            style="color: #aeaeae; font-size: 1.05rem; line-height: 1.7; margin-top: 1.5rem;">
+                            Strategic alignment outweighs technical checklists. Your expert choice determines your
+                            digital narrative for years to come.
+                        </p>
+                    </div>
+
+                    <!-- Right: Solution -->
+                    <div class="solution-side">
+                        <div class="accent-title-box">
+                            <h2 *ngIf="!isGlobal">A BETTER APPROACH: <br> REQUIREMENT–BASED MATCHING</h2>
+                            <h2 *ngIf="isGlobal">START WITH CLARITY<br>BEFORE YOU BEGIN.</h2>
+                        </div>
+                        <div *ngIf="!isGlobal">
+                            <div class="list-item">
+                                <div class="check-icon"><i class="bi bi-check-lg"></i></div>
+                                <span class="text">THE RIGHT SEO EXPERTS CAN BE IDENTIFIED FASTER</span>
+                            </div>
+                            <div class="list-item">
+                                <div class="check-icon"><i class="bi bi-check-lg"></i></div>
+                                <span class="text">THE PROCESS BECOMES STRUCTURED</span>
+                            </div>
+                            <div class="list-item">
+                                <div class="check-icon"><i class="bi bi-check-lg"></i></div>
+                                <span class="text">YOU AVOID MISLEADING OPTIONS</span>
+                            </div>
+                        </div>
+                        <p *ngIf="isGlobal"
+                            style="color: #aeaeae; font-size: 1.05rem; line-height: 1.7; margin-top: 1.5rem;">
+                            Define what you are trying to achieve. Are you looking for authority, traffic, or
+                            conversions? Without a clear objective, SEO is just a series of disconnected tasks.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- HOW KANSBE WORKS -->
+    <section class="how-it-works-section">
+        <div class="container">
+            <h2 class="section-title center small-caps">HOW KANSBE WORKS</h2>
+            <div class="row g-4 mt-5 justify-content-center">
+                <ng-container *ngIf="!isGlobal">
+                    <div class="col-lg-2-4 col-md-6 d-flex" *ngFor="let step of workSteps">
+                        <div class="work-step h-100">
+                            <div class="step-num">{{ step.step }}</div>
+                            <h3>{{ step.title }}</h3>
+                            <p>{{ step.description }}</p>
+                        </div>
+                    </div>
+                </ng-container>
+                <ng-container *ngIf="isGlobal">
+                    <div class="col-lg-2-4 col-md-6 d-flex" *ngFor="let step of globalWorkSteps">
+                        <div class="work-step h-100">
+                            <div class="step-num">{{ step.step }}</div>
+                            <h3>{{ step.title }}</h3>
+                            <p class="step-subtitle"
+                                style="color: var(--kansbe-red); font-size: 0.75rem; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 0.8rem;">
+                                {{ step.subtitle }}</p>
+                            <p>{{ step.description }}</p>
+                        </div>
+                    </div>
+                </ng-container>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 4: What Makes Kansbe Different -->
+    <section class="differences-section py-5">
+        <div class="container">
+            <h2 class="section-heading mb-5" *ngIf="!isGlobal">WHAT MAKES <span class="text-danger">KANSBE</span>
+                DIFFERENT</h2>
+            <h2 class="section-heading mb-5" *ngIf="isGlobal">KEY AREAS OF <span class="text-danger">SEO</span> TO
+                CONSIDER.</h2>
+
+            <div class="grid-container" *ngIf="!isGlobal">
+                <!-- Large Card -->
+                <div class="grid-card large-card">
+                    <div class="icon-circle mb-4"><i class="bi bi-slash-circle text-danger fs-2"></i></div>
+                    <div class="card-content">
+                        <h3>No endless scrolling</h3>
+                        <p>We eliminate the fatigue of infinite search. Our interfaces are designed for immediate
+                            identification and
+                            rapid decision-making.</p>
+                    </div>
+                </div>
+
+                <!-- Image Card -->
+                <div class="grid-card curated-card">
+                    <div class="text-center overlay-content">
+                        <i class="bi bi-award text-danger fs-2 mb-2"></i>
+                        <h3>Curated <br> SEO Experts</h3>
+                    </div>
+                </div>
+
+                <!-- Small Card 1 -->
+                <div class="grid-card small-card">
+                    <div class="icon-box mb-4"><i class="bi bi-folder-check text-danger fs-2"></i></div>
+                    <h3>Requirement-based matching</h3>
+                    <p>Logic-driven alignment between your technical needs and expert specializations. Zero guesswork.
+                    </p>
+                </div>
+
+                <!-- Chart Card -->
+                <div class="grid-card chart-card">
+                    <div class="chart-box mb-4">
+                        <div class="bar bar-1"></div>
+                        <div class="bar bar-2"></div>
+                        <div class="bar bar-3"></div>
+                        <div class="bar bar-4 danger"></div>
+                    </div>
+                    <h3>Focus on clarity and long-term growth</h3>
+                    <p>Transforming complex data into actionable expansion strategies.</p>
+                </div>
+
+                <!-- Small Card 2 -->
+                <div class="grid-card small-card">
+                    <div class="icon-circle mb-4"><i class="bi bi-arrow-left-right text-danger fs-2"></i></div>
+                    <h3>Smooth end-to-end process</h3>
+                    <p>A unified workflow from initial audit to final implementation. Total continuity.</p>
+                </div>
+            </div>
+
+            <!-- GLOBAL: Key Areas of SEO grid -->
+            <div class="areas-grid" *ngIf="isGlobal">
+                <div class="area-box" *ngFor="let area of globalSeoAreas">
+                    <span class="num">{{area.num}}</span>
+                    <h4>{{area.title}}</h4>
+                    <p>{{area.desc}}</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 5: Why This Approach Works Better -->
+    <section class="approach-section py-5">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-6">
+                    <h2 class="approach-title" *ngIf="!isGlobal">WHY THIS APPROACH <br> WORKS BETTER</h2>
+                    <h2 class="approach-title" *ngIf="isGlobal">WHY THIS APPROACH<br>WORKS BETTER</h2>
+                </div>
+                <div class="col-md-6">
+                    <div class="approach-list">
+                        <div class="approach-item">
+                            <div class="dash"></div>
+                            <div class="content">
+                                <h3>DECISIONS BECOME FASTER</h3>
+                                <p>Eliminate the noise of unnecessary data points. Focus only on what drives the needle.
+                                </p>
+                            </div>
+                        </div>
+                        <div class="approach-item">
+                            <div class="dash"></div>
+                            <div class="content">
+                                <h3>STRATEGY BECOMES CLEARER</h3>
+                                <p>Transparent methodologies ensure every stakeholder understands the path to dominance.
+                                </p>
+                            </div>
+                        </div>
+                        <div class="approach-item">
+                            <div class="dash"></div>
+                            <div class="content">
+                                <h3>GROWTH BECOMES MORE SUSTAINABLE</h3>
+                                <p>Built on technical foundations, not temporary trends. Long-term authority is the
+                                    default state.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 6: Key Areas of SEO -->
+    <section class="key-areas-section py-5">
+        <div class="container">
+            <h2 class="section-heading text-center" *ngIf="!isGlobal">KEY AREAS OF <span class="text-danger">SEO</span>
+            </h2>
+            <h2 class="section-heading text-center" *ngIf="isGlobal">A MORE FOCUSED WAY<br>TO MOVE FORWARD.</h2>
+            <div class="areas-grid" *ngIf="!isGlobal">
+                <div class="area-box" *ngFor="let area of seoAreas">
+                    <span class="num">{{area.num}}</span>
+                    <h4>{{area.title}}</h4>
+                    <p>{{area.desc}}</p>
+                </div>
+            </div>
+            <div class="areas-grid" *ngIf="isGlobal">
+                <div class="area-box">
+                    <span class="num"><i class="bi bi-x-circle text-danger"></i></span>
+                    <h4>No endless searching</h4>
+                    <p>Stop browsing generic lists. Get direct access to curated expertise.</p>
+                </div>
+                <div class="area-box">
+                    <span class="num"><i class="bi bi-x-circle text-danger"></i></span>
+                    <h4>No unnecessary noise</h4>
+                    <p>Focus only on the strategies that impact your specific bottom line.</p>
+                </div>
+                <div class="area-box">
+                    <span class="num"><i class="bi bi-x-circle text-danger"></i></span>
+                    <h4>No unclear strategies</h4>
+                    <p>Transparency in every deliverable, from keyword choice to backlink profile.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- REGION SECTION -->
+    <section class="region-section">
+        <div class="container">
+            <div class="region-card">
+                <div class="row align-items-center">
+                    <div class="col-lg-6">
+                        <h2 class="region-title" *ngIf="!isGlobal">Looking for a perfect SEO Expert<br>in your region?
+                        </h2>
+                        <h2 class="region-title" *ngIf="isGlobal">Looking for a perfect SEO Expert<br>in your region?
+                        </h2>
+                        <p class="region-subtitle" *ngIf="!isGlobal">Connect with elite professionals in India's major
+                            tech and creative
+                            hubs.</p>
+                        <p class="region-subtitle" *ngIf="isGlobal" style="color: rgba(255, 255, 255, 0.6);">Connect
+                            with elite professionals in major global tech and creative hubs.</p>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="city-grid" *ngIf="!isGlobal">
+                            <a [routerLink]="['/hire-freelancers-in-noida']" [queryParams]="{ from: 'seo-page' }"
+                                class="city-link">
+                                <span>Noida</span>
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                    stroke-linecap="round" stroke-linejoin="round">
+                                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                                    <polyline points="12 5 19 12 12 19"></polyline>
+                                </svg>
+                            </a>
+                            <a [routerLink]="['/hire-freelancers-in-hyderabad']" [queryParams]="{ from: 'seo-page' }"
+                                class="city-link">
+                                <span>Hyderabad</span>
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                    stroke-linecap="round" stroke-linejoin="round">
+                                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                                    <polyline points="12 5 19 12 12 19"></polyline>
+                                </svg>
+                            </a>
+                            <a [routerLink]="['/hire-freelancers-in-bengaluru']" [queryParams]="{ from: 'seo-page' }"
+                                class="city-link">
+                                <span>Bangalore</span>
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                    stroke-linecap="round" stroke-linejoin="round">
+                                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                                    <polyline points="12 5 19 12 12 19"></polyline>
+                                </svg>
+                            </a>
+                            <a [routerLink]="['/hire-freelancers-in-mumbai']" [queryParams]="{ from: 'seo-page' }"
+                                class="city-link">
+                                <span>Mumbai</span>
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                    stroke-linecap="round" stroke-linejoin="round">
+                                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                                    <polyline points="12 5 19 12 12 19"></polyline>
+                                </svg>
+                            </a>
+                            <a [routerLink]="['/hire-freelancers-in-pune']" [queryParams]="{ from: 'seo-page' }"
+                                class="city-link">
+                                <span>Pune</span>
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                    stroke-linecap="round" stroke-linejoin="round">
+                                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                                    <polyline points="12 5 19 12 12 19"></polyline>
+                                </svg>
+                            </a>
+                            <a [routerLink]="['/hire-freelancers-in-chennai']" [queryParams]="{ from: 'seo-page' }"
+                                class="city-link">
+                                <span>Chennai</span>
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                    stroke-linecap="round" stroke-linejoin="round">
+                                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                                    <polyline points="12 5 19 12 12 19"></polyline>
+                                </svg>
+                            </a>
+                        </div>
+
+                        <!-- GLOBAL city grid -->
+                        <div class="city-grid" *ngIf="isGlobal">
+                            <a [routerLink]="['/seo-experts-india']" class="city-link">
+                                <span>India</span>
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                    stroke-linecap="round" stroke-linejoin="round">
+                                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                                    <polyline points="12 5 19 12 12 19"></polyline>
+                                </svg>
+                            </a>
+                            <a (click)="showComingSoon('UK')" class="city-link"
+                                [class.active-soon]="activeComingSoon === 'UK'">
+                                <div class="city-content">
+                                    <span>UK</span>
+                                    <svg *ngIf="activeComingSoon === 'UK'" viewBox="0 0 24 24" fill="none"
+                                        stroke="currentColor" stroke-width="2" class="lock-icon">
+                                        <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                                        <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                                    </svg>
+                                </div>
+                                <svg *ngIf="activeComingSoon !== 'UK'" viewBox="0 0 24 24" fill="none"
+                                    stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round">
+                                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                                    <polyline points="12 5 19 12 12 19"></polyline>
+                                </svg>
+                                <span class="soon-dot" *ngIf="activeComingSoon === 'UK'"></span>
+                            </a>
+                            <a (click)="showComingSoon('Dubai')" class="city-link"
+                                [class.active-soon]="activeComingSoon === 'Dubai'">
+                                <div class="city-content">
+                                    <span>Dubai</span>
+                                    <svg *ngIf="activeComingSoon === 'Dubai'" viewBox="0 0 24 24" fill="none"
+                                        stroke="currentColor" stroke-width="2" class="lock-icon">
+                                        <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                                        <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                                    </svg>
+                                </div>
+                                <svg *ngIf="activeComingSoon !== 'Dubai'" viewBox="0 0 24 24" fill="none"
+                                    stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round">
+                                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                                    <polyline points="12 5 19 12 12 19"></polyline>
+                                </svg>
+                                <span class="soon-dot" *ngIf="activeComingSoon === 'Dubai'"></span>
+                            </a>
+                            <a (click)="showComingSoon('Singapore')" class="city-link"
+                                [class.active-soon]="activeComingSoon === 'Singapore'">
+                                <div class="city-content">
+                                    <span>Singapore</span>
+                                    <svg *ngIf="activeComingSoon === 'Singapore'" viewBox="0 0 24 24" fill="none"
+                                        stroke="currentColor" stroke-width="2" class="lock-icon">
+                                        <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                                        <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                                    </svg>
+                                </div>
+                                <svg *ngIf="activeComingSoon !== 'Singapore'" viewBox="0 0 24 24" fill="none"
+                                    stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round">
+                                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                                    <polyline points="12 5 19 12 12 19"></polyline>
+                                </svg>
+                                <span class="soon-dot" *ngIf="activeComingSoon === 'Singapore'"></span>
+                            </a>
+                            <a (click)="showComingSoon('USA')" class="city-link"
+                                [class.active-soon]="activeComingSoon === 'USA'">
+                                <div class="city-content">
+                                    <span>USA</span>
+                                    <svg *ngIf="activeComingSoon === 'USA'" viewBox="0 0 24 24" fill="none"
+                                        stroke="currentColor" stroke-width="2" class="lock-icon">
+                                        <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                                        <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                                    </svg>
+                                </div>
+                                <svg *ngIf="activeComingSoon !== 'USA'" viewBox="0 0 24 24" fill="none"
+                                    stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round">
+                                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                                    <polyline points="12 5 19 12 12 19"></polyline>
+                                </svg>
+                                <span class="soon-dot" *ngIf="activeComingSoon === 'USA'"></span>
+                            </a>
+                            <a (click)="showComingSoon('Australia')" class="city-link"
+                                [class.active-soon]="activeComingSoon === 'Australia'">
+                                <div class="city-content">
+                                    <span>Australia</span>
+                                    <svg *ngIf="activeComingSoon === 'Australia'" viewBox="0 0 24 24" fill="none"
+                                        stroke="currentColor" stroke-width="2" class="lock-icon">
+                                        <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                                        <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                                    </svg>
+                                </div>
+                                <svg *ngIf="activeComingSoon !== 'Australia'" viewBox="0 0 24 24" fill="none"
+                                    stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round">
+                                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                                    <polyline points="12 5 19 12 12 19"></polyline>
+                                </svg>
+                                <span class="soon-dot" *ngIf="activeComingSoon === 'Australia'"></span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 7: FAQ -->
+    <section class="faq-section">
+        <div class="container">
+            <h2 class="faq-title">Frequently Asked Questions</h2>
+            <div class="faq-list">
+                <ng-container *ngIf="!isGlobal">
+                    <div class="faq-item" *ngFor="let faq of faqs; let i = index">
+                        <div class="faq-header" (click)="toggleFaq(i)">
+                            <h3>{{ faq.question }}</h3>
+                            <svg class="chevron-icon" [class.rotated]="faq.isOpen" viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" stroke-width="2">
+                                <path d="M6 9l6 6 6-6" />
+                            </svg>
+                        </div>
+                        <div class="faq-body" *ngIf="faq.isOpen">
+                            <p>{{ faq.answer }}</p>
+                        </div>
+                    </div>
+                </ng-container>
+                <ng-container *ngIf="isGlobal">
+                    <div class="faq-item" *ngFor="let faq of globalFaqs; let i = index">
+                        <div class="faq-header" (click)="toggleFaq(i)">
+                            <h3>{{ faq.question }}</h3>
+                            <svg class="chevron-icon" [class.rotated]="faq.isOpen" viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" stroke-width="2">
+                                <path d="M6 9l6 6 6-6" />
+                            </svg>
+                        </div>
+                        <div class="faq-body" *ngIf="faq.isOpen">
+                            <p>{{ faq.answer }}</p>
+                        </div>
+                    </div>
+                </ng-container>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER SECTION - 100% PARITY -->
+    <footer class="kansbe-footer-section" id="contact">
+        <div class="footer-container container-fluid">
+            <div class="footer-top-row">
+                <div class="footer-brand">
+                    <img src="assets/pics.webp" alt="KANSBE" class="footer-primary-logo">
+                    <p class="footer-tagline">
+                        For people who care about how their days feel, who value freedom, balance, clarity, and build
+                        everything
+                        else around that.
+                    </p>
+                </div>
+                <div class="footer-social-block">
+                    <h4 class="footer-heading">CONNECT WITH US</h4>
+                    <div class="footer-social-icons">
+                        <a *ngFor="let social of socialLinks" [href]="social.url" class="social-btn" target="_blank"
+                            rel="noopener noreferrer" [attr.aria-label]="social.name">
+                            <span class="social-tooltip">{{ social.name }}</span>
+                            <svg *ngIf="social.icon === 'linkedin'" viewBox="0 0 24 24">
+                                <path
+                                    d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z" />
+                            </svg>
+                            <svg *ngIf="social.icon === 'instagram'" viewBox="0 0 24 24">
+                                <path
+                                    d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" />
+                            </svg>
+                            <svg *ngIf="social.icon === 'x'" viewBox="0 0 24 24">
+                                <path
+                                    d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+                            </svg>
+                            <svg *ngIf="social.icon === 'facebook'" viewBox="0 0 24 24">
+                                <path
+                                    d="M22.675 0h-21.35c-.732 0-1.325.593-1.325 1.325v21.351c0 .731.593 1.324 1.325 1.324h11.495v-9.294h-3.128v-3.622h3.128v-2.671c0-3.1 1.893-4.788 4.659-4.788 1.325 0 2.463.099 2.795.143v3.24l-1.918.001c-1.504 0-1.795.715-1.795 1.763v2.313h3.587l-.467 3.622h-3.12v9.293h6.116c.73 0 1.323-.593 1.323-1.325v-21.35c0-.732-.593-1.325-1.325-1.325z" />
+                            </svg>
+                        </a>
+                    </div>
+                    <div class="footer-email-block">
+                        <p class="footer-heading" style="margin-bottom: 10px;">FOR ANY SUPPORT</p>
+                        <a href="mailto:support@kansbe.com" class="footer-email">support@kansbe.com</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="footer-divider"></div>
+
+            <div class="footer-mid-row row">
+                <div class="col-lg-4 col-md-6 footer-nav-col">
+                    <h4 class="footer-heading">Company</h4>
+                    <nav class="footer-links-list">
+                        <button (click)="scrollToTop()" class="f-link">Home</button>
+                        <button (click)="navigateToAbout()" class="f-link">About Kansbe</button>
+                        <button (click)="navigateToHowItWorks()" class="f-link">How Kansbe Works</button>
+                        <button (click)="navigateToWhyFreelancers()" class="f-link">Why Kansbe Freelancers</button>
+                        <button (click)="navigateToBlogs()" class="f-link">Blogs</button>
+                    </nav>
+                </div>
+
+                <div class="col-lg-4 col-md-6 footer-nav-col">
+                    <h4 class="footer-heading">Independence</h4>
+                    <nav class="footer-links-list">
+                        <button (click)="registerAsFreelancer()" class="f-link">For Freelancers</button>
+                        <button (click)="registerAsClient()" class="f-link">For Clients</button>
+                        <button (click)="toggleModal()" class="f-link">Join the Network</button>
+                    </nav>
+                </div>
+
+                <div class="col-lg-4 col-md-12 footer-nav-col">
+                    <h4 class="footer-heading">Legal</h4>
+                    <nav class="footer-links-list">
+                        <button (click)="openModal('privacy')" class="f-link">Privacy Statement</button>
+                        <button (click)="openModal('terms')" class="f-link">Terms & Conditions</button>
+                        <span class="f-location">Singapore Inc. HQ</span>
+                    </nav>
+                </div>
+            </div>
+
+            <div class="footer-bottom-row">
+                <div class="copyright-container">
+                    <span class="copyright-text">© {{ currentYear }} KANSBE. ALL RIGHTS RESERVED.</span>
+                </div>
+                <div class="footer-accent-line"></div>
+            </div>
+        </div>
+
+        <!-- PRIVACY/TERMS MODAL -->
+        <div class="modal-overlay" *ngIf="isModalOpen" (click)="closeModal()">
+            <div class="modal-box" (click)="$event.stopPropagation()">
+                <div class="modal-content-wrapper">
+                    <div *ngIf="modalType === 'privacy'" class="modal-content">
+                        <h2>Privacy Policy and Data Security</h2>
+                        <p><strong>Kansbe privacy policy last updated on {{ currentYear }}</strong></p>
+                        <h3>Data Sharing & Confidentiality</h3>
+                        <p>Kansbe does not sell or share your personal data with other clients or freelancers. Only
+                            profile details
+                            necessary for matching and collaboration are used within the platform.</p>
+                        <h3>Current Security Status (MVP Disclosure)</h3>
+                        <p>Kansbe is operating as a Minimum Viable Product (MVP). While we use standard security
+                            practices, our
+                            platform infrastructure does not yet provide the comprehensive protection typical of fully
+                            scaled
+                            services.</p>
+                    </div>
+                    <div *ngIf="modalType === 'terms'" class="modal-content">
+                        <h2>KANSBE – Terms & Conditions</h2>
+                        <h3>Platform Usage</h3>
+                        <ul>
+                            <li>KANSBE connects clients and freelancers — it does not manage project execution.</li>
+                            <li>All communication and deals must stay within the platform.</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="close-btn" (click)="closeModal()">Close</button>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- FIXED JOIN US -->
+    <div class="fixed-join-us-wrapper" [class.near-footer]="isNearFooter">
+        <button class="btn-join-fixed" (click)="toggleModal()">Join Us</button>
+
+        <div class="modal-buttons-fixed" [class.show]="showModal">
+            <div class="pill-container">
+                <button class="pill-button pill-left" (click)="startAsFreelancer()">
+                    Start as Freelancer
+                </button>
+                <div class="pill-divider"></div>
+                <button class="pill-button pill-right" (click)="joinAsClient()">
+                    Join as Client
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

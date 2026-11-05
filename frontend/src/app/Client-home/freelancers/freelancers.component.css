@@ -1,0 +1,332 @@
+/* ============================================================
+   POPPINS FONT STANDARDIZATION (400 REGULAR)
+   ============================================================ */
+:host {
+  font-family: 'Poppins', sans-serif !important;
+}
+
+:host *:not(i):not([class*="fa-"]):not([class*="bi-"]):not(.material-icons):not([class*="material-"]) {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 400;
+}
+
+h1, h2, h3, h4, h5, h6,
+input, textarea, select, button,
+.form-control, label, p,
+span:not(.material-icons):not([class*="material-"]):not([class*="fa-"]):not([class*="bi-"]),
+a, li, td, th {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 400;
+}
+
+.material-icons,
+.material-icons-outlined,
+.material-symbols-outlined,
+[class*="material-icons"],
+[class*="material-symbols"] {
+  font-family: 'Material Icons' !important;
+  font-weight: normal !important;
+  font-style: normal !important;
+  display: inline-block;
+  line-height: 1;
+  text-transform: none;
+  letter-spacing: normal;
+  word-wrap: normal;
+  white-space: nowrap;
+  direction: ltr;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* Dashboard & Layout Base Matching client-projects */
+.dashboard-wrapper {
+  background-color: #060606;
+  background-image: url('/assets/projectpage bi.png');
+  background-position: left center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-attachment: fixed;
+  min-height: 100vh;
+  min-height: 100dvh;
+  color: #ffffff;
+  padding-top: 96px;
+  padding-bottom: 40px;
+  position: relative;
+}
+
+.card-premium {
+  background: linear-gradient(135deg,
+      rgba(255, 255, 255, 0.07) 0%,
+      rgba(255, 255, 255, 0.015) 40%,
+      rgba(255, 255, 255, 0.003) 70%,
+      rgba(255, 255, 255, 0.04) 100%);
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-top: 1.5px solid rgba(255, 255, 255, 0.42);
+  border-left: 1.5px solid rgba(255, 255, 255, 0.28);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  border-right: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 
+    inset 0 1.5px 2px 0 rgba(255, 255, 255, 0.42),
+    inset 0 -1.5px 2px 0 rgba(0, 0, 0, 0.5),
+    inset 0 0 12px 0 rgba(255, 255, 255, 0.03),
+    0 20px 48px -10px rgba(0, 0, 0, 0.85),
+    0 6px 14px rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(18px) saturate(110%) brightness(1.03);
+  -webkit-backdrop-filter: blur(18px) saturate(110%) brightness(1.03);
+  margin-bottom: 24px;
+  color: #ffffff;
+}
+
+/* Sidebar Reused */
+.profile-banner { 
+  height: 80px; 
+  background-color: rgba(255, 1, 0, 0.25);
+  background-size: cover;
+  background-position: center;
+  border-radius: 20px 20px 0 0;
+  transition: all 0.3s ease;
+}
+
+.avatar-wrapper { 
+  width: 90px; 
+  height: 90px; 
+  margin: -45px auto 10px; 
+  position: relative; 
+  border: 4px solid rgba(255, 255, 255, 0.2); 
+  border-radius: 50%; 
+  overflow: hidden; 
+  background: #111; 
+}
+
+.avatar-wrapper img { 
+  width: 100%; 
+  height: 100%; 
+  object-fit: cover; 
+}
+
+.profile-stats { 
+  padding: 20px; 
+  font-size: 13px; 
+  font-weight: 400; 
+  color: rgba(255, 255, 255, 0.75); 
+}
+
+.stat-item { 
+  display: flex; 
+  justify-content: space-between; 
+  margin-bottom: 8px; 
+}
+
+.stat-value { 
+  color: #ffffff; 
+  font-weight: 400; 
+}
+
+.badge-active { 
+  background: rgba(255, 1, 0, 0.2); 
+  color: #FF0100; 
+  font-size: 10px; 
+  font-weight: 400; 
+  padding: 3px 10px; 
+  border-radius: 12px;
+  border: 1px solid rgba(255, 1, 0, 0.35);
+}
+
+.running-card { padding: 22px; }
+.running-project-item { margin-bottom: 16px; }
+.rp-header { display: flex; justify-content: space-between; font-size: 13px; font-weight: 400; margin-bottom: 6px; color: #ffffff; }
+.rp-pct { color: #FF0100; font-size: 12px; }
+.progress-thin { height: 4px; background: rgba(255, 255, 255, 0.1); border-radius: 2px; }
+.progress-fill { height: 100%; background: #FF0100; border-radius: 2px; }
+
+/* Scanning Card */
+.scanning-card { position: relative; overflow: hidden; }
+
+.icon-circle {
+  width: 68px; 
+  height: 68px; 
+  background: rgba(255, 1, 0, 0.15);
+  color: #FF0100; 
+  border-radius: 16px; 
+  display: flex;
+  align-items: center; 
+  justify-content: center; 
+  font-size: 28px;
+  margin: 0 auto;
+  border: 1px solid rgba(255, 1, 0, 0.3);
+}
+
+.scan-title { 
+  font-size: 26px; 
+  font-weight: 300 !important; 
+  color: #ffffff; 
+}
+
+.scan-subtitle { 
+  font-size: 14.5px; 
+  color: rgba(255, 255, 255, 0.75); 
+  line-height: 1.6; 
+}
+
+/* Progress Main */
+.scan-status-container { max-width: 80%; margin: 0 auto; }
+.status-label { font-size: 13.5px; font-weight: 400; color: #ffffff; }
+.status-percent { font-size: 13.5px; font-weight: 400; color: #FF0100; }
+
+.progress-main { 
+  height: 8px; 
+  background: rgba(255, 255, 255, 0.12); 
+  border-radius: 10px; 
+  overflow: hidden; 
+}
+
+.progress-bar-fill { 
+  height: 100%; 
+  background: linear-gradient(90deg, #FF0100 0%, #ff4d4d 100%); 
+  border-radius: 10px; 
+  transition: width 0.3s ease; 
+}
+
+/* Matching Visuals Avatar Scanner */
+.matching-visuals {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.avatar-scanner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+}
+
+.avatar-scanner img {
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.avatar-fade {
+  width: 50px;
+  height: 50px;
+  opacity: 0.4;
+  border: 2px solid rgba(255, 255, 255, 0.15);
+}
+
+.center-scan {
+  position: relative;
+}
+
+.avatar-active {
+  width: 72px;
+  height: 72px;
+  border: 3px solid #FF0100;
+  box-shadow: 0 0 20px rgba(255, 1, 0, 0.4);
+}
+
+.scan-line {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: #FF0100;
+  box-shadow: 0 0 8px #FF0100;
+  animation: scanAnim 2s infinite ease-in-out;
+}
+
+@keyframes scanAnim {
+  0% { top: 0%; opacity: 0; }
+  50% { opacity: 1; }
+  100% { top: 100%; opacity: 0; }
+}
+
+/* Steps Card */
+.steps-card {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.step-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  opacity: 0.45;
+  transition: all 0.3s ease;
+}
+
+.step-item.active {
+  opacity: 0.85;
+}
+
+.step-item.done {
+  opacity: 1;
+}
+
+.step-icon {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 14px;
+  flex-shrink: 0;
+}
+
+.step-item.done .step-icon {
+  background: rgba(46, 213, 115, 0.2);
+  color: #2ed573;
+}
+
+.step-item.active:not(.done) .step-icon {
+  background: rgba(255, 1, 0, 0.2);
+  color: #FF0100;
+}
+
+.step-content h6 {
+  font-size: 14.5px;
+  color: #ffffff;
+  font-weight: 400;
+}
+
+.step-content p {
+  font-size: 12.5px;
+  color: rgba(255, 255, 255, 0.65) !important;
+}
+
+.list-header h2 {
+  font-size: 28px;
+  font-weight: 300 !important;
+  color: #ffffff;
+}
+
+.list-header .section-title {
+  font-size: 16px;
+  color: rgba(255, 255, 255, 0.75);
+  font-weight: 400;
+}
+
+/* Testimonial & Active Projects Card */
+.testimonial-card .test-avatar {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin: 0 auto;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+}
+
+.test-quote {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.7) !important;
+}
+
+.text-muted-custom {
+  color: rgba(255, 255, 255, 0.65);
+  font-size: 13px;
+}

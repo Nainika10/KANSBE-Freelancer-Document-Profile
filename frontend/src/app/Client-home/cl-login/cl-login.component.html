@@ -1,0 +1,347 @@
+<div class="cl-page-wrapper">
+    <!-- Background Image -->
+    <div class="cl-bg-image"></div>
+    <div class="cl-bg-overlay"></div>
+
+    <!-- Header / Navbar -->
+    <header class="cl-header">
+        <div class="cl-header-inner container-fluid">
+            <div class="cl-logo" routerLink="/">
+                <img src="assets/pics.webp" alt="KANSBE" class="cl-logo-img">
+            </div>
+            <nav class="cl-nav d-none d-md-flex">
+                <a routerLink="/freelancerlogin" class="cl-nav-link">Freelancer</a>
+                <a routerLink="/clientlogin" class="cl-nav-link cl-nav-active">Client</a>
+            </nav>
+            <div class="cl-auth-buttons d-none d-sm-flex">
+                <a routerLink="/clientlogin" class="cl-login-btn-header">Login</a>
+                <a routerLink="/clientsignup" class="cl-signup-link">Signup</a>
+            </div>
+            <!-- Mobile hamburger -->
+            <button class="cl-hamburger d-md-none" [class.active]="mobileMenuOpen"
+                (click)="mobileMenuOpen = !mobileMenuOpen" aria-label="Toggle menu">
+                <span class="cl-hamburger-bar"></span>
+                <span class="cl-hamburger-bar"></span>
+                <span class="cl-hamburger-bar"></span>
+            </button>
+        </div>
+        <!-- Mobile dropdown menu -->
+        <div class="cl-mobile-menu" *ngIf="mobileMenuOpen">
+            <a routerLink="/freelancerlogin" class="cl-mobile-link" (click)="mobileMenuOpen = false">Freelancer</a>
+            <a routerLink="/clientlogin" class="cl-mobile-link cl-nav-active"
+                (click)="mobileMenuOpen = false">Client</a>
+            <a routerLink="/clientsignup" class="cl-mobile-link" (click)="mobileMenuOpen = false">Signup</a>
+            <a routerLink="/clientlogin" class="cl-mobile-signup-btn" (click)="mobileMenuOpen = false">Login</a>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="cl-main-content">
+        <div class="container-fluid h-100">
+            <div class="row h-100">
+                <!-- Left Section - Hero Text -->
+                <div class="col-lg-6 col-md-6 cl-hero-col">
+                    <div class="cl-hero-text">
+                        <h1 class="cl-hero-title">Welcome back, let's<br>build something<br><span
+                                class="cl-hero-red">GREAT</span>
+                        </h1>
+                        <p class="cl-hero-subtitle">Continue your projects and connect with freelancers.<br>Get things
+                            done smoothly and efficiently.</p>
+                    </div>
+                </div>
+
+                <!-- Right Section - Login Form -->
+                <div class="col-lg-5 col-md-6 offset-lg-1 cl-form-col">
+                    <div class="cl-form-card">
+                        <h2 class="cl-form-title">Client Login</h2>
+                        <p class="cl-form-sub">Sign in to your dashboard</p>
+
+                        <form #loginForm="ngForm" (ngSubmit)="login()" novalidate autocomplete="off">
+                            <!-- Email Field -->
+                            <div class="cl-field-group">
+                                <label class="cl-field-label">YOUR EMAIL</label>
+                                <input type="email" class="cl-input" placeholder="user@gmail.com" name="email"
+                                    [(ngModel)]="loginDetails.email" #email="ngModel" required
+                                    pattern="^[^\s@]+@[^\s@]+\.(com|co|in)$"
+                                    [class.cl-input-invalid]="email.invalid && (email.touched || submitted)" />
+                            </div>
+                            <p *ngIf="email.invalid && (email.touched || submitted)" class="cl-error-msg">
+                                <span *ngIf="email.errors?.['required']">Email is required.</span>
+                                <span *ngIf="email.errors?.['pattern'] && !email.errors?.['required']">
+                                    Please enter a valid email ending with .com, .co, or .in.
+                                </span>
+                            </p>
+
+                            <!-- Password Field -->
+                            <div class="cl-field-group">
+                                <label class="cl-field-label">PASSWORD</label>
+                                <div class="cl-password-wrap">
+                                    <input [type]="showPassword ? 'text' : 'password'"
+                                        class="cl-input cl-input-password" placeholder="••••••••" name="password"
+                                        [(ngModel)]="loginDetails.password" #password="ngModel" required minlength="8"
+                                        autocomplete="current-password"
+                                        [class.cl-input-invalid]="password.invalid && (password.touched || submitted)" />
+                                    <i class="fas cl-eye-icon" [class.fa-eye]="!showPassword"
+                                        [class.fa-eye-slash]="showPassword" (click)="togglePasswordVisibility()"
+                                        role="button" tabindex="0"
+                                        [attr.aria-label]="showPassword ? 'Hide password' : 'Show password'"></i>
+                                </div>
+                            </div>
+                            <p *ngIf="password.invalid && (password.touched || submitted)" class="cl-error-msg">
+                                Password is required (min 8 chars).
+                            </p>
+
+                            <div class="d-flex justify-content-between align-items-center mb-4">
+                                <!-- <div class="cl-remember-row">
+                                    <input type="checkbox" id="rememberMe" name="rememberMe" [(ngModel)]="rememberMe"
+                                        class="cl-checkbox" />
+                                    <label for="rememberMe" class="cl-remember-label">Remember me</label>
+                                </div> -->
+                                <a href="javascript:void(0)" class="cl-forgot-link" data-bs-toggle="modal"
+                                    data-bs-target="#forgotPasswordModal">Forgot Password?</a>
+                            </div>
+
+                            <!-- Login Button -->
+                            <button type="submit" class="cl-btn-login" [disabled]="isSubmitting">
+                                {{ isSubmitting ? 'LOGGING IN...' : 'LOGIN' }}
+                            </button>
+
+                            <div *ngIf="submitted && errorMessage" class="auth-api-error">
+                                <i class="fas fa-exclamation-circle"></i>
+                                <span>{{ errorMessage }}</span>
+                                <button type="button" *ngIf="needsVerification"
+                                    (click)="resendVerificationAndRedirect()" class="btn-verify-now"
+                                    style="margin-left: 10px; background: #ef2f2c; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer; font-size: 12px; font-weight: bold;">Verify
+                                    Now</button>
+                            </div>
+                            <!-- Google Login -->
+                            <div class="google-login-container">
+                                <div #googleLoginButton id="google-login-button"></div>
+                            </div>
+                        </form>
+
+                        <p class="cl-create-account">
+                            Don't have an account? <a routerLink="/clientsignup" class="cl-create-link">SIGN UP</a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="cl-footer">
+        <div class="container-fluid">
+            <div class="row align-items-center">
+                <div class="col-md-6 col-12 cl-footer-left">
+                    <span class="cl-copyright">&copy; 2026 KANSBE. ALL RIGHTS RESERVED.</span>
+                </div>
+                <div class="col-md-6 col-12 cl-footer-right">
+                    <a href="javascript:void(0)" (click)="activeModal = 'terms'" class="cl-footer-link">TERMS</a>
+                    <a href="javascript:void(0)" (click)="activeModal = 'privacy'" class="cl-footer-link">PRIVACY</a>
+                    <!-- <a routerLink="/support" class="cl-footer-link">SUPPORT</a> -->
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- TERMS & PRIVACY MODAL -->
+    <div class="modal-backdrop-custom" *ngIf="activeModal" (click)="closeModal()">
+        <div class="modal-box-custom" (click)="$event.stopPropagation()">
+            <button class="modal-close-custom" (click)="closeModal()" aria-label="Close popup">&times;</button>
+
+            <!-- TERMS & CONDITIONS -->
+            <div *ngIf="activeModal === 'terms'" class="modal-content-container">
+                <div class="modal-header-custom">
+                    <h3>KANSBE – Terms & Conditions</h3>
+                </div>
+                <div class="modal-body-scroll">
+                    <h4>Scope of These Terms</h4>
+                    <p>These Terms apply to all users of the KANSBE Platform: Freelancers, Clients, and Visitors. "You"
+                        refers
+                        to the specific user type where relevant. Clauses are clearly marked for each group.</p>
+
+                    <h4>Account Registration</h4>
+                    <ul>
+                        <li>You must register to access platform features.</li>
+                        <li>Provide accurate, up-to-date information.</li>
+                        <li>You're responsible for all activity under your account.</li>
+                        <li>Only one verified account is allowed per user.</li>
+                    </ul>
+
+                    <h4>Platform Usage</h4>
+                    <ul>
+                        <li>KANSBE connects clients and freelancers — it does not manage project execution.</li>
+                        <li>All communication and deals must stay within the platform.</li>
+                        <li>Subcontracting (giving the work to someone else) without permission is not allowed.</li>
+                    </ul>
+
+                    <h4>Payments & Fees</h4>
+                    <ul>
+                        <li>KANSBE may charge service fees or commissions.</li>
+                        <li>Payments go through secure, third-party gateways.</li>
+                        <li>Bypassing KANSBE for off-platform deals is strictly prohibited and will lead to a permanent
+                            ban.
+                        </li>
+                        <li>Refunds and cancellations follow KANSBE's policies.</li>
+                    </ul>
+
+                    <h4>Data Privacy & Protection</h4>
+                    <ul>
+                        <li>KANSBE complies with data laws and prioritizes user privacy.</li>
+                        <li>Users cannot share personal info (email, phone, social handles).</li>
+                        <li>Unauthorized data usage can result in legal action.</li>
+                        <li>KANSBE can audit your activity in case of misuse.</li>
+                    </ul>
+
+                    <h4>Prohibited Activities</h4>
+                    <ul>
+                        <li>Misrepresenting yourself or your services.</li>
+                        <li>Harassing or discriminating against others.</li>
+                        <li>Posting fake jobs or portfolios.</li>
+                        <li>Attempting off-platform payments or communication.</li>
+                        <li>Manipulating reviews.</li>
+                        <li>Creating multiple accounts.</li>
+                    </ul>
+
+                    <h4>Termination</h4>
+                    <ul>
+                        <li>KANSBE can suspend or delete your account for any violation.</li>
+                        <li>Inactivity for 6+ months may result in account removal.</li>
+                        <li>You can request account deletion at any time.</li>
+                    </ul>
+
+                    <h4>Disclaimers & Limitations</h4>
+                    <ul>
+                        <li>KANSBE is not responsible for delays, poor service, or payment issues.</li>
+                        <li>The platform is provided 'as-is', with no performance guarantees.</li>
+                        <li>KANSBE is not liable for indirect loss like income, reputation, or data.</li>
+                    </ul>
+
+                    <h4>Dispute Resolution</h4>
+                    <ul>
+                        <li>First raise disputes to KANSBE support.</li>
+                        <li>If unresolved, they're governed by Indian Law.</li>
+                        <li>Legal proceedings are handled in Hyderabad jurisdiction.</li>
+                    </ul>
+
+                    <h4>Updates</h4>
+                    <p>We may update these Terms. Continued use of the platform implies your acceptance.</p>
+
+                    <h3>FREELANCER-SPECIFIC CLAUSES</h3>
+                    <ul>
+                        <li><strong>Code of Conduct:</strong> Maintain professional tone, respectful communication, and
+                            ethical
+                            behaviour with clients and staff.</li>
+                        <li><strong>Timely Delivery:</strong> Deliver projects on or before deadlines, communicate valid
+                            reasons
+                            for delay.</li>
+                        <li><strong>Profile Authenticity:</strong> Profile details must be genuine and verifiable.</li>
+                        <li><strong>Skill Commitment:</strong> Only accept projects within your qualified expertise.
+                        </li>
+                        <li><strong>Rate Transparency:</strong> All rates must be agreed upfront; no hidden charges.
+                        </li>
+                        <li><strong>No Dual Bidding:</strong> Do not bid on the same project with multiple accounts.
+                        </li>
+                        <li><strong>Milestone Adherence:</strong> Respect agreed milestones before requesting payments.
+                        </li>
+                        <li><strong>Language Standards:</strong> Use professional, non-abusive language.</li>
+                        <li><strong>Platform Reputation:</strong> Do not publicly defame KANSBE or users.</li>
+                        <li><strong>Portfolio Integrity:</strong> Showcase only your original work.</li>
+                        <li><strong>Learning & Updates:</strong> Maintain and improve skills regularly.</li>
+                        <li><strong>Tool Usage Disclosure:</strong> Declare use of external plugins or licensed tools.
+                        </li>
+                        <li><strong>Cross-Client Integrity:</strong> Do not reuse deliverables between clients.</li>
+                        <li><strong>Feedback Response:</strong> Address client feedback professionally.</li>
+                        <li><strong>Support Window:</strong> Provide agreed post-delivery support.</li>
+                        <li><strong>Backup Responsibility:</strong> Keep backups until client confirms delivery.</li>
+                        <li><strong>Ethical Work Only:</strong> No plagiarism or illegal activities.</li>
+                        <li><strong>Payment Channel Integrity:</strong> Use only KANSBE's payment system.</li>
+                        <li><strong>Post-Delivery Silence:</strong> Do not request reviews or payments post-delivery.
+                        </li>
+                        <li><strong>Local Law Compliance:</strong> Ensure legal compliance in all jurisdictions.</li>
+                        <li><strong>Platform Downtime Disclaimer:</strong> KANSBE not liable for downtime delays.</li>
+                        <li><strong>No AI-Generated Misrepresentation:</strong> Disclose any AI tool usage in work.</li>
+                        <li><strong>Client Review Blackmail:</strong> Reviews must be earned ethically.</li>
+                        <li><strong>Task Abandonment:</strong> Unresponsiveness over 5 days leads to cancellation.</li>
+                    </ul>
+
+                    <h3>CLIENT-SPECIFIC CLAUSES</h3>
+                    <ul>
+                        <li><strong>Anti-Discrimination:</strong> No bias based on gender, religion, or identity.</li>
+                        <li><strong>Code of Conduct:</strong> Maintain professional and respectful behavior.</li>
+                        <li><strong>Fair Deadline:</strong> Set realistic project timelines.</li>
+                        <li><strong>Non-Exploit:</strong> No extra work beyond agreed scope without pay.</li>
+                        <li><strong>Onboarding Clarity:</strong> Clearly define goals and outcomes.</li>
+                        <li><strong>Revision Limit:</strong> Keep revision requests within reason.</li>
+                        <li><strong>Partial Payment:</strong> Pay for work completed even if terminated early.</li>
+                        <li><strong>Respect for Expertise:</strong> Avoid micromanaging skilled freelancers.</li>
+                        <li><strong>Holiday Consideration:</strong> Allow declared holidays.</li>
+                        <li><strong>Platform Loyalty:</strong> Keep all rehires on KANSBE.</li>
+                        <li><strong>Scope Freeze:</strong> Changes require consent and new pricing.</li>
+                        <li><strong>Demo Request Limitation:</strong> Samples only if mentioned upfront.</li>
+                        <li><strong>Post-Completion Engagement:</strong> Rehires only through platform.</li>
+                        <li><strong>Rating Responsibility:</strong> Give fair, honest feedback.</li>
+                        <li><strong>Internal Team Use:</strong> Use deliverables only for intended purpose.</li>
+                        <li><strong>Sensitive Info:</strong> Do not ask for personal documents unless necessary.</li>
+                        <li><strong>Creative Freedom:</strong> Provide references but avoid forced imitation.</li>
+                        <li><strong>Payment Confirmation:</strong> Confirm receipt before releasing funds.</li>
+                        <li><strong>Feedback Acknowledgement:</strong> Respond to deliveries within 48 hours.</li>
+                        <li><strong>No Ghosting:</strong> No mid-project abandonment beyond 10 days.</li>
+                        <li><strong>Proof of Business:</strong> KANSBE may request verification for large projects.</li>
+                        <li><strong>Intent-to-Hire:</strong> Only post genuine opportunities.</li>
+                        <li><strong>AI Detection Rights:</strong> KANSBE may check content for AI/plagiarism.</li>
+                        <li><strong>Payment Delay Consequence:</strong> Delayed payments may pause projects.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- PRIVACY POLICY -->
+            <div *ngIf="activeModal === 'privacy'" class="modal-content-container">
+                <div class="modal-header-custom">
+                    <h3>KANSBE – Privacy Policy</h3>
+                </div>
+                <div class="modal-body-scroll">
+                    <p>Your privacy is important to us. This policy describes how we collect, use, and protect your
+                        personal
+                        data when you use the KANSBE platform.</p>
+
+                    <h4>Information We Collect</h4>
+                    <ul>
+                        <li>Profile Information: Name, email, location, and professional details.</li>
+                        <li>Usage Data: Information about how you interact with the platform.</li>
+                    </ul>
+
+                    <h4>How We Use Your Data</h4>
+                    <p>We use your information to facilitate project connections and provide customer support.</p>
+
+                    <p class="mt-4 text-center text-muted">For more information, please contact our support team.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Forgot Password Modal (backend logic preserved) -->
+    <div class="modal fade" id="forgotPasswordModal" tabindex="-1" aria-labelledby="forgotPasswordLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content custom-forgot-modal">
+                <div class="modal-header border-0">
+                    <h5 class="modal-title fw-bold" id="forgotPasswordLabel">Reset Password</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+                </div>
+                <div class="modal-body pb-4">
+                    <p class="text-secondary small mb-4">Enter your registered email to receive your password.</p>
+                    <div class="forgot-field-group">
+                        <label class="forgot-label">EMAIL ADDRESS</label>
+                        <input type="email" class="forgot-input" placeholder="Enter your email"
+                            [(ngModel)]="forgotEmail" name="forgotEmail" required />
+                    </div>
+                    <p *ngIf="forgoterror" class="text-danger small mt-2">{{forgoterror}}</p>
+                    <button type="button" class="btn-forgot-submit" (click)="forgotpassword()">SEND PASSWORD</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

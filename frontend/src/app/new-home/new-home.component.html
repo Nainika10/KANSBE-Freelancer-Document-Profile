@@ -1,0 +1,1061 @@
+<!-- section 1 - Landing page -->
+<section class="hero-section" #heroSection id="section1">
+  <!-- Background Video with ViewChild reference for immediate playback -->
+  <video #backgroundVideo class="background-video" autoplay muted loop playsinline preload="metadata">
+    <source src="../../assets/Lpage.webm" type="video/webm">
+    Your browser does not support the video tag.
+  </video>
+
+  <!-- Dark Overlay (Always Active - NO Orange Gradient) -->
+  <div class="video-overlay active"></div>
+
+  <!-- Backdrop for closing modals on outside click -->
+  <div class="modal-backdrop" [class.active]="showModal || showRegisterModal" (click)="closeAllModals()"></div>
+
+  <!-- Header Navigation - Sticky -->
+  <app-header></app-header>
+
+  <!-- Hero Content -->
+  <div class="hero-content">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-10 col-md-12 col-12">
+          <h1 class="hero-title">
+            <span class="title-red">The Elite</span>
+            <span class="title-white">&nbsp;Freelance Platform</span><br>
+            <span class="title-white">for </span>
+            <span class="title-red">Global Visionaries</span><span class="title-red">.</span>
+          </h1>
+          <p class="hero-description">
+            Access top-tier talent or build your independence with curated, high-impact projects. Designed for those who
+            value freedom, balance, and creative excellence.
+          </p>
+        </div>
+      </div>
+
+      <!-- Quick Trust Indicators / What We Do -->
+      <div class="row mt-5 service-highlights gx-lg-5">
+        <div class="col-lg-4 col-md-6 mb-4">
+          <div class="highlight-item">
+            <h3 class="highlight-title">Access Skilled Freelancers</h3>
+            <p class="highlight-text">Connect with a curated network of skilled professionals across a wide range of
+              domains.</p>
+          </div>
+        </div>
+        <div class="col-lg-4 col-md-6 mb-4">
+          <div class="highlight-item">
+            <h3 class="highlight-title">Discover Premium Projects</h3>
+            <p class="highlight-text">Skip the bidding. Get matched with high-impact projects that align with your
+              lifestyle</p>
+          </div>
+        </div>
+        <div class="col-lg-4 col-md-12 mb-4">
+          <div class="highlight-item">
+            <h3 class="highlight-title">Work Together Securely</h3>
+            <p class="highlight-text">Manage your entire workflow in one clear, private, and secure virtual office.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Fixed Join Us Button - Visible Throughout Homepage -->
+  <div class="fixed-join-us-wrapper" [class.near-footer]="isNearFooter">
+    <button class="btn-join-fixed" (click)="toggleModal()">Join Us</button>
+
+    <!-- Join Us Modal - Single Pill with Divider -->
+    <div class="modal-buttons-fixed" [class.show]="showModal">
+      <div class="pill-container">
+        <button class="pill-button pill-left" (click)="startAsFreelancer()">
+          Start as Freelancer
+        </button>
+        <div class="pill-divider"></div>
+        <button class="pill-button pill-right" (click)="joinAsClient()">
+          Join as Client
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scroll Down Indicator - Hidden when near footer -->
+  <div class="scroll-indicator" [class.visible]="showScrollIndicator">
+    <span class="scroll-text">Scroll</span>
+    <div class="scroll-arrow"></div>
+  </div>
+</section>
+
+<!-- section2 - Cinematic Features Corridor -->
+<!-- ============================================= -->
+<!-- SECTION 2 — CINEMATIC FEATURES CORRIDOR      -->
+<!-- ============================================= -->
+<section class="section-features" id="section2">
+
+  <!-- CSS-only dot-grid texture overlay -->
+  <div class="dot-grid-overlay"></div>
+
+  <!-- Section Heading -->
+  <div class="container-xl text-center py-5">
+    <span class="eyebrow-label">How it works</span>
+    <h2 class="section-title">What Makes KansBe Different</h2>
+  </div>
+
+  <!-- Cards Corridor -->
+  <div class="cards-corridor" [class.mobile-timeline]="isMobile">
+
+    <ng-container *ngFor="let card of cards; let i = index; let last = last">
+
+      <!-- Feature Card -->
+      <div #cardRef class="feature-card" [class.is-visible]="cardVisible[i]" [class.mobile-mode]="isMobile">
+        <div class="container-xl">
+          <div class="row align-items-center gx-0" [ngClass]="getRowClass(i)">
+
+            <!-- Content Column -->
+            <div class="col-12 col-lg-6">
+              <div class="card-panel p-4 p-lg-5">
+
+                <!-- Watermark number (desktop) -->
+                <span class="card-watermark" [class.is-visible]="cardVisible[i]">{{ card.number }}</span>
+
+                <!-- Mobile: inline number + mini shape -->
+                <div class="d-flex align-items-center gap-3 mb-3 d-lg-none">
+                  <span class="card-number-inline" [style.color]="card.accent">{{ card.number }}</span>
+                  <ng-container
+                    *ngTemplateOutlet="featureShape; context: { type: card.shapeType, accent: card.accent, isVisible: cardVisible[i], class: 'shape-inline' }">
+                  </ng-container>
+                </div>
+
+                <!-- Card number (desktop only) -->
+                <span class="card-number-desktop d-none d-lg-block" [style.color]="card.accent">{{ card.number }}</span>
+
+                <!-- Feature title -->
+                <h3 class="card-feature-title" [class.is-visible]="cardVisible[i]" [style.--accent]="card.accent">{{
+                  card.title }}</h3>
+
+                <!-- Description -->
+                <p class="card-body-text">{{ card.description }}</p>
+
+
+              </div>
+            </div>
+
+            <!-- Shape Column (tablet & desktop) -->
+            <div class="col-12 col-lg-6 d-none d-lg-flex justify-content-center align-items-center p-4 p-lg-5">
+              <ng-container
+                *ngTemplateOutlet="featureShape; context: { type: card.shapeType, accent: card.accent, isVisible: cardVisible[i], class: 'shape-desktop' }">
+              </ng-container>
+            </div>
+
+            <!-- Shape Column (tablet only — above content, centered) -->
+            <div class="col-12 d-none d-md-flex d-lg-none justify-content-center align-items-center py-4">
+              <ng-container
+                *ngTemplateOutlet="featureShape; context: { type: card.shapeType, accent: card.accent, isVisible: cardVisible[i], class: 'shape-tablet' }">
+              </ng-container>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <!-- Thread line between cards (horizontal on desktop, vertical dashed on mobile) -->
+      <div *ngIf="!last" class="thread-line" [class.is-drawn]="threadVisible[i]"></div>
+
+    </ng-container>
+
+  </div>
+</section>
+
+<!-- Reusable Feature Shapes SVG Template -->
+<ng-template #featureShape let-shapeType="type" let-accent="accent" let-isVisible="isVisible" let-customClass="class">
+  <div class="shape-wrapper" [ngClass]="customClass">
+    <!-- Arrow: upward arrow bursting out of a square box -->
+    <svg *ngIf="shapeType === 'arrow'" [class.is-animated]="isVisible" class="shape-svg shape-arrow"
+      viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <!-- Box -->
+      <rect x="50" y="80" width="100" height="90" rx="8" [attr.stroke]="accent" stroke-width="2.5" fill="none"
+        opacity="0.5" />
+      <!-- Arrow shaft -->
+      <line x1="100" y1="150" x2="100" y2="45" [attr.stroke]="accent" stroke-width="3" stroke-linecap="round"
+        class="arrow-shaft" />
+      <!-- Arrow head -->
+      <polyline points="75,70 100,40 125,70" [attr.stroke]="accent" stroke-width="3" fill="none" stroke-linecap="round"
+        stroke-linejoin="round" class="arrow-head" />
+      <!-- Burst particles -->
+      <circle cx="100" cy="35" r="3" [attr.fill]="accent" opacity="0.6" class="burst-dot burst-1" />
+      <circle cx="80" cy="45" r="2" [attr.fill]="accent" opacity="0.4" class="burst-dot burst-2" />
+      <circle cx="120" cy="45" r="2" [attr.fill]="accent" opacity="0.4" class="burst-dot burst-3" />
+    </svg>
+
+    <!-- Gavel: crossed gavel replaced by balance scale -->
+    <svg *ngIf="shapeType === 'gavel'" [class.is-animated]="isVisible" class="shape-svg shape-gavel"
+      viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <!-- Crossed gavel (faded) -->
+      <line x1="40" y1="160" x2="110" y2="80" stroke="#555" stroke-width="2" stroke-linecap="round" opacity="0.3"
+        class="gavel-line-1" />
+      <rect x="95" y="65" width="30" height="14" rx="3" transform="rotate(-45 110 72)" stroke="#555" stroke-width="1.5"
+        fill="none" opacity="0.3" />
+      <line x1="160" y1="160" x2="90" y2="80" stroke="#555" stroke-width="2" stroke-linecap="round" opacity="0.3"
+        class="gavel-line-2" />
+      <!-- X mark -->
+      <line x1="85" y1="115" x2="115" y2="145" stroke="#ff4444" stroke-width="2.5" stroke-linecap="round"
+        opacity="0.5" />
+      <line x1="115" y1="115" x2="85" y2="145" stroke="#ff4444" stroke-width="2.5" stroke-linecap="round"
+        opacity="0.5" />
+      <!-- Balance scale -->
+      <line x1="100" y1="30" x2="100" y2="100" [attr.stroke]="accent" stroke-width="2.5" stroke-linecap="round"
+        class="scale-pillar" />
+      <!-- Beam -->
+      <line x1="55" y1="55" x2="145" y2="55" [attr.stroke]="accent" stroke-width="2.5" stroke-linecap="round"
+        class="scale-beam" />
+      <!-- Left pan -->
+      <path d="M45,60 Q55,85 65,60" [attr.stroke]="accent" stroke-width="2" fill="none" class="scale-pan-l" />
+      <!-- Right pan -->
+      <path d="M135,60 Q145,85 155,60" [attr.stroke]="accent" stroke-width="2" fill="none" class="scale-pan-r" />
+      <!-- Triangle base -->
+      <polygon points="90,100 110,100 100,90" [attr.fill]="accent" opacity="0.4" />
+    </svg>
+
+    <!-- Puzzle: two interlocking pieces clicking together -->
+    <svg *ngIf="shapeType === 'puzzle'" [class.is-animated]="isVisible" class="shape-svg shape-puzzle"
+      viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <!-- Left piece -->
+      <g class="puzzle-left">
+        <path d="M30,60 L85,60 L85,80 Q100,75 100,90 Q100,105 85,100 L85,140 L30,140 Z" [attr.stroke]="accent"
+          stroke-width="2.5" fill="none" opacity="0.9" />
+      </g>
+      <!-- Right piece -->
+      <g class="puzzle-right">
+        <path d="M170,60 L115,60 L115,80 Q100,75 100,90 Q100,105 115,100 L115,140 L170,140 Z" [attr.stroke]="accent"
+          stroke-width="2.5" fill="none" opacity="0.9" />
+      </g>
+      <!-- Click spark -->
+      <circle cx="100" cy="90" r="6" [attr.fill]="accent" opacity="0" class="puzzle-spark" />
+    </svg>
+
+    <!-- Shield: geometric shield with keyhole cutout -->
+    <svg *ngIf="shapeType === 'shield'" [class.is-animated]="isVisible" class="shape-svg shape-shield"
+      viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <!-- Shield body -->
+      <path d="M100,25 L160,55 L160,110 Q160,160 100,185 Q40,160 40,110 L40,55 Z" [attr.stroke]="accent"
+        stroke-width="2.5" fill="none" class="shield-body" />
+      <!-- Inner shield line -->
+      <path d="M100,40 L148,65 L148,108 Q148,150 100,172 Q52,150 52,108 L52,65 Z" [attr.stroke]="accent"
+        stroke-width="1" fill="none" opacity="0.25" />
+      <!-- Keyhole circle -->
+      <circle cx="100" cy="95" r="16" [attr.stroke]="accent" stroke-width="2" fill="none" />
+      <!-- Keyhole slot -->
+      <rect x="95" y="105" width="10" height="25" rx="2" [attr.fill]="accent" opacity="0.5" />
+      <!-- Lock dot -->
+      <circle cx="100" cy="92" r="5" [attr.fill]="accent" opacity="0.6" />
+    </svg>
+
+    <!-- Hexagon: hex hub with 6 node lines -->
+    <svg *ngIf="shapeType === 'hexagon'" [class.is-animated]="isVisible" class="shape-svg shape-hexagon"
+      viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <!-- Central hexagon -->
+      <polygon points="100,40 145,65 145,115 100,140 55,115 55,65" [attr.stroke]="accent" stroke-width="2.5" fill="none"
+        class="hex-core" />
+      <!-- 6 connecting node lines -->
+      <line x1="100" y1="40" x2="100" y2="10" [attr.stroke]="accent" stroke-width="1.5" class="node-line n1" />
+      <circle cx="100" cy="8" r="4" [attr.fill]="accent" class="node-dot n1" />
+
+      <line x1="145" y1="65" x2="172" y2="48" [attr.stroke]="accent" stroke-width="1.5" class="node-line n2" />
+      <circle cx="174" cy="46" r="4" [attr.fill]="accent" class="node-dot n2" />
+
+      <line x1="145" y1="115" x2="172" y2="132" [attr.stroke]="accent" stroke-width="1.5" class="node-line n3" />
+      <circle cx="174" cy="134" r="4" [attr.fill]="accent" class="node-dot n3" />
+
+      <line x1="100" y1="140" x2="100" y2="170" [attr.stroke]="accent" stroke-width="1.5" class="node-line n4" />
+      <circle cx="100" cy="172" r="4" [attr.fill]="accent" class="node-dot n4" />
+
+      <line x1="55" y1="115" x2="28" y2="132" [attr.stroke]="accent" stroke-width="1.5" class="node-line n5" />
+      <circle cx="26" cy="134" r="4" [attr.fill]="accent" class="node-dot n5" />
+
+      <line x1="55" y1="65" x2="28" y2="48" [attr.stroke]="accent" stroke-width="1.5" class="node-line n6" />
+      <circle cx="26" cy="46" r="4" [attr.fill]="accent" class="node-dot n6" />
+    </svg>
+
+    <!-- Infinity: infinity loop morphing into padlock -->
+    <svg *ngIf="shapeType === 'infinity'" [class.is-animated]="isVisible" class="shape-svg shape-infinity"
+      viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <!-- Infinity path -->
+      <path d="M100,100 C100,70 140,50 155,75 C170,100 140,130 100,100 C60,70 30,100 45,125 C60,150 100,130 100,100"
+        [attr.stroke]="accent" stroke-width="2.5" fill="none" stroke-linecap="round" class="infinity-path" />
+      <!-- Padlock body at crossing -->
+      <rect x="82" y="92" width="36" height="28" rx="4" [attr.stroke]="accent" stroke-width="2" fill="none"
+        class="lock-body" />
+      <!-- Padlock shackle -->
+      <path d="M88,92 L88,80 Q88,70 100,70 Q112,70 112,80 L112,92" [attr.stroke]="accent" stroke-width="2" fill="none"
+        stroke-linecap="round" class="lock-shackle" />
+      <!-- Keyhole -->
+      <circle cx="100" cy="103" r="4" [attr.fill]="accent" opacity="0.7" />
+      <rect x="98" y="105" width="4" height="8" rx="1" [attr.fill]="accent" opacity="0.5" />
+    </svg>
+  </div>
+</ng-template>
+
+
+<!-- section 3 - Testimonials -->
+<section class="redesigned-testimonial-section">
+  <!-- Top Left Title -->
+  <div class="voices-title-overlay">
+    VOICES OF SUCCESS
+  </div>
+
+  <div class="testimonial-container h-100 p-0">
+    <div class="row m-0 h-100 align-items-stretch position-relative">
+
+      <!-- Left Column: Image -->
+      <div class="col-lg-7 col-md-12 p-0 image-col">
+        <div class="image-wrapper" [class.fade]="isTextAnimating">
+          <img *ngIf="activeTestimonial.image" [src]="activeTestimonial.image" alt="Testimonial Author"
+            class="testimonial-hero-img" width="600" height="800" loading="lazy">
+          <div class="image-fade-overlay"></div>
+        </div>
+      </div>
+
+      <!-- Right Column: Glass Card & Details -->
+      <div class="col-lg-5 col-md-12 position-relative card-col">
+        <div class="testimonial-content-wrapper" [class.fade]="isTextAnimating">
+          <!-- The Glassmorphic Block -->
+          <div class="testimonial-glass-block">
+            <!-- Red Quote Marks -->
+            <div class="quote-marks">
+              <div class="red-slash"></div>
+              <div class="red-slash"></div>
+            </div>
+
+            <p class="testimonial-message">
+              '{{ activeTestimonial.testimonial }}'
+            </p>
+          </div>
+
+          <!-- Author Info & Nav below -->
+          <div class="testimonial-footer d-flex justify-content-between align-items-end">
+            <div class="author-details">
+              <p class="author-name">{{ activeTestimonial.name | uppercase }}</p>
+              <p class="author-title">{{ activeTestimonial.authorTitle | uppercase }}</p>
+            </div>
+
+            <div class="testimonial-nav d-flex gap-3">
+              <button class="nav-btn-circle prev-circle" (click)="previousSlide()" [disabled]="isAnimating"
+                aria-label="Previous">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                  <path d="M19 12H5M12 19l-7-7 7-7" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+              </button>
+              <button class="nav-btn-circle next-circle" (click)="nextSlide()" [disabled]="isAnimating"
+                aria-label="Next">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                  <path d="M5 12h14M12 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Section: Trusted By Leading Brands -->
+<section class="trusted-brands-section" id="trusted-brands">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-12 text-center">
+        <span class="brands-label">TRUSTED BY</span>
+        <h2 class="brands-heading">Trusted by Businesses and Professionals</h2>
+      </div>
+    </div>
+  </div>
+
+  <!-- Auto-Scrolling Logo Carousel -->
+  <div class="brands-scroll-wrapper">
+    <div class="brands-scroll-track">
+      <!-- Group 1 -->
+      <div class="brands-scroll-group">
+        <img src="../../assets/Under_armour_logo.webp" alt="Under Armour" class="brand-logo-img" loading="lazy"
+          decoding="async" />
+        <img src="../../assets/google_logo.webp" alt="Google" class="brand-logo-img" loading="lazy" decoding="async" />
+        <img src="../../assets/zomato_logo.webp" alt="Zomato" class="brand-logo-img" loading="lazy" decoding="async" />
+        <img src="../../assets/ndc_logo.webp" alt="NDC" class="brand-logo-img" loading="lazy" decoding="async" />
+        <img src="../../assets/cokarma_logo.webp" alt="Cokarma" class="brand-logo-img" loading="lazy"
+          decoding="async" />
+        <!-- <img src="../../assets/Swiggy.webp" alt="Swiggy" class="brand-logo-img" loading="lazy" decoding="async" /> -->
+      </div>
+      <!-- Group 2 (Exact Duplicate for seamless scrolling) -->
+      <div class="brands-scroll-group">
+        <img src="../../assets/Under_armour_logo.webp" alt="Under Armour" class="brand-logo-img" loading="lazy"
+          decoding="async" />
+        <img src="../../assets/google_logo.webp" alt="Google" class="brand-logo-img" loading="lazy" decoding="async" />
+        <img src="../../assets/zomato_logo.webp" alt="Zomato" class="brand-logo-img" loading="lazy" decoding="async" />
+        <img src="../../assets/ndc_logo.webp" alt="NDC" class="brand-logo-img" loading="lazy" decoding="async" />
+        <img src="../../assets/cokarma_logo.webp" alt="Cokarma" class="brand-logo-img" loading="lazy"
+          decoding="async" />
+        <!-- <img src="../../assets/Swiggy.webp" alt="Swiggy" class="brand-logo-img" loading="lazy" decoding="async" /> -->
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Section: In-Demand Capabilities Grid -->
+<section #capabilitiesSection id="capabilities" class="capabilities-grid-section">
+  <div class="container-fluid content-container">
+
+    <!-- Section Top Heading -->
+    <div class="row section-heading-row top-heading-row">
+      <div class="col-12 text-start">
+        <h2 class="capabilities-heading">Curated Talent for Every Skill</h2>
+      </div>
+    </div>
+
+    <!-- Carousel Container -->
+    <div class="domain-carousel-wrapper" style="overflow: hidden; width: 100%;">
+      <div class="domain-carousel-track" [style.transform]="'translateX(-' + (currentDomainSlide * (100 / 3)) + '%)'"
+        style="display: flex; transition: transform 0.5s ease-in-out; width: 300%;">
+
+        <ng-container *ngFor="let slideIndex of [0, 1, 2]">
+          <div class="domain-slide" style="width: 33.3333%; flex: 0 0 33.3333%;">
+            <!-- Medium Boxes Grid (2x5 for 10 boxes per slide) -->
+            <div
+              class="row row-cols-2 row-cols-md-3 row-cols-lg-5 g-4 justify-content-start medium-boxes-row w-100 m-0">
+              <div class="col"
+                *ngFor="let domain of curatedDomains | slice:(slideIndex * 10):(slideIndex * 10 + 10); let i = index">
+                <div class="capability-box medium-box animate-content" [class.content-visible]="isCapabilitiesVisible"
+                  [style.transition-delay]="(i * 0.05) + 's'" (click)="navigateToDomain(domain.name)">
+                  <div class="box-inner">
+                    <div class="box-icon">
+                      <img [src]="domain.icon" [alt]="domain.name + ' Icon'" loading="lazy" decoding="async" />
+                    </div>
+                    <p class="box-text">{{ domain.name }}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </ng-container>
+
+      </div>
+    </div>
+
+    <!-- Carousel Navigation Bottom Center -->
+    <div class="row mt-4 mb-4">
+      <div class="col-12 d-flex justify-content-center">
+        <div class="domain-navigation" style="justify-content: center;">
+          <button class="nav-arrow left-arrow" (click)="prevDomainSlide()" [disabled]="currentDomainSlide === 0"
+            [class.disabled]="currentDomainSlide === 0">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <path d="M19 12H5M12 19l-7-7 7-7" />
+            </svg>
+          </button>
+          <button class="nav-arrow right-arrow" (click)="nextDomainSlide()" [disabled]="currentDomainSlide === 2"
+            [class.disabled]="currentDomainSlide === 2">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <path d="M5 12h14M12 5l7 7-7 7" />
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Section Heading -->
+    <div class="row section-heading-row">
+      <div class="col-12 text-start">
+        <h2 class="capabilities-heading">In-Demand Freelance Skills</h2>
+      </div>
+    </div>
+
+    <!-- Small Boxes Grid (1x6 Grid) -->
+    <div class="row row-cols-2 row-cols-md-3 row-cols-lg-6 g-4 justify-content-start small-boxes-row">
+
+      <div class="col">
+        <div class="capability-box small-box animate-content" [class.content-visible]="isCapabilitiesVisible"
+          [style.transition-delay]="'0.1s'" (click)="navigateToDomain('AI & Tech Development')">
+          <div class="box-inner">
+            <div class="box-icon">
+              <img src="../../assets/AI.png" alt="AI & Tech Development Icon" loading="lazy" decoding="async" />
+            </div>
+            <p class="box-text">AI & Tech Development</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="col">
+        <div class="capability-box small-box animate-content" [class.content-visible]="isCapabilitiesVisible"
+          [style.transition-delay]="'0.2s'" (click)="navigateToDomain('Digital Marketing')">
+          <div class="box-inner">
+            <div class="box-icon">
+              <img src="../../assets/marketing.png" alt="Digital Marketing Icon" loading="lazy" decoding="async" />
+            </div>
+            <p class="box-text">Digital Marketing</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="col">
+        <div class="capability-box small-box animate-content" [class.content-visible]="isCapabilitiesVisible"
+          [style.transition-delay]="'0.3s'" (click)="navigateToDomain('Video & Animation')">
+          <div class="box-inner">
+            <div class="box-icon">
+              <img src="../../assets/video.png" alt="Video & Animation Icon" loading="lazy" decoding="async" />
+            </div>
+            <p class="box-text">Video & Animation</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="col">
+        <div class="capability-box small-box animate-content" [class.content-visible]="isCapabilitiesVisible"
+          [style.transition-delay]="'0.4s'" (click)="navigateToDomain('Graphics & Design')">
+          <div class="box-inner">
+            <div class="box-icon">
+              <img src="../../assets/graphics.png" alt="Graphics & Design Icon" loading="lazy" decoding="async" />
+            </div>
+            <p class="box-text">Graphics & Design</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="col">
+        <div class="capability-box small-box animate-content" [class.content-visible]="isCapabilitiesVisible"
+          [style.transition-delay]="'0.5s'" (click)="navigateToDomain('AI & Automation')">
+          <div class="box-inner">
+            <div class="box-icon">
+              <img src="../../assets/automation.png" alt="AI & Automation Icon" loading="lazy" decoding="async" />
+            </div>
+            <p class="box-text">AI & Automation</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="col">
+        <div class="capability-box small-box animate-content" [class.content-visible]="isCapabilitiesVisible"
+          [style.transition-delay]="'0.6s'" (click)="navigateToDomain('Data & Analytics')">
+          <div class="box-inner">
+            <div class="box-icon">
+              <img src="../../assets/pixel.png" alt="Data & Analytics Icon" loading="lazy" decoding="async" />
+            </div>
+            <p class="box-text">Data & Analytics</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- section 4 - Freelance Culture -->
+<section class="freelance-section">
+  <div class="container-fluid">
+    <div class="row align-items-center justify-content-center">
+      <!-- Left Side: Text Content - Comes second on mobile/tablet -->
+      <div class="col-lg-6 col-md-12 order-lg-1 order-2">
+        <div class="left-content">
+          <p class="content-paragraph">
+            Freelancing shouldn't feel rushed, uncertain, or exhausting. It should feel intentional, balanced, and
+            sustainable.
+          </p>
+          <p class="content-paragraph">
+            Kansbe is designed to remove the constant noise that comes with traditional freelancing endless searching,
+            repeated pitching, and unclear communication.
+          </p>
+          <p class="content-paragraph">
+            Instead, the right opportunities come to you. Collaboration stays focused. Your time stays respected.
+          </p>
+          <p class="content-paragraph">
+            With everything happening inside one clear space, freelancers spend less energy managing chaos and more time
+            doing meaningful work.
+          </p>
+          <p class="content-paragraph">
+            Over time, this creates something better than short-term wins — a steady rhythm, trusted relationships, and
+            a lifestyle that feels calm and sustainable.
+          </p>
+        </div>
+      </div>
+
+      <!-- Right Side: Typography Composition - Comes first on mobile/tablet -->
+      <div class="col-lg-6 col-md-12 order-lg-2 order-1">
+        <div class="right-content">
+          <!-- Top Typography -->
+          <div class="top-typography">
+            <h2 class="heading-large">Redefining</h2>
+            <h2 class="heading-small">the</h2>
+          </div>
+
+          <!-- Bottom Typography -->
+          <div class="bottom-typography">
+            <h2 class="heading-large">Culture</h2>
+          </div>
+
+          <!-- Vertical Red Text -->
+          <div class="vertical-text">
+            Freelance
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- section 5 - our story -->
+<section class="timeline-section" id="timeline-section">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-12 timeline-wrapper">
+
+        <!-- 2019 Section -->
+        <div class="timeline-block timeline-2019">
+          <!-- Large Year Number Background -->
+          <div class="year-background year-2019-bg">2024</div>
+
+          <!-- Content Container -->
+          <div class="timeline-content-wrapper timeline-2019-content">
+            <div class="row align-items-center">
+              <div class="col-lg-6 col-md-12 offset-lg-6">
+                <div class="timeline-content">
+                  <!-- Title with Arrow -->
+                  <div class="title-with-arrow title-2019-container">
+                    <div class="arrow-container">
+                      <svg class="red-arrow" viewBox="0 0 100 40" xmlns="http://www.w3.org/2000/svg">
+                        <line x1="0" y1="20" x2="80" y2="20" stroke="#ff0100" stroke-width="3" />
+                        <polygon points="80,12 100,20 80,28" fill="#ff0100" />
+                      </svg>
+                    </div>
+
+                    <h2 class="timeline-title">{{ timeline2024.title }}</h2>
+                  </div>
+
+                  <!-- Description -->
+                  <p class="timeline-description">{{ timeline2024.content }}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 2024 Section -->
+        <div class="timeline-block timeline-2024">
+          <!-- Large Year Number Background -->
+          <div class="year-background year-2024-bg">2025</div>
+
+          <!-- Content Container -->
+          <div class="timeline-content-wrapper timeline-2024-content">
+            <div class="row align-items-center">
+              <div class="col-lg-6 col-md-12">
+                <div class="timeline-content">
+                  <!-- Title with Arrow -->
+                  <div class="title-with-arrow title-2024-container">
+                    <div class="arrow-container">
+                      <svg class="red-arrow" viewBox="0 0 100 40" xmlns="http://www.w3.org/2000/svg">
+                        <line x1="0" y1="20" x2="80" y2="20" stroke="#ff0100" stroke-width="3" />
+                        <polygon points="80,12 100,20 80,28" fill="#ff0100" />
+                      </svg>
+                    </div>
+
+                    <h2 class="timeline-title">{{ timeline2025.title }}</h2>
+                  </div>
+
+                  <!-- Description -->
+                  <p class="timeline-description">{{ timeline2025.content }}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CHILD SECTION 1 -->
+<section #teamSection class="team-section">
+  <div class="container-fluid">
+
+    <!-- Top Content: Headline and Narrative -->
+    <div class="row content-row">
+
+      <!-- Left Column: Headline -->
+      <div class="col-lg-6 col-md-12 headline-column">
+        <h2 class="section-headline animate-content" [class.content-visible]="isTeamHeadlineVisible">
+          {{ sectionData.headline }}
+        </h2>
+      </div>
+
+      <!-- Right Column: Narrative Text -->
+      <div class="col-lg-6 col-md-12 narrative-column">
+        <div class="narrative-block">
+          <p class="narrative-paragraph animate-content" [class.content-visible]="isTeamNarrativeVisible"
+            *ngFor="let paragraph of sectionData.narrativeParagraphs; let i = index"
+            [style.transition-delay]="(i * 0.15) + 's'">
+            {{ paragraph }}
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bottom Content: Team Image (Commented out as requested)
+    <div class="row image-row">
+      <div class="col-12">
+        <div class="team-image-container">
+          <div class="team-image-wrapper animate-content animate-zoom" [class.content-visible]="isTeamImageVisible">
+            <img [src]="sectionData.teamImage" alt="Kansbe Team Members" class="team-photo" />
+          </div>
+        </div>
+      </div>
+    </div> -->
+  </div>
+</section>
+
+<!-- CHILD SECTION 2 -->
+<section #editorialSection class="editorial-section">
+
+
+  <div class="container-fluid">
+    <div class="row editorial-row align-items-center">
+      <!-- Image Column (Larger for Editorial feel) -->
+      <div class="col-lg-7 col-md-12 editorial-image-col">
+        <div class="editorial-image-container animate-content" [class.content-visible]="isEditorialImageVisible">
+          <img [src]="sectionData.image" alt="Kansbe Team" class="editorial-photo" />
+        </div>
+      </div>
+
+      <!-- Text Column (Narrower, centered vertically) -->
+      <div class="col-lg-5 col-md-12 editorial-text-col">
+        <div class="editorial-text-wrapper animate-content" [class.content-visible]="isEditorialTextVisible">
+          <h2 class="editorial-title">Building the Future of Freelancing</h2>
+          <div class="editorial-paragraphs">
+            <p class="editorial-paragraph" *ngFor="let paragraph of sectionData.manifestoText">
+              {{ paragraph }}
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER SECTION -->
+<footer class="kansbe-footer-section" id="contact">
+  <div class="footer-container container-fluid">
+
+    <!-- ═════════════════════════════════════════════════════════════
+         1. KANSBE TRUST / MARKETPLACE BENEFITS STRIP (CLEAN & FLAT)
+         ═════════════════════════════════════════════════════════════ -->
+    <div class="marketplace-benefits-strip">
+      <!-- 01: Smart Project Matching -->
+      <div class="benefit-item">
+        <div class="benefit-icon-box">
+          <svg viewBox="0 0 24 24" class="benefit-svg" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"></circle>
+            <circle cx="12" cy="12" r="6"></circle>
+            <circle cx="12" cy="12" r="2"></circle>
+          </svg>
+        </div>
+        <div class="benefit-content">
+          <h4 class="benefit-title">Smart Project Matching</h4>
+          <p class="benefit-desc">Find projects matched to your skills</p>
+        </div>
+      </div>
+
+      <!-- 02: Secure Payments -->
+      <div class="benefit-item">
+        <div class="benefit-icon-box">
+          <svg viewBox="0 0 24 24" class="benefit-svg" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+            <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+          </svg>
+        </div>
+        <div class="benefit-content">
+          <h4 class="benefit-title">Secure Payments</h4>
+          <p class="benefit-desc">Protected escrow transactions</p>
+        </div>
+      </div>
+
+      <!-- 03: Trusted Opportunities -->
+      <div class="benefit-item">
+        <div class="benefit-icon-box">
+          <svg viewBox="0 0 24 24" class="benefit-svg" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z">
+            </path>
+          </svg>
+        </div>
+        <div class="benefit-content">
+          <h4 class="benefit-title">Trusted Opportunities</h4>
+          <p class="benefit-desc">Quality client projects & verified scope</p>
+        </div>
+      </div>
+
+      <!-- 04: Fair Opportunities -->
+      <div class="benefit-item">
+        <div class="benefit-icon-box">
+          <svg viewBox="0 0 24 24" class="benefit-svg" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <path d="M16 16v1a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2h11a2 2 0 0 1 2 2v1"></path>
+            <path d="M18 8h4a2 2 0 0 1 2 2v7a2 2 0 0 1-2 2h-4"></path>
+            <circle cx="8" cy="12" r="2"></circle>
+            <path d="M21 12h.01"></path>
+          </svg>
+        </div>
+        <div class="benefit-content">
+          <h4 class="benefit-title">Fair Opportunities</h4>
+          <p class="benefit-desc">Skills over lowest bid pricing</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═════════════════════════════════════════════════════════════
+         2. MARKETPLACE REGION STRIP (CLEAN & FLAT)
+         ═════════════════════════════════════════════════════════════ -->
+    <div class="marketplace-region-strip">
+      <h4 class="region-title">Marketplace Region</h4>
+      <div class="region-subtext">
+        <span class="region-globe">🌐</span>
+        <span class="region-location">We are in USA and India</span>
+      </div>
+    </div>
+
+    <!-- TOP FOOTER: BRAND & CONNECT -->
+    <div class="footer-top-row">
+      <div class="footer-brand">
+        <img src="../../assets/pics.webp" alt="KANSBE" class="footer-primary-logo" width="118" height="30">
+        <p class="footer-tagline">
+          For freelancers who care about how their days feel, value freedom, balance, and clarity, and build meaningful
+          work around what matters most.
+        </p>
+      </div>
+
+      <div class="footer-social-block">
+        <h4 class="footer-heading">Connect with us</h4>
+        <div class="footer-social-icons">
+          <a *ngFor="let social of socialLinks" [href]="social.url" class="social-btn" target="_blank"
+            rel="noopener noreferrer" [attr.aria-label]="social.name">
+            <span class="social-tooltip">{{ social.name }}</span>
+            <svg *ngIf="social.icon === 'linkedin'" viewBox="0 0 24 24">
+              <path
+                d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z" />
+            </svg>
+            <svg *ngIf="social.icon === 'instagram'" viewBox="0 0 24 24">
+              <path
+                d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" />
+            </svg>
+            <svg *ngIf="social.icon === 'x'" viewBox="0 0 24 24">
+              <path
+                d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+            </svg>
+            <svg *ngIf="social.icon === 'facebook'" viewBox="0 0 24 24">
+              <path
+                d="M22.675 0h-21.35c-.732 0-1.325.593-1.325 1.325v21.351c0 .731.593 1.324 1.325 1.324h11.495v-9.294h-3.128v-3.622h3.128v-2.671c0-3.1 1.893-4.788 4.659-4.788 1.325 0 2.463.099 2.795.143v3.24l-1.918.001c-1.504 0-1.795.715-1.795 1.763v2.313h3.587l-.467 3.622h-3.12v9.293h6.116c.73 0 1.323-.593 1.323-1.325v-21.35c0-.732-.593-1.325-1.325-1.325z" />
+            </svg>
+          </a>
+        </div>
+        <div class="footer-email-block">
+          <p class="footer-heading" style="margin-bottom: 10px;">For any support</p>
+          <a href="mailto:support@kansbe.com" class="footer-email">support@kansbe.com</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer-divider"></div>
+
+    <!-- MIDDLE FOOTER: NAVIGATION -->
+    <div class="footer-mid-row row">
+      <div class="col-lg-4 col-md-6 footer-nav-col">
+        <h4 class="footer-heading">Company</h4>
+        <nav class="footer-links-list">
+          <button (click)="scrollToTop()" class="f-link">Home</button>
+          <button (click)="navigateToAbout()" class="f-link">About Kansbe</button>
+          <button (click)="navigateToHowItWorks()" class="f-link">How Kansbe Works</button>
+          <button (click)="navigateToWhyFreelancers()" class="f-link">Why Kansbe Freelancers</button>
+          <button (click)="navigateToBlogs()" class="f-link">Blogs</button>
+
+        </nav>
+      </div>
+
+      <div class="col-lg-4 col-md-6 footer-nav-col">
+        <h4 class="footer-heading">Independence</h4>
+        <nav class="footer-links-list">
+          <button (click)="registerAsFreelancer()" class="f-link">For Freelancers</button>
+          <button (click)="registerAsClient()" class="f-link">For Clients</button>
+          <button (click)="showJoinModal = true" class="f-link">Join the Network</button>
+        </nav>
+      </div>
+
+      <div class="col-lg-4 col-md-12 footer-nav-col">
+        <h4 class="footer-heading">Legal</h4>
+        <nav class="footer-links-list">
+          <button (click)="openModal('privacy')" class="f-link">Privacy Statement</button>
+          <button (click)="openModal('terms')" class="f-link">Terms & Conditions</button>
+          <span class="f-location">USA Inc. HQ</span>
+        </nav>
+      </div>
+    </div>
+
+    <!-- BOTTOM FOOTER: COPYRIGHT -->
+    <div class="footer-bottom-row">
+      <div class="copyright-container">
+        <span class="copyright-text">© {{ currentYear }} KANSBE. ALL RIGHTS RESERVED.</span>
+      </div>
+      <div class="footer-accent-line"></div>
+    </div>
+  </div>
+
+  <!-- ================= PRIVACY & TERMS MODAL ================= -->
+  <div class="modal-backdrop-custom" *ngIf="isModalOpen" (click)="closeModal()">
+    <div class="modal-box-custom" (click)="$event.stopPropagation()">
+      <!-- Close Button -->
+      <button class="modal-close-custom" (click)="closeModal()" aria-label="Close modal">×</button>
+
+      <div class="modal-content-container">
+        <!-- Privacy Policy -->
+        <ng-container *ngIf="modalType === 'privacy'">
+          <div class="modal-header-custom">
+            <h3>Privacy Policy and Data Security</h3>
+          </div>
+          <div class="modal-body-scroll">
+            <p><strong>Kansbe privacy policy last updated on (Date)</strong></p>
+            <h4>Update to Our Terms</h4>
+            <p>
+              We are updating our terms on (Date). See here to know what's coming in our updated privacy policy.
+            </p>
+            <h4>Data Sharing & Confidentiality</h4>
+            <p>
+              Kansbe does not sell or share your personal data (including contact information, financial details,
+              or specific project files) with other clients or freelancers. Only profile details necessary for
+              matching and collaboration are used within the platform. Protecting your identity and fostering
+              trusted professional connections is a core value for us.
+            </p>
+            <h4>Data Encryption</h4>
+            <p>
+              All critical information transmitted across the Kansbe platform is currently protected using modern
+              encryption protocols to maintain security and integrity during transmission.
+            </p>
+            <h4>Current Security Status (MVP Disclosure)</h4>
+            <p>
+              Kansbe is operating as a Minimum Viable Product (MVP). While we use standard security practices and
+              encrypted data transmission, our platform infrastructure does not yet provide the comprehensive
+              protection typical of fully scaled services. By using Kansbe at this stage, you acknowledge that we
+              cannot accept responsibility for loss, misuse, or unauthorized access to your data outside our
+              current controls.
+            </p>
+            <h4>User Responsibility</h4>
+            <p>
+              To help keep your information secure, you are requested to only provide data that is necessary or
+              specifically requested by the platform. Please do not submit sensitive personal data (such as
+              identification documents, private addresses, or other confidential information) unless essential, as
+              Kansbe cannot accept responsibility for any compromise to such details.
+            </p>
+            <p>
+              Kansbe is committed to continuously enhancing our security measures and will introduce more robust
+              protections in the future. Thank you for your understanding as we grow to serve you better.
+            </p>
+          </div>
+        </ng-container>
+
+        <!-- Terms & Conditions -->
+        <ng-container *ngIf="modalType === 'terms'">
+          <div class="modal-header-custom">
+            <h3>Terms & Conditions</h3>
+          </div>
+          <div class="modal-body-scroll">
+            <p><strong>Kansbe Terms & Conditions last updated on (Date)</strong></p>
+            <h4>Scope of These Terms</h4>
+            <p>
+              These Terms apply to all users of the KANSBE Platform: Freelancers, Clients, and Visitors.
+              "You" refers to the specific user type where relevant. Clauses are clearly marked for each group.
+            </p>
+            <h4>Account Registration</h4>
+            <ul>
+              <li>Provide accurate, up-to-date information.</li>
+              <li>You're responsible for all activity under your account.</li>
+              <li>Only one verified account is allowed per user.</li>
+            </ul>
+            <h4>Platform Usage</h4>
+            <ul>
+              <li>KANSBE connects clients and freelancers — it does not manage project execution.</li>
+              <li>All communication and deals must stay within the platform.</li>
+              <li>Subcontracting (giving the work to someone else) without permission is not allowed.</li>
+            </ul>
+            <h4>Payments & Fees</h4>
+            <ul>
+              <li>KANSBE may charge service fees or commissions.</li>
+              <li>Payments go through secure, third-party gateways.</li>
+              <li>Bypassing KANSBE for off-platform deals is strictly prohibited and will lead to a permanent ban.</li>
+              <li>Refunds and cancellations follow KANSBE's policies.</li>
+            </ul>
+            <h4>Termination</h4>
+            <ul>
+              <li>KANSBE can suspend or delete your account for any violation.</li>
+              <li>Inactivity for 6+ months may result in account removal.</li>
+              <li>You can request account deletion at any time.</li>
+            </ul>
+            <h4>Updates</h4>
+            <p>We may update these Terms. Continued use of the platform implies your acceptance.</p>
+          </div>
+        </ng-container>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= JOIN THE NETWORK MODAL ================= -->
+  <div class="modal-backdrop-custom" *ngIf="showJoinModal" (click)="closeJoinModal()">
+    <div class="join-modal-box" (click)="$event.stopPropagation()">
+      <!-- Close Button -->
+      <button class="modal-close-custom" (click)="closeJoinModal()" aria-label="Close modal">×</button>
+
+      <div class="join-modal-header text-center">
+        <h2>Join the Elite Network</h2>
+        <p class="join-modal-subtitle">
+          Choose how you want to experience KANSBE. Access curated global opportunities or connect with top-tier talent.
+        </p>
+      </div>
+
+      <div class="join-options-container">
+        <!-- Freelancer Option Card -->
+        <div class="join-card" (click)="startAsFreelancer()" (mousemove)="onCardMouseMove($event)">
+          <div class="join-card-icon">
+            <svg viewBox="0 0 24 24">
+              <path
+                d="M20 6h-4V4c0-1.11-.89-2-2-2h-4c-1.11 0-2 .89-2 2v2H4c-1.11 0-1.99.89-1.99 2L2 19c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2zm-6 0h-4V4h4v2z" />
+            </svg>
+          </div>
+          <h3>I am a Freelancer</h3>
+          <p>
+            Build your professional independence. Skip bidding wars and access curated high-value projects that fit your
+            lifestyle.
+          </p>
+          <div class="join-card-cta">
+            <span>Start As Freelancer</span>
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+              <path d="M5 13h11.86l-5.43 5.43 1.42 1.42L21.14 12l-8.29-8.29-1.42 1.42L16.86 11H5v2z" />
+            </svg>
+          </div>
+        </div>
+
+        <!-- Client Option Card -->
+        <div class="join-card" (click)="joinAsClient()" (mousemove)="onCardMouseMove($event)">
+          <div class="join-card-icon">
+            <svg viewBox="0 0 24 24">
+              <path
+                d="M12 7V3H2v18h20V7H12zM6 19H4v-2h2v2zm0-4H4v-2h2v2zm0-4H4V9h2v2zm0-4H4V5h2v2zm4 12H8v-2h2v2zm0-4H8v-2h2v2zm0-4H8V9h2v2zm0-4H8V5h2v2zm10 12h-8v-2h2v-2h-2v-2h2v-2h-2V9h8v10zm-2-8h-2v2h2v-2zm0 4h-2v2h2v-2z" />
+            </svg>
+          </div>
+          <h3>I am a Client</h3>
+          <p>
+            Hire premium global talent. Post your high-end project scope and get instantly matched with the perfect
+            domain experts.
+          </p>
+          <div class="join-card-cta">
+            <span>Join As Client</span>
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+              <path d="M5 13h11.86l-5.43 5.43 1.42 1.42L21.14 12l-8.29-8.29-1.42 1.42L16.86 11H5v2z" />
+            </svg>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>

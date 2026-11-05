@@ -1,0 +1,144 @@
+<div class="main-admin-wrapper">
+    <button class="back-btn" (click)="goBack()">
+        <i class="bi bi-arrow-left"></i>
+        Return to Portal
+    </button>
+    
+    <div class="page-container">
+
+        <!-- Header -->
+        <div class="header">
+            <div class="header-title-row">
+                <h1>Active Projects</h1>
+                <span class="count-badge" *ngIf="filteredProjects.length > 0">{{ filteredProjects.length }} Results</span>
+            </div>
+            <p class="subtitle">Oversee and manage the active creative portfolio.</p>
+        </div>
+
+        <!-- Search Section -->
+        <div class="search-section">
+            <div class="search-box">
+                <i class="bi bi-search icon"></i>
+                <input type="text" [(ngModel)]="searchQuery" (input)="onSearch()" placeholder="Search by title, skills or project ID...">
+                <button class="clear-btn" *ngIf="searchQuery" (click)="clearSearch()">
+                    <i class="bi bi-x"></i>
+                </button>
+            </div>
+            <button class="filter-btn" (click)="onSearch()">Search Projects</button>
+        </div>
+
+        <!-- Project Cards -->
+        <div class="project-card" *ngFor="let p of filteredProjects">
+
+            <!-- Card Header -->
+            <div class="card-header">
+                <div class="project-info">
+                    <img src="https://img.icons8.com/fluency/96/concept.png" class="project-icon">
+                    <div>
+                        <h3>{{p.title}}</h3>
+                        <div class="d-flex flex-column gap-1 mt-1">
+                            <p class="mb-0 text-dark opacity-75" style="font-size: 11px;">
+                                <i class="bi bi-person-fill me-1"></i> Client: <strong>{{p.clientname || 'Loading...'}}</strong> ({{p.c_id}})
+                            </p>
+                            <p class="mb-0 text-secondary" style="font-size: 10px; margin-top: -2px;">
+                                <i class="bi bi-envelope-fill me-1"></i> {{p.clientemail || 'N/A'}}
+                            </p>
+                            <p class="mb-0">REF ID: #{{p.p_id}}</p>
+                        </div>
+                    </div>
+                </div>
+                <span class="duration">
+                    {{getDeadlineDays(p.startDate, p.endDate)}}
+                </span>
+            </div>
+
+            <!-- Card Body -->
+            <div class="card-body">
+                <div class="tech-section">
+                    <span class="label">Required Expertise</span>
+                    <span class="tech">{{p.skills}}</span>
+                </div>
+                <div class="budget-section">
+                    <span class="label">Project Value</span>
+                    <p>₹{{p.budget}}</p>
+                </div>
+                <div class="freelancer-section">
+                    <span class="label">Talent Required</span>
+                    <p>{{p.freelancersNeeded || 1}} Freelancer(s)</p>
+                </div>
+            </div>
+
+            <!-- Description -->
+            <div class="description">
+                <span class="label">Briefing Narrative</span>
+                <p>{{p.description}}</p>
+            </div>
+
+            <!-- Project File (Matching ProjectDescriptionComponent Style) -->
+            <div class="documents-section mt-4">
+                <h5 class="fw-bold mb-3 section-title" style="font-size: 13px; color: #333;">Project Documents</h5>
+                
+                <div class="document-card p-3 rounded-4 border bg-white d-flex align-items-center gap-3 hover-shadow transition-all" 
+                     *ngIf="p.filedata; else noFileTemplate"
+                     style="box-shadow: 0 2px 10px rgba(0,0,0,0.05);">
+                    <div class="doc-icon-box bg-danger bg-opacity-10 text-danger rounded-circle p-2 d-flex align-items-center justify-content-center"
+                         style="width: 42px; height: 42px;">
+                        <i class="bi bi-file-earmark-pdf-fill fs-5" *ngIf="p.filedata.contentType?.includes('pdf')"></i>
+                        <i class="bi bi-file-earmark-image-fill fs-5" *ngIf="p.filedata.contentType?.includes('image')"></i>
+                        <i class="bi bi-file-earmark-fill fs-5" *ngIf="!p.filedata.contentType?.includes('pdf') && !p.filedata.contentType?.includes('image')"></i>
+                    </div>
+                    <div class="flex-grow-1">
+                        <h6 class="fw-bold mb-0" style="font-size: 13px;">Project Brief Document</h6>
+                        <span class="text-secondary" style="font-size: 11px;">
+                            {{ p.filedata.contentType?.includes('pdf') ? 'PDF Document' : (p.filedata.contentType?.includes('image') ? 'Image' : 'Attachment') }}
+                        </span>
+                    </div>
+                    <button class="btn btn-outline-danger btn-sm rounded-pill fw-bold px-3" style="font-size: 11px;" (click)="downloadFile(p.p_id)">
+                        Download <i class="bi bi-download ms-1"></i>
+                    </button>
+                </div>
+
+                <ng-template #noFileTemplate>
+                    <div class="no-file-box p-3 rounded-4 border bg-light d-flex align-items-center gap-3 opacity-75">
+                        <div class="doc-icon-box bg-secondary bg-opacity-10 text-secondary rounded-circle p-2 d-flex align-items-center justify-content-center"
+                             style="width: 42px; height: 42px;">
+                            <i class="bi bi-file-earmark-x fs-5"></i>
+                        </div>
+                        <div class="flex-grow-1">
+                            <h6 class="fw-bold mb-0 text-muted" style="font-size: 13px;">No Attachment</h6>
+                            <span class="text-secondary" style="font-size: 11px;">No file uploaded for this project</span>
+                        </div>
+                    </div>
+                </ng-template>
+            </div>
+
+            <!-- Assign Managers (Multi-select) -->
+            <div class="manager-selection-area">
+                <p class="selection-title">Assign Project Managers</p>
+                <div class="manager-chips-container">
+                    <div 
+                        *ngFor="let m of managers" 
+                        class="manager-chip" 
+                        [class.selected]="isManagerSelected(p, m.usr_id)"
+                        (click)="toggleManager(p, m.usr_id)"
+                    >
+                        <i class="bi" [ngClass]="isManagerSelected(p, m.usr_id) ? 'bi-check-circle-fill' : 'bi-person-badge-fill'"></i>
+                        {{ m.usr_name }}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Footer -->
+            <div class="card-footer">
+                <button class="accept-btn" (click)="acceptProject(p.p_id)">
+                    Approve Project
+                </button>
+                <button class="reject-btn" (click)="rejectProject(p.p_id)">
+                    Reject
+                </button>
+            </div>
+
+        </div>
+
+    </div>
+</div>

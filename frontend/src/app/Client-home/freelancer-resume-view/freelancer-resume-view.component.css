@@ -1,0 +1,219 @@
+/* ============================================================
+   FREELANCER RESUME VIEW (client-facing, PII-stripped sheet)
+   Dark page background + clean white resume sheet.
+   ============================================================ */
+:host {
+  display: block;
+  font-family: 'Poppins', sans-serif;
+  min-height: 100vh;
+  background: #14100f;
+}
+
+.frv-wrap {
+  max-width: 880px;
+  margin: 0 auto;
+  padding: 28px 20px 60px;
+}
+
+/* ---- Back link ---- */
+.frv-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: transparent;
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  border-radius: 999px;
+  padding: 8px 18px;
+  font-size: 13px;
+  font-family: inherit;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  margin-bottom: 18px;
+}
+
+.frv-back:hover {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.7);
+}
+
+/* ---- States ---- */
+.frv-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding: 64px 24px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 14px;
+  color: rgba(255, 255, 255, 0.75);
+  font-size: 14px;
+}
+
+.frv-state-error {
+  color: #ff8a85;
+}
+
+.frv-state-icon {
+  font-size: 34px;
+}
+
+.frv-spinner {
+  width: 26px;
+  height: 26px;
+  border: 3px solid rgba(255, 255, 255, 0.2);
+  border-top-color: #FF0100;
+  border-radius: 50%;
+  animation: frv-spin 0.8s linear infinite;
+}
+
+@keyframes frv-spin {
+  to { transform: rotate(360deg); }
+}
+
+.frv-btn-back {
+  margin-top: 6px;
+  background: #FF0100;
+  color: #ffffff;
+  border: none;
+  border-radius: 999px;
+  padding: 9px 26px;
+  font-size: 13px;
+  font-family: inherit;
+  cursor: pointer;
+  transition: background 0.25s ease;
+}
+
+.frv-btn-back:hover {
+  background: #e00000;
+}
+
+/* ---- White resume sheet ---- */
+.frv-sheet {
+  background: #ffffff;
+  color: #22262e;
+  border-radius: 14px;
+  box-shadow: 0 10px 34px rgba(0, 0, 0, 0.45);
+  padding: 34px 40px 40px;
+}
+
+.frv-header {
+  text-align: left;
+}
+
+.frv-name {
+  margin: 0;
+  font-size: 27px;
+  font-weight: 600;
+  color: #17203a;
+}
+
+.frv-title {
+  margin: 6px 0 0;
+  font-size: 15px;
+  font-weight: 500;
+  color: #FF0100;
+}
+
+.frv-privacy {
+  margin: 10px 0 0;
+  font-size: 12px;
+  color: #8a92a6;
+}
+
+.frv-divider {
+  height: 1px;
+  background: #eef1f7;
+  margin: 22px 0;
+}
+
+/* ---- Sections ---- */
+.frv-section {
+  margin-bottom: 24px;
+}
+
+.frv-section-title {
+  margin: 0 0 12px;
+  padding-bottom: 6px;
+  font-size: 12.5px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #6b7390;
+  border-bottom: 2px solid #f0f3f9;
+}
+
+/* Skills / technologies: compact inline lists */
+.frv-inline-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.frv-inline-list li {
+  background: #eef2ff;
+  border: 1px solid #dbe2fb;
+  color: #35408f;
+  font-size: 13px;
+  padding: 4px 12px;
+  border-radius: 999px;
+}
+
+.frv-inline-list-alt li {
+  background: #eaf7f1;
+  border-color: #d1ecdf;
+  color: #1c7a45;
+}
+
+/* Bulleted sections */
+.frv-bullets {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.frv-bullets li {
+  position: relative;
+  padding: 6px 0 6px 18px;
+  font-size: 14px;
+  line-height: 1.55;
+  color: #2f3850;
+}
+
+.frv-bullets li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 14px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #FF0100;
+}
+
+/* Projects: one entry each */
+.frv-project {
+  padding: 12px 14px;
+  margin-bottom: 10px;
+  background: #f7f9fc;
+  border: 1px solid #eaeef6;
+  border-radius: 8px;
+  font-size: 14px;
+  line-height: 1.55;
+  color: #2f3850;
+}
+
+/* ---- Responsive ---- */
+@media (max-width: 640px) {
+  .frv-sheet {
+    padding: 24px 20px 28px;
+  }
+
+  .frv-name {
+    font-size: 22px;
+  }
+}

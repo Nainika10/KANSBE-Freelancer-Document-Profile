@@ -1,0 +1,831 @@
+<div class="messages-workspace-page" *ngIf="data">
+  <!-- Atmospheric Futuristic Glow Background -->
+  <div class="ambient-glow-mesh"></div>
+
+  <main class="messages-workspace-container">
+    
+    <div class="msg-two-containers-layout">
+
+      <!-- ═════════════════════════════════════════════════════════════
+           CONTAINER 1: UNIFIED LIQUID GLASS MAIN WORKSPACE (LEFT + CENTER)
+           ═════════════════════════════════════════════════════════════ -->
+      <div class="msg-main-workspace-card">
+
+        <!-- LEFT SUB-COLUMN: SEARCH & PROJECT CONVERSATIONS -->
+        <aside class="msg-left-column" [class.d-none-mobile]="currentMobileView === 'chat' && isMobile">
+          <!-- Mobile View Switcher (Chats vs Meeting History) -->
+          <div class="msg-mobile-top-tabs d-lg-none">
+            <button class="msg-mobile-tab-btn" [class.active]="viewMode === 'chat'" (click)="toggleView('chat')">
+              <i class="bi bi-chat-left-text me-1"></i> Project Chats
+            </button>
+            <button class="msg-mobile-tab-btn" [class.active]="viewMode === 'history'" (click)="toggleView('history')">
+              <i class="bi bi-clock me-1"></i> Meetings
+              <span class="badge bg-danger ms-1 rounded-pill" *ngIf="pendingMeetingCount > 0">{{ pendingMeetingCount }}</span>
+            </button>
+          </div>
+
+          <!-- Search Bar -->
+          <div class="msg-search-box">
+            <i class="bi bi-search msg-search-icon"></i>
+            <input
+              type="text"
+              class="msg-search-input"
+              placeholder="Search projects..."
+              [(ngModel)]="searchQuery"
+            />
+          </div>
+
+          <!-- Project List -->
+          <div class="msg-project-list-stream custom-scrollbar">
+            <ng-container *ngIf="getFilteredConversations().length > 0; else noConvsTpl">
+              <div
+                class="msg-project-item"
+                *ngFor="let conv of getFilteredConversations()"
+                [class.active]="viewMode === 'chat' ? conv.active : (activeHistoryConversation?.p_id === conv.p_id)"
+                (click)="viewMode === 'chat' ? selectConversation(conv) : selectHistoryConversation(conv)"
+              >
+                <div class="msg-project-item__header">
+                  <div class="msg-project-item__title-wrap">
+                    <i *ngIf="conv.isManagerChat" class="bi bi-person-badge-fill text-white-50 me-1" style="font-size: 11px;"></i>
+                    <span class="msg-project-item__title">{{ conv.name }}</span>
+                  </div>
+                  <span class="msg-project-item__time">{{ conv.time }}</span>
+                </div>
+
+                <div class="msg-project-item__footer">
+                  <p class="msg-project-item__preview">
+                    <span *ngIf="conv.isManagerChat" class="msg-manager-tag">MANAGER</span>
+                    {{ conv.lastMsg || (viewMode === 'history' ? 'Click to view meeting history' : 'hello manager') }}
+                  </p>
+                  <span class="msg-unread-badge" *ngIf="viewMode === 'chat' && conv.unreadCount > 0">
+                    {{ conv.unreadCount }}
+                  </span>
+                  <span class="msg-unread-badge" *ngIf="viewMode === 'history' && ((meetingCountByProject.get(conv.original_p_id || conv.p_id) || 0) > 0)">
+                    {{ meetingCountByProject.get(conv.original_p_id || conv.p_id) }}
+                  </span>
+                </div>
+              </div>
+            </ng-container>
+
+            <ng-template #noConvsTpl>
+              <div class="msg-empty-projects">
+                <i class="bi bi-chat-left-text msg-empty-icon"></i>
+                <p class="msg-empty-text">
+                  {{ searchQuery ? 'No matching projects found' : 'No active project chats' }}
+                </p>
+              </div>
+            </ng-template>
+          </div>
+
+          <!-- Mobile Active Manager Mini Bar -->
+          <div class="msg-mobile-manager-bar d-lg-none" *ngIf="currentManager?.name && currentManager.name !== 'Select a project' && currentManager.name !== 'No project manager'">
+            <div class="msg-mobile-manager-avatar">
+              {{ currentManager.name?.charAt(0)?.toUpperCase() || 'M' }}
+              <span class="msg-sidebar-manager-dot"></span>
+            </div>
+            <div class="msg-mobile-manager-info">
+              <span class="msg-mobile-manager-title">{{ currentManager.name }}</span>
+              <span class="msg-mobile-manager-sub">Project Manager · Tap to chat</span>
+            </div>
+            <button class="msg-mobile-chat-btn" title="Chat with Manager">
+              <i class="bi bi-chat-dots-fill"></i>
+            </button>
+          </div>
+        </aside>
+
+        <!-- CENTER SUB-COLUMN: CHAT STREAM OR MEETING HISTORY -->
+        <section class="msg-center-column" [class.d-none-mobile]="currentMobileView === 'list' && isMobile">
+
+          <!-- ── 1. CHAT MODE ── -->
+          <ng-container *ngIf="viewMode === 'chat'">
+            
+            <!-- Active Conversation Selected -->
+            <div class="msg-chat-view-container" *ngIf="isChatVisible && activeConversation; else noChatSelectedTpl">
+              
+              <!-- Chat Header -->
+              <header class="msg-chat-header-bar">
+                <div class="msg-chat-header-left">
+                  <button class="msg-mobile-back-btn d-lg-none" (click)="goBackToList()">
+                    <i class="bi bi-chevron-left"></i>
+                  </button>
+
+                  <div class="msg-header-avatar">
+                    <img *ngIf="activeConversation.avatar && !activeConversation.avatar.includes('placeholder')" [src]="activeConversation.avatar" alt="" class="msg-avatar-img">
+                    <span *ngIf="!activeConversation.avatar || activeConversation.avatar.includes('placeholder')">
+                      {{ activeConversation.name?.charAt(0)?.toUpperCase() || 'K' }}
+                    </span>
+                  </div>
+
+                  <div class="msg-header-meta">
+                    <h3 class="msg-header-project-name">
+                      <i *ngIf="activeConversation.isManagerChat" class="bi bi-person-badge-fill text-white-50 me-1" style="font-size: 14px;"></i>
+                      {{ activeConversation.name }}
+                    </h3>
+                    <span class="msg-header-status-online">
+                      {{ activeConversation.status || 'ONLINE' }}
+                    </span>
+                  </div>
+                </div>
+
+                <div class="msg-chat-header-right">
+                  <button class="msg-header-req-meeting-btn" *ngIf="!isProjectCompleted" (click)="openScheduleModal()">
+                    <i class="bi bi-plus-lg"></i> Request Meeting
+                  </button>
+                  <button class="msg-header-close-btn" (click)="closeChat()" title="Close Chat">
+                    <i class="bi bi-x"></i>
+                  </button>
+                </div>
+              </header>
+
+              <!-- Chat Messages Body -->
+              <div class="msg-chat-messages-scroll custom-scrollbar" #scrollMe>
+                <ng-container *ngIf="messages.length > 0; else noMessagesTpl">
+                  <div class="msg-chat-bubble-row" *ngFor="let msg of messages" [class.msg-mine]="msg.isCurrentUser">
+                    
+                    <!-- Message Avatar -->
+                    <div class="msg-bubble-avatar">
+                      <img *ngIf="msg.isCurrentUser && usr?.profile_pic" [src]="usr.profile_pic" alt="" class="msg-avatar-img">
+                      <div *ngIf="msg.isCurrentUser && !usr?.profile_pic" class="msg-avatar-letter">
+                        {{ usr?.fullname?.charAt(0) || 'U' }}
+                      </div>
+                      <img *ngIf="!msg.isCurrentUser && (msg.avatar && !msg.avatar.includes('placeholder'))" [src]="msg.avatar" alt="" class="msg-avatar-img">
+                      <div *ngIf="!msg.isCurrentUser && (!msg.avatar || msg.avatar.includes('placeholder'))" class="msg-avatar-letter">
+                        {{ msg.user.charAt(0) || 'M' }}
+                      </div>
+                    </div>
+
+                    <!-- Message Bubble Content -->
+                    <div class="msg-bubble-main-wrapper">
+                      <!-- Sender line -->
+                      <div class="msg-bubble-sender-line">
+                        <span class="msg-sender-name-red">{{ msg.isCurrentUser ? (usr?.fullname || 'You') : (msg.role === 'Admin' ? msg.user : getFormattedName(msg.user)) }}</span>
+                        <span class="msg-sender-role-gray"> • {{ msg.role || 'Freelancer' }}</span>
+                      </div>
+
+                      <!-- Dark Glass Bubble -->
+                      <div class="msg-dark-glass-bubble">
+                        <!-- Replying quote preview -->
+                        <div class="msg-quote-subbox" *ngIf="msg.replyToText">
+                          <span class="msg-quote-sender">Replying to {{ getFormattedName(msg.replyToUser) }}</span>
+                          <p class="msg-quote-content text-truncate">{{ msg.replyToText }}</p>
+                        </div>
+
+                        <!-- Message Text -->
+                        <span class="msg-text-span">{{ msg.text }}</span>
+                        <small class="msg-edited-badge" *ngIf="msg.isEdited">(edited)</small>
+                      </div>
+
+                      <!-- Timestamp & Reply Trigger -->
+                      <div class="msg-bubble-time-row">
+                        <span class="msg-time-label">{{ (msg.createdAt | date:'shortTime') || msg.time }}</span>
+                        
+                        <!-- Edit Button (only if canEdit returns true) -->
+                        <button *ngIf="canEdit(msg)" class="msg-reply-arrow-btn me-2" (click)="editMessage(msg)" title="Edit">
+                          <i class="bi bi-pencil"></i>
+                        </button>
+                        
+                        <!-- Reply Button -->
+                        <button class="msg-reply-arrow-btn" (click)="replyToMessage(msg)" title="Reply">
+                          <i class="bi bi-arrow-90deg-left"></i>
+                        </button>
+                      </div>
+                    </div>
+
+                  </div>
+                </ng-container>
+
+                <ng-template #noMessagesTpl>
+                  <div class="msg-empty-messages-placeholder">
+                    <div class="msg-empty-messages-circle">
+                      <i class="bi bi-chat-dots"></i>
+                    </div>
+                    <p class="msg-empty-messages-title">No messages yet</p>
+                    <p class="msg-empty-messages-sub">Start the conversation with your team!</p>
+                  </div>
+                </ng-template>
+              </div>
+
+              <!-- Chat Footer / Floating Composer -->
+              <footer class="msg-chat-composer-footer">
+                <!-- Privacy Protected Notice -->
+                <div class="msg-privacy-tag" *ngIf="!isProjectCompleted">
+                  <i class="bi bi-shield-lock-fill text-white-50 me-1"></i>
+                  <span><b>Privacy Protected:</b> Personal emails, phone numbers, and unauthorized links are masked with <b>*****</b>.</span>
+                </div>
+
+                <!-- Reply Preview Bar -->
+                <div class="msg-reply-active-bar" *ngIf="replyingToMessage">
+                  <div class="msg-reply-active-info">
+                    <span class="msg-reply-active-user">Replying to {{ getFormattedName(replyingToMessage.user) }}</span>
+                    <p class="msg-reply-active-text text-truncate">{{ replyingToMessage.text }}</p>
+                  </div>
+                  <button class="msg-reply-active-close" (click)="cancelReply()">
+                    <i class="bi bi-x-circle-fill"></i>
+                  </button>
+                </div>
+
+                <!-- Edit Mode Bar -->
+                <div class="msg-edit-active-bar" *ngIf="isEditing">
+                  <div class="msg-edit-active-info">
+                    <i class="bi bi-pencil-fill text-white-50 me-1"></i>
+                    <span>Editing Message</span>
+                  </div>
+                  <button class="msg-reply-active-close" (click)="cancelEdit()">
+                    <i class="bi bi-x-circle-fill"></i>
+                  </button>
+                </div>
+
+                <!-- Capsule Message Input -->
+                <div class="msg-composer-capsule-row" *ngIf="!isProjectCompleted; else archivedFooterTpl">
+                  <div class="msg-composer-capsule">
+                    <input type="file" id="file-upload-input" class="d-none" (change)="onFileSelected($event)" />
+                    <button class="msg-composer-action-btn" (click)="triggerFileUpload()" title="Attach file">
+                      <i class="bi bi-plus-circle"></i>
+                    </button>
+
+                    <div class="msg-emoji-box">
+                      <button class="msg-composer-action-btn" (click)="toggleEmojiPicker()" title="Add emoji">
+                        <i class="bi bi-emoji-smile"></i>
+                      </button>
+                      <div class="msg-emoji-picker-dropdown" *ngIf="showEmojiPicker">
+                        <span (click)="addEmoji('😊')">😊</span>
+                        <span (click)="addEmoji('😂')">😂</span>
+                        <span (click)="addEmoji('👍')">👍</span>
+                        <span (click)="addEmoji('❤️')">❤️</span>
+                        <span (click)="addEmoji('🔥')">🔥</span>
+                        <span (click)="addEmoji('🎉')">🎉</span>
+                        <span (click)="addEmoji('🚀')">🚀</span>
+                      </div>
+                    </div>
+
+                    <input
+                      type="text"
+                      class="msg-composer-text-input chat-input"
+                      [placeholder]="isEditing ? 'Edit your message...' : 'Type a message...'"
+                      [(ngModel)]="newMessage"
+                      (keyup.enter)="sendMessage()"
+                    />
+                  </div>
+
+                  <button class="msg-circular-send-btn" (click)="sendMessage()" [disabled]="!newMessage.trim()">
+                    <i class="bi" [class.bi-send-fill]="!isEditing" [class.bi-check-lg]="isEditing"></i>
+                  </button>
+                </div>
+
+                <ng-template #archivedFooterTpl>
+                  <div class="msg-archived-notice-pill">
+                    <i class="bi bi-lock-fill text-secondary me-2"></i>
+                    <span><b>Project Archived:</b> This project is completed. Messaging is disabled.</span>
+                  </div>
+                </ng-template>
+              </footer>
+
+            </div>
+
+            <!-- Empty State (No Conversation Selected) -->
+            <ng-template #noChatSelectedTpl>
+              <div class="msg-empty-chat-state">
+                <div class="msg-empty-chat-orb">
+                  <i class="bi bi-chat-dots-fill"></i>
+                </div>
+                <h3 class="msg-empty-chat-title">Project Collaboration</h3>
+                <p class="msg-empty-chat-desc" *ngIf="conversations.length > 0">
+                  Connect with your team members in dedicated project channels. Select a conversation from the left to start messaging.
+                </p>
+                <p class="msg-empty-chat-desc" *ngIf="conversations.length === 0">
+                  You currently have no active projects. Team chats will automatically appear here once you are assigned to a project.
+                </p>
+              </div>
+            </ng-template>
+
+          </ng-container>
+
+          <!-- ── 2. MEETING HISTORY MODE ── -->
+          <div class="msg-history-view-container" *ngIf="viewMode === 'history'">
+            
+            <!-- History Header -->
+            <header class="msg-history-header-bar">
+              <div class="msg-history-header-left">
+                <h2 class="msg-history-main-title">Meeting History</h2>
+                <span class="msg-history-sub-project-name" *ngIf="activeHistoryConversation">{{ activeHistoryConversation.name }}</span>
+              </div>
+
+              <div class="msg-history-header-right">
+                <button class="msg-header-req-meeting-btn" *ngIf="!isProjectCompleted" (click)="openScheduleModal()">
+                  <i class="bi bi-plus-lg"></i> Request Meeting
+                </button>
+                <div class="msg-history-counter-pill">
+                  {{ meetingsHistory.length }} MEETINGS
+                </div>
+              </div>
+            </header>
+
+            <!-- History Content Stream -->
+            <div class="msg-history-stream-scroll custom-scrollbar">
+              <ng-container *ngIf="meetingsHistory.length > 0; else noHistoryTpl">
+                <div class="msg-history-cards-stack">
+                  <div class="msg-history-card-item" *ngFor="let meeting of meetingsHistory">
+                    
+                    <!-- Left Details -->
+                    <div class="msg-history-card-item__left">
+                      <span class="msg-history-status-badge" [ngClass]="'status-' + (meeting.status | lowercase)">
+                        {{ meeting.status }}
+                      </span>
+
+                      <h4 class="msg-history-card-topic">{{ meeting.topic || meeting.projectTitle || 'saiukmae' }}</h4>
+
+                      <div class="msg-history-card-meta">
+                        <span class="msg-meta-pill">
+                          <i class="bi bi-calendar-event"></i> {{ meeting.date }}
+                        </span>
+                        <span class="msg-meta-pill">
+                          <i class="bi bi-clock"></i> {{ meeting.time }}
+                        </span>
+                      </div>
+                    </div>
+
+                    <!-- Right Actions & Meta -->
+                    <div class="msg-history-card-item__right">
+                      
+                      <!-- Join Link Button -->
+                      <a
+                        *ngIf="meeting.status === 'scheduled' && meeting.meetingLink"
+                        [href]="meeting.meetingLink"
+                        target="_blank"
+                        class="msg-meeting-join-now-btn"
+                      >
+                        <i class="bi bi-camera-video-fill"></i> Join NOW
+                      </a>
+
+                      <!-- Pending Approval Actions -->
+                      <div
+                        class="msg-meeting-approval-actions"
+                        *ngIf="(getMyMeetingStatus(meeting) === 'pending' || !meeting.freelancerApproval) && meeting.status === 'pending-approvals' && meeting.requestedBy !== flid"
+                      >
+                        <div class="msg-meeting-btn-group" *ngIf="rejectMeetingId !== (meeting.requestId || meeting._id)">
+                          <button
+                            class="msg-meeting-accept-btn"
+                            (click)="resolveMeeting(meeting.requestId, 'accepted', meeting.p_id)"
+                          >
+                            Accept Invitation
+                          </button>
+                          <button
+                            class="msg-meeting-reject-btn"
+                            (click)="openRejectInput(meeting.requestId || meeting._id)"
+                          >
+                            Reject
+                          </button>
+                        </div>
+
+                        <!-- Rejection Reason Input -->
+                        <div class="msg-meeting-reject-box" *ngIf="rejectMeetingId === (meeting.requestId || meeting._id)">
+                          <label class="msg-meeting-reject-label">Reason for Rejection (Mandatory):</label>
+                          <input
+                            type="text"
+                            class="msg-meeting-reject-field"
+                            placeholder="Enter reason..."
+                            [(ngModel)]="rejectReason"
+                          />
+                          <div class="msg-meeting-reject-btn-row">
+                            <button
+                              class="msg-meeting-reject-submit"
+                              (click)="confirmReject(meeting.requestId || meeting._id, meeting.p_id)"
+                            >
+                              Submit
+                            </button>
+                            <button class="msg-meeting-reject-cancel" (click)="cancelReject()">Cancel</button>
+                          </div>
+                        </div>
+                      </div>
+
+                      <!-- Waiting for Team / Waiting for Client -->
+                      <div
+                        *ngIf="meeting.requestedBy === flid && meeting.status === 'pending-approvals'"
+                        class="msg-meeting-waiting-pill"
+                      >
+                        Waiting For Team
+                      </div>
+
+                      <div
+                        *ngIf="meeting.status === 'waiting-for-schedule'"
+                        class="msg-meeting-waiting-pill"
+                      >
+                        Waiting For Manager
+                      </div>
+
+                      <span class="msg-meeting-requested-on">Requested: {{ meeting.createdAt | date:'yyyy-MM-dd' }}</span>
+                    </div>
+
+                  </div>
+                </div>
+              </ng-container>
+
+              <ng-template #noHistoryTpl>
+                <div class="msg-empty-history-placeholder">
+                  <i class="bi bi-calendar-x msg-empty-history-icon"></i>
+                  <h4 class="msg-empty-history-title">No Meeting Records</h4>
+                  <p class="msg-empty-history-desc">Your past and upcoming meeting requests will appear here.</p>
+                </div>
+              </ng-template>
+            </div>
+
+          </div>
+
+        </section>
+
+      </div>
+
+      <!-- ═════════════════════════════════════════════════════════════
+           CONTAINER 2: LIQUID GLASS RIGHT SIDEBAR
+           ═════════════════════════════════════════════════════════════ -->
+      <aside class="msg-sidebar-card" [class.d-none-mobile]="currentMobileView === 'chat' && isMobile">
+        
+        <!-- Navigation Tab Cards Stack -->
+        <div class="msg-sidebar-nav-stack">
+          <!-- Tab 1: Project Chats -->
+          <div
+            class="msg-sidebar-tab-card"
+            [class.active]="viewMode === 'chat'"
+            (click)="toggleView('chat')"
+          >
+            <div class="msg-sidebar-active-indicator" *ngIf="viewMode === 'chat'"></div>
+            <div class="msg-sidebar-tab-icon-circle">
+              <i class="bi bi-chat-left-text"></i>
+            </div>
+            <div class="msg-sidebar-tab-meta">
+              <h4 class="msg-sidebar-tab-title">Project Chats</h4>
+              <p class="msg-sidebar-tab-subtitle">Direct Collaboration</p>
+            </div>
+          </div>
+
+          <!-- Tab 2: Meeting History -->
+          <div
+            class="msg-sidebar-tab-card"
+            [class.active]="viewMode === 'history'"
+            (click)="toggleView('history')"
+          >
+            <div class="msg-sidebar-active-indicator" *ngIf="viewMode === 'history'"></div>
+            <div class="msg-sidebar-tab-icon-circle">
+              <i class="bi bi-clock"></i>
+            </div>
+            <div class="msg-sidebar-tab-meta">
+              <h4 class="msg-sidebar-tab-title">Meeting History</h4>
+              <p class="msg-sidebar-tab-subtitle">All Workspace Syncs</p>
+            </div>
+            <span class="msg-sidebar-unread-pill ms-auto" *ngIf="pendingMeetingCount > 0">
+              {{ pendingMeetingCount }}
+            </span>
+          </div>
+        </div>
+
+        <div class="msg-sidebar-divider"></div>
+
+        <!-- Active Project Section -->
+        <div class="msg-sidebar-active-proj-wrap">
+          <span class="msg-sidebar-section-tag">ACTIVE PROJECT</span>
+          <h4 class="msg-sidebar-proj-title" [title]="currentProject.name">
+            {{ currentProject.name }}
+          </h4>
+
+          <!-- Manager Card -->
+          <div class="msg-sidebar-manager-card">
+            <div class="msg-sidebar-manager-left">
+              <div class="msg-sidebar-manager-avatar">
+                {{ currentManager.name?.charAt(0)?.toUpperCase() || 'V' }}
+                <span class="msg-sidebar-manager-dot"></span>
+              </div>
+              <div class="msg-sidebar-manager-text">
+                <h5 class="msg-sidebar-manager-name">{{ currentManager.name }}</h5>
+                <p class="msg-sidebar-manager-role">
+                  Project Manager
+                  <span *ngIf="currentManager.department">· {{ currentManager.department }}</span>
+                </p>
+              </div>
+            </div>
+
+            <button class="msg-sidebar-chat-icon-btn" title="Chat with Manager">
+              <i class="bi bi-chat-left"></i>
+            </button>
+          </div>
+        </div>
+
+        <div class="msg-sidebar-divider"></div>
+
+        <!-- Meeting Scheduler Card -->
+        <div class="msg-sidebar-scheduler-wrap">
+          <div class="msg-sidebar-scheduler-header">
+            <div class="msg-scheduler-icon-badge">
+              <i class="bi bi-calendar-event msg-scheduler-red-icon"></i>
+            </div>
+            <h4 class="msg-sidebar-scheduler-title">Meeting Scheduler</h4>
+          </div>
+          <p class="msg-sidebar-scheduler-desc">
+            Connect instantly with a professional meeting link.
+          </p>
+          
+          <button
+            class="msg-sidebar-request-btn"
+            *ngIf="!isProjectCompleted"
+            [disabled]="conversations.length === 0"
+            (click)="openScheduleModal()"
+            [title]="conversations.length === 0 ? 'You need an active project to schedule a meeting.' : 'Request Meeting'"
+          >
+            <i class="bi bi-calendar2-plus me-2"></i> Request Meeting
+          </button>
+
+          <div *ngIf="isProjectCompleted" class="msg-sidebar-archived-pill">
+            <i class="bi bi-archive-fill me-1"></i> PROJECT ARCHIVED
+          </div>
+        </div>
+
+      </aside>
+
+    </div>
+
+  </main>
+</div>
+
+<!-- ═════════════════════════════════════════════════════════════
+     SCHEDULE MEETING MODAL (MATCHING IMAGE 1)
+     ═════════════════════════════════════════════════════════════ -->
+<div class="msg-modal-backdrop" *ngIf="showScheduleModal" (click)="closeScheduleModal()">
+  <div class="msg-schedule-modal" (click)="$event.stopPropagation()">
+    
+    <!-- Modal Header -->
+    <header class="msg-modal-header">
+      <div class="msg-modal-header__icon">
+        <i class="bi bi-camera-video-fill"></i>
+      </div>
+      <div class="msg-modal-header__text">
+        <h3 class="msg-modal-title">Schedule Meeting</h3>
+        <p class="msg-modal-subtitle">Request a project synchronization session</p>
+      </div>
+      <button class="msg-modal-close-btn" (click)="closeScheduleModal()">
+        <i class="bi bi-x-lg"></i>
+      </button>
+    </header>
+
+    <!-- Modal Body -->
+    <div class="msg-modal-body custom-scrollbar">
+      
+      <!-- Field 1: Meeting Topic -->
+      <div class="msg-form-group">
+        <label class="msg-form-label">
+          <i class="bi bi-chat-left-text text-white-50 me-2"></i> Meeting Topic
+        </label>
+        <div class="msg-input-wrap">
+          <input
+            type="text"
+            class="msg-form-input"
+            [(ngModel)]="meetingRequest.topic"
+            placeholder="e.g., Sprint Review & Planning"
+          />
+        </div>
+        <div class="msg-form-warning" *ngIf="meetingRequest.topic && !startsWithAlphabet(meetingRequest.topic)">
+          <i class="bi bi-exclamation-circle-fill me-1"></i> Topic must start with an alphabet letter (A-Z).
+        </div>
+      </div>
+
+      <!-- Field 2: Date & Time dual columns -->
+      <div class="msg-form-row">
+        <div class="msg-form-group">
+          <label class="msg-form-label">
+            <i class="bi bi-calendar-event text-white-50 me-2"></i> Date
+          </label>
+          <div class="msg-input-wrap">
+            <input
+              type="date"
+              class="msg-form-input"
+              [(ngModel)]="meetingRequest.date"
+              [min]="minDate"
+              (keydown)="$event.preventDefault()"
+            />
+          </div>
+        </div>
+
+        <div class="msg-form-group">
+          <label class="msg-form-label">
+            <i class="bi bi-clock text-white-50 me-2"></i> Time
+          </label>
+          <div class="msg-input-wrap">
+            <input
+              type="time"
+              class="msg-form-input"
+              [(ngModel)]="meetingRequest.time"
+            />
+          </div>
+        </div>
+      </div>
+
+      <!-- Alert Banners -->
+      <div class="msg-alert msg-alert--danger" *ngIf="meetingRequest.date && meetingRequest.time && isTimeCompletedOrPast(meetingRequest.date, meetingRequest.time)">
+        <i class="bi bi-exclamation-triangle-fill me-2"></i> This time has already passed. Please choose a future time slot.
+      </div>
+      <div class="msg-alert msg-alert--warning" *ngIf="meetingRequest.date && meetingRequest.time && !isTimeCompletedOrPast(meetingRequest.date, meetingRequest.time) && hasTimeConflict(meetingRequest.date, meetingRequest.time, (pendingMeetings || []).concat(meetingsHistory || []))">
+        <i class="bi bi-exclamation-triangle-fill me-2"></i> <strong>Schedule Conflict:</strong> Another meeting occupies this time slot.
+      </div>
+
+      <!-- Field 3: Notify Team Members -->
+      <div class="msg-form-group">
+        <label class="msg-form-label">
+          <i class="bi bi-people text-white-50 me-2"></i> Notify Team Members
+        </label>
+        
+        <div class="msg-members-stack custom-scrollbar">
+          <!-- Manager Card (Mandatory & Locked Selected) -->
+          <div
+            class="msg-member-select-card msg-member-select-card--mandatory selected"
+            *ngIf="activeContext?.manager_id && activeContext.manager_id !== flid"
+          >
+            <div class="msg-member-select-card__avatar msg-member-select-card__avatar--manager">
+              {{ activeContext.manager?.charAt(0) || 'V' }}
+            </div>
+            <div class="msg-member-select-card__info">
+              <span class="msg-member-select-card__name">{{ activeContext.manager }}</span>
+              <span class="msg-member-select-card__role">PROJECT MANAGER</span>
+            </div>
+            <div class="msg-toggle-switch on locked">
+              <div class="msg-toggle-thumb">
+                <i class="bi bi-check"></i>
+              </div>
+            </div>
+          </div>
+
+          <!-- Client Card -->
+          <div
+            class="msg-member-select-card"
+            *ngIf="activeContext?.client_id && activeContext.client_id !== flid"
+            [class.selected]="isMemberSelected(activeContext.client_id)"
+            (click)="toggleMember(activeContext.client_id)"
+          >
+            <div class="msg-member-select-card__avatar msg-member-select-card__avatar--client">
+              {{ activeContext.client_name?.charAt(0) || 's' }}
+            </div>
+            <div class="msg-member-select-card__info">
+              <span class="msg-member-select-card__name">{{ activeContext.client_name }}</span>
+              <span class="msg-member-select-card__role">CLIENT</span>
+            </div>
+            <div class="msg-toggle-switch" [class.on]="isMemberSelected(activeContext.client_id)">
+              <div class="msg-toggle-thumb">
+                <i class="bi bi-check" *ngIf="isMemberSelected(activeContext.client_id)"></i>
+              </div>
+            </div>
+          </div>
+
+          <!-- Team Members -->
+          <ng-container *ngFor="let member of activeContext?.team">
+            <div
+              class="msg-member-select-card"
+              *ngIf="isOtherMemberValid(member)"
+              [class.selected]="isMemberSelected(member.fl_id || member.id || member._id || member.userId)"
+              (click)="toggleMember(member.fl_id || member.id || member._id || member.userId)"
+            >
+              <img [src]="member.profile_pic || 'assets/profile-placeholder.png'" class="msg-member-select-card__avatar-img" alt="">
+              <div class="msg-member-select-card__info">
+                <span class="msg-member-select-card__name">{{ getFormattedName(member.name || member.fullname) }}</span>
+                <span class="msg-member-select-card__role">TEAM MEMBER</span>
+              </div>
+              <div class="msg-toggle-switch" [class.on]="isMemberSelected(member.fl_id || member.id || member._id || member.userId)">
+                <div class="msg-toggle-thumb">
+                  <i class="bi bi-check" *ngIf="isMemberSelected(member.fl_id || member.id || member._id || member.userId)"></i>
+                </div>
+              </div>
+            </div>
+          </ng-container>
+        </div>
+      </div>
+
+      <!-- Field 4: Briefing Notes -->
+      <div class="msg-form-group">
+        <div class="d-flex justify-content-between align-items-center mb-1">
+          <label class="msg-form-label mb-0">
+            <i class="bi bi-card-text text-white-50 me-2"></i> Briefing Notes
+          </label>
+          <span class="msg-form-optional-tag">OPTIONAL</span>
+        </div>
+        <div class="msg-input-wrap">
+          <textarea
+            class="msg-form-textarea"
+            rows="3"
+            [(ngModel)]="meetingRequest.notes"
+            placeholder="Describe the agenda or objectives for this sync..."
+          ></textarea>
+        </div>
+        <div class="msg-form-warning" *ngIf="meetingRequest.notes && !startsWithAlphabet(meetingRequest.notes)">
+          <i class="bi bi-exclamation-circle-fill me-1"></i> Notes must start with an alphabet letter (A-Z).
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Modal Footer -->
+    <footer class="msg-modal-footer">
+      <button class="msg-modal-cancel-btn" (click)="closeScheduleModal()">Cancel</button>
+      <button class="msg-modal-submit-btn" (click)="scheduleMeeting()">
+        <i class="bi bi-send-fill me-1"></i> Send Request
+      </button>
+    </footer>
+
+  </div>
+</div>
+
+<!-- Skill Management Modal -->
+<div class="msg-modal-backdrop" *ngIf="showSkillModal" (click)="closeSkillModal()">
+  <div class="msg-generic-modal" (click)="$event.stopPropagation()">
+    <header class="msg-modal-header">
+      <div class="msg-modal-header__icon">
+        <i class="bi bi-stars"></i>
+      </div>
+      <div class="msg-modal-header__text">
+        <h3 class="msg-modal-title">Manage Skills</h3>
+        <p class="msg-modal-subtitle">Add or remove your professional skills</p>
+      </div>
+      <button class="msg-modal-close-btn" (click)="closeSkillModal()">
+        <i class="bi bi-x-lg"></i>
+      </button>
+    </header>
+
+    <div class="msg-modal-body">
+      <div class="msg-skills-chip-wrap" *ngIf="getSkillsArray().length > 0">
+        <div class="msg-skill-chip" *ngFor="let skill of getSkillsArray()">
+          <span>{{ skill.skill }}</span>
+          <small *ngIf="skill.status" class="opacity-75 ms-1">({{ skill.status }})</small>
+          <button class="msg-skill-chip-del" (click)="$event.stopPropagation(); openConfirmDelete(skill.id || skill._id)">
+            <i class="bi bi-x"></i>
+          </button>
+        </div>
+      </div>
+
+      <div class="msg-form-group mt-3">
+        <label class="msg-form-label">Add New Skill</label>
+        <div class="msg-alert msg-alert--danger mb-2" *ngIf="skillErrorMessage">
+          {{ skillErrorMessage }}
+        </div>
+        <input
+          type="text"
+          class="msg-form-input mb-2"
+          [(ngModel)]="skilldetails.skill"
+          placeholder="e.g. Angular, Figma, Python..."
+          (keyup.enter)="addNewSkill()"
+        />
+        <div class="d-flex gap-2">
+          <button
+            class="msg-pill-choice flex-grow-1"
+            [class.active]="skilldetails.status === 'Beginner'"
+            (click)="setSkillLevel('Beginner')"
+          >
+            Beginner
+          </button>
+          <button
+            class="msg-pill-choice flex-grow-1"
+            [class.active]="skilldetails.status === 'Intermediate'"
+            (click)="setSkillLevel('Intermediate')"
+          >
+            Intermediate
+          </button>
+          <button
+            class="msg-pill-choice flex-grow-1"
+            [class.active]="skilldetails.status === 'Experienced'"
+            (click)="setSkillLevel('Experienced')"
+          >
+            Experienced
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <footer class="msg-modal-footer">
+      <button class="msg-modal-cancel-btn" (click)="closeSkillModal()">Cancel</button>
+      <button class="msg-modal-submit-btn" (click)="addNewSkill()" [disabled]="!skilldetails.skill || !skilldetails.status">
+        Add Skill
+      </button>
+    </footer>
+  </div>
+</div>
+
+<!-- Delete Skill Confirm Modal -->
+<div class="msg-modal-backdrop" *ngIf="showConfirmModal" (click)="cancelDelete()">
+  <div class="msg-confirm-modal" (click)="$event.stopPropagation()">
+    <div class="msg-confirm-icon">
+      <i class="bi bi-trash3-fill"></i>
+    </div>
+    <h4 class="msg-confirm-title">Remove Skill?</h4>
+    <p class="msg-confirm-desc">This skill will be permanently removed from your profile.</p>
+    <div class="d-flex gap-3 w-100">
+      <button class="msg-modal-cancel-btn flex-grow-1" (click)="cancelDelete()">Cancel</button>
+      <button class="msg-modal-submit-btn flex-grow-1" (click)="confirmDelete()">Remove</button>
+    </div>
+  </div>
+</div>
+
+<!-- Profile Complete Popup -->
+<app-profile-complete-popup
+  [visible]="showProfilePopup"
+  [userType]="'freelancer'"
+  [missingFields]="profileMissingFields"
+  [actionBlocked]="'adding skills'"
+  (navigateToSettings)="onProfilePopupNavigate()"
+  (closePopup)="onProfilePopupClose()">
+</app-profile-complete-popup>
+
+<app-error-message *ngIf="!data"></app-error-message>

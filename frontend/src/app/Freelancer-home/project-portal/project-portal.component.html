@@ -1,0 +1,1121 @@
+<div class="project-portal-page-wrapper" (click)="closeDropdowns()" *ngIf="data"
+  [class.archived-portal]="isProjectCompleted">
+
+  <!-- Crisp Cyberpunk Character Photographic Background on Far Right -->
+  <div class="portal-bg-canvas"></div>
+
+  <!-- Main Viewport Container -->
+  <main class="portal-main-container">
+
+    <!-- Archived Project Mode Banner (if completed) -->
+    <div class="archived-project-banner animate__animated animate__fadeInDown" *ngIf="isProjectCompleted">
+      <div class="banner-content">
+        <i class="bi bi-archive-fill"></i>
+        <div>
+          <span class="banner-title">Archived Project Mode</span>
+          <p class="banner-sub">This project is completed. You are viewing a read-only historical record.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═════════════════════════════════════════════════════════════
+         TOP NAVIGATION: BACK BUTTON & LIVE SCHEDULED MEETING BANNER
+         ═════════════════════════════════════════════════════════════ -->
+    <div class="portal-top-bar" [ngStyle]="{'margin-top': isProjectCompleted ? '60px' : '8px'}">
+      <button class="btn-portal-back" (click)="goBackToProjects()">
+        <i class="bi bi-arrow-left"></i>
+        <span>Back</span>
+      </button>
+    </div>
+
+    <!-- Live Scheduled Meeting Banner (Clean Liquid Glass - No Orange/Red Glare) -->
+    <div *ngIf="showMeetingLinkBanner && activeMeetingLink"
+      class="scheduled-meeting-hero-banner animate__animated animate__fadeInDown">
+      <div class="scheduled-meeting-left-content">
+        <div class="scheduled-icon-pulse">
+          <i class="bi bi-camera-video-fill"></i>
+        </div>
+        <div class="scheduled-meeting-text-meta">
+          <div class="scheduled-meeting-topic-row">
+            <span class="scheduled-live-badge">Live Meeting Scheduled</span>
+            <span class="scheduled-topic-text" *ngIf="activeScheduledMeeting?.topic">Topic: <strong>{{
+                activeScheduledMeeting.topic }}</strong></span>
+          </div>
+          <div class="scheduled-datetime-text" *ngIf="activeScheduledMeeting?.date">
+            <i class="bi bi-calendar3 me-1"></i>{{ activeScheduledMeeting.date }} at {{ activeScheduledMeeting.time }}
+          </div>
+        </div>
+      </div>
+      <div class="scheduled-meeting-action-btns">
+        <a [href]="activeMeetingLink" target="_blank" class="btn-scheduled-join">
+          <i class="bi bi-box-arrow-up-right"></i> Join Now
+        </a>
+        <button *ngIf="isManager" class="btn-scheduled-complete" (click)="markAsCompleted(activeScheduledMeeting)">
+          <i class="bi bi-check2-circle"></i> Complete
+        </button>
+      </div>
+    </div>
+
+    <!-- ═════════════════════════════════════════════════════════════
+         MAIN 2-COLUMN DASHBOARD GRID
+         ═════════════════════════════════════════════════════════════ -->
+    <div class="portal-dashboard-grid">
+
+      <!-- ─── LEFT COLUMN: HERO OVERVIEW + SCROLLABLE ACTIVE TASKS ─── -->
+      <div class="portal-left-column">
+
+        <!-- 1. Project Hero Overview Header -->
+        <div class="portal-hero-meta-section">
+
+          <!-- Full Width Title & Category Line (Guarantees Clean Single Line Title) -->
+          <div class="hero-top-title-row">
+            <h1 class="project-portal-title" [title]="projectInfo.title || 'Kansbe Application'">
+              {{ projectInfo.title || 'Kansbe Application' }}
+            </h1>
+            <div class="project-portal-sub">
+              ID: {{ projectInfo.c_id || project_Id || 'P503' }} •
+              <span class="category-highlight">{{ (projectInfo.skills && projectInfo.skills.length > 0 ?
+                projectInfo.skills[0] : 'SCRIPTWRITTING') | uppercase }}</span>
+            </div>
+          </div>
+
+          <!-- 3-Column Metrics, Buttons & Dates Cluster (Brought Down with Clean Spacing) -->
+          <div class="hero-3col-cluster">
+
+            <!-- Col 1: Left Actions Stack (Vertical) -->
+            <div class="hero-actions-col">
+              <div class="meeting-btn-wrapper">
+                <button class="btn-file-history-solid" (click)="openMeetingsHistoryModal()">
+                  <i class="bi bi-clock-history me-1"></i> Meetings History
+                </button>
+                <span class="meeting-count-badge-floating" *ngIf="pendingMeetingCount > 0"
+                  [title]="pendingMeetingCount + ' actionable meeting(s)'">
+                  {{ pendingMeetingCount }}
+                </span>
+              </div>
+              <button class="btn-request-meeting-glass" (click)="openScheduleModal()" [disabled]="isProjectCompleted">
+                Request Meeting
+              </button>
+
+              <!-- PROJECT COMPLETION WORKFLOW BUTTONS -->
+              <ng-container
+                *ngIf="currentUser?.role === 'Freelancer' && projectInfo?.status === 'in-progress' && allTasksCompleted">
+                <button class="btn-request-completion-glow"
+                  (click)="updateProjectStatus('freelancer-completion-request')">
+                  <i class="bi bi-check2-all"></i> Request Completion
+                </button>
+              </ng-container>
+
+              <ng-container
+                *ngIf="(currentUser?.role === 'Admin' || currentUser?.role === 'Manager') && projectInfo?.status === 'freelancer-completion-request'">
+                <button class="btn-manager-forward-glow" (click)="updateProjectStatus('ready-for-completion')">
+                  <i class="bi bi-arrow-right-circle"></i> Forward to Client
+                </button>
+              </ng-container>
+
+              <ng-container *ngIf="currentUser?.role === 'Client' && projectInfo?.status === 'ready-for-completion'">
+                <button class="btn-client-finalize-glow" (click)="updateProjectStatus('completed')">
+                  <i class="bi bi-stars"></i> Finalize
+                </button>
+              </ng-container>
+            </div>
+
+            <!-- Col 2: Budget & Team Members (With circular dark icons) -->
+            <div class="hero-metrics-block">
+              <!-- Real Budget Stat Item (Manager & Client) -->
+              <div class="hero-stat-item" *ngIf="currentUser.role !== 'Freelancer'">
+                <div class="stat-icon-circle-glass">
+                  <i class="bi bi-currency-rupee"></i>
+                </div>
+                <div class="stat-text-block">
+                  <div class="stat-number-val">₹{{ projectInfo.budget }}</div>
+                  <div class="stat-label-dim">{{ currentUser.role === 'Client' ? 'BUDGET' : 'REAL BUDGET' }}</div>
+                </div>
+              </div>
+
+              <!-- Actual Budget Stat Item (Freelancer & Manager) -->
+              <div class="hero-stat-item" *ngIf="currentUser.role !== 'Client'">
+                <div class="stat-icon-circle-glass">
+                  <i class="bi bi-currency-rupee"></i>
+                </div>
+                <div class="stat-text-block">
+                  <div class="stat-number-val">₹{{ projectInfo.actualBudget }}</div>
+                  <div class="stat-label-dim">ACTUAL BUDGET</div>
+                </div>
+              </div>
+
+              <!-- Team Members Stat Item -->
+              <div class="hero-stat-item">
+                <div class="stat-icon-circle-glass">
+                  <i class="bi bi-person-fill"></i>
+                </div>
+                <div class="stat-text-block">
+                  <div class="stat-number-val">{{ members.length || 0 }}</div>
+                  <div class="stat-label-dim">TEAM MEMBERS</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Col 3: Start Date & Due Date -->
+            <div class="hero-dates-block">
+              <!-- Start Date Item (Manager & Client) -->
+              <div class="hero-date-item" *ngIf="currentUser?.role !== 'Freelancer'">
+                <div class="date-label-dim">START DATE</div>
+                <div class="date-value-bright">{{ formatToDateOnlyIST(projectInfo.startDate) || 'N/A' }}</div>
+              </div>
+
+              <!-- End Date Item (Manager & Client) -->
+              <div class="hero-date-item" *ngIf="currentUser?.role !== 'Freelancer'">
+                <div class="date-label-dim">END DATE</div>
+                <div class="date-value-bright">{{ formatToDateOnlyIST(projectInfo.dueDate) || 'N/A' }}</div>
+              </div>
+
+              <!-- Actual Start Date Item (Freelancer & Manager) -->
+              <div class="hero-date-item" *ngIf="currentUser?.role !== 'Client'">
+                <div class="date-label-dim">ACTUAL START DATE</div>
+                <div class="date-value-bright">{{ formatToDateOnlyIST(projectInfo.actualStartDate) || 'N/A' }}</div>
+              </div>
+
+              <!-- Actual End Date Item (Freelancer & Manager) -->
+              <div class="hero-date-item" *ngIf="currentUser?.role !== 'Client'">
+                <div class="date-label-dim">ACTUAL END DATE</div>
+                <div class="date-value-bright">{{ formatToDateOnlyIST(projectInfo.actualEndDate) || 'N/A' }}</div>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+
+        <!-- 2. Active Tasks Section (ONLY THIS SECTION SCROLLS INTERNALLY!) -->
+        <div class="portal-tasks-section">
+
+          <!-- Header with Red Checkmark & Timeline Pill Button -->
+          <div class="tasks-section-header">
+            <div class="tasks-heading-left">
+              <div class="tasks-check-icon">
+                <i class="bi bi-check-circle-fill"></i>
+              </div>
+              <h2 class="tasks-section-title">Active Tasks</h2>
+            </div>
+
+            <div class="tasks-heading-right">
+              <button class="btn-timeline-capsule" (click)="toggleTimeline()">
+                <i class="bi bi-list-task"></i>
+                <span>Timeline</span>
+              </button>
+
+              <!-- Add Task Button (Admin Only) -->
+              <button class="btn-add-task-icon" *ngIf="currentUser.role === 'Admin' && !isProjectCompleted"
+                (click)="openCreateTaskModal($event)" title="Add New Task">
+                <i class="bi bi-plus"></i>
+              </button>
+            </div>
+          </div>
+
+          <!-- Gantt Chart Timeline View (Expandable) -->
+          <div class="gantt-container-glass mb-3" *ngIf="showTimeline">
+            <div class="gantt-chart">
+              <div class="gantt-header">
+                <div class="gantt-month" *ngFor="let month of timelineMonths" [style.left.%]="month.leftPct">
+                  {{ month.label }}
+                </div>
+              </div>
+              <div class="gantt-row" *ngFor="let task of timelineTasks">
+                <div class="gantt-label text-truncate" [title]="task.title">{{ task.title }}</div>
+                <div class="gantt-track">
+                  <div class="gantt-bar" [style.left.%]="task.leftPct" [style.width.%]="task.widthPct"
+                    [style.background-color]="task.statusColor"
+                    title="{{ task.title }} ({{ task.startLabel }} - {{ task.endLabel }})">
+                  </div>
+                </div>
+              </div>
+              <div class="text-center py-3 text-muted small" *ngIf="timelineTasks.length === 0">
+                No tasks with valid dates to display on timeline.
+              </div>
+            </div>
+          </div>
+
+          <!-- Tasks Scrollable Stack (Internal Scroll Only) -->
+          <div class="portal-tasks-scroll-list custom-scrollbar" [class.is-empty-tasks]="tasks.length === 0">
+
+            <ng-container *ngFor="let task of tasks; let i = index">
+
+              <!-- Current / In-Progress Task (Liquid Glass Orange Card with Current Tag) -->
+              <div class="task-card-current"
+                *ngIf="task.status?.toLowerCase() === 'in progress' || task.status?.toLowerCase() === 'in-progress' || (i === 0 && task.status?.toLowerCase() !== 'completed')"
+                (click)="showTaskDetails(task); $event.stopPropagation()">
+                <div class="task-card-top-row">
+                  <div class="task-icon-orb-orange">
+                    <div class="task-icon-concentric-dot-orange"></div>
+                  </div>
+                  <span class="task-status-tag tag-current" style="text-transform: capitalize;">{{ task.status ?
+                    task.status.replace('-', ' ') : 'In Progress' }}</span>
+                </div>
+                <div class="task-text-group">
+                  <h3 class="task-name">{{ task.title }}</h3>
+                  <div class="task-date-text">{{ formatToDateOnlyIST(task.dueDate) || 'N/A' }}</div>
+                  <div *ngIf="task.reject_reason && getStatusBadgeClass(task.status) !== 'status-completed'"
+                    style="margin-top: 10px; padding: 8px; border-left: 2px solid #f44336; background: rgba(244, 67, 54, 0.1); border-radius: 4px; font-size: 12px; color: rgba(255,255,255,0.8);">
+                    <strong style="color: #ff5252;">Feedback:</strong> {{ task.reject_reason }}
+                  </div>
+                </div>
+              </div>
+
+              <!-- Pending Task (Liquid Glass Card with Light Grey & Pending Tag) -->
+              <div class="task-card-pending"
+                *ngIf="task.status?.toLowerCase() === 'pending' || (!task.status && i > 0) || (task.status?.toLowerCase() !== 'in progress' && task.status?.toLowerCase() !== 'in-progress' && task.status?.toLowerCase() !== 'completed' && i > 0)"
+                (click)="showTaskDetails(task); $event.stopPropagation()">
+                <div class="task-card-top-row">
+                  <div class="task-icon-orb-pending">
+                    <i class="bi bi-clock-history"></i>
+                  </div>
+                  <span class="task-status-tag tag-pending" style="text-transform: capitalize;">{{ task.status ?
+                    task.status.replace('-', ' ') : 'Pending' }}</span>
+                </div>
+                <div class="task-text-group">
+                  <h3 class="task-name">{{ task.title }}</h3>
+                  <div class="task-date-text">{{ formatToDateOnlyIST(task.dueDate) || 'N/A' }}</div>
+                  <div *ngIf="task.reject_reason && getStatusBadgeClass(task.status) !== 'status-completed'"
+                    style="margin-top: 10px; padding: 8px; border-left: 2px solid #f44336; background: rgba(244, 67, 54, 0.1); border-radius: 4px; font-size: 12px; color: rgba(255,255,255,0.8);">
+                    <strong style="color: #ff5252;">Feedback:</strong> {{ task.reject_reason }}
+                  </div>
+                </div>
+              </div>
+
+              <!-- Completed Task (Liquid Glass Card with Checkmark & Completed Tag) -->
+              <div class="task-card-completed" *ngIf="task.status?.toLowerCase() === 'completed'"
+                (click)="showTaskDetails(task); $event.stopPropagation()">
+                <div class="task-card-top-row">
+                  <div class="task-icon-orb-green">
+                    <i class="bi bi-check-lg"></i>
+                  </div>
+                  <span class="task-status-tag tag-completed" style="text-transform: capitalize;">{{ task.status ?
+                    task.status.replace('-', ' ') : 'Completed' }}</span>
+                </div>
+                <div class="task-text-group">
+                  <h3 class="task-name">{{ task.title }}</h3>
+                  <div class="task-date-text">{{ formatToDateOnlyIST(task.dueDate) || 'N/A' }}</div>
+                </div>
+              </div>
+
+            </ng-container>
+
+            <!-- Empty State when no tasks exist -->
+            <div class="empty-tasks-state" *ngIf="tasks.length === 0"
+              style="display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 250px; text-align: center; color: rgba(255,255,255,0.7); padding: 40px 20px;">
+              <i class="bi bi-list-task" style="font-size: 40px; margin-bottom: 15px; opacity: 0.6;"></i>
+              <h3 style="font-size: 22px; font-weight: 600; margin: 0;">No active tasks found</h3>
+              <p style="font-size: 15px; margin-top: 8px; opacity: 0.7;">This project currently has no tasks.</p>
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+      <!-- ─── RIGHT COLUMN: FROSTED GLASS PROGRESS CARD, TEAM & MANAGER, CHAT ─── -->
+      <div class="portal-right-column">
+
+        <!-- 1. Top Card: Project Progress with Tall Liquid Glassy Gauge & 3 Metric Pills -->
+        <div class="portal-progress-card">
+          <h3 class="progress-card-title">Project progress</h3>
+
+          <!-- Circular Progress Ring (Centered 0%) -->
+          <div class="circular-progress-wrap">
+            <svg class="progress-ring-svg" viewBox="0 0 160 160">
+              <circle class="progress-ring-track" cx="80" cy="80" r="68" fill="none" stroke-width="9" />
+              <circle class="progress-ring-indicator" cx="80" cy="80" r="68" fill="none" stroke-width="9"
+                stroke-dasharray="427.256"
+                [attr.stroke-dashoffset]="427.256 - (427.256 * (getOverallProgressPercentage() || 0)) / 100" />
+            </svg>
+            <div class="progress-percentage-center">{{ getOverallProgressPercentage() || 0 }}%</div>
+          </div>
+
+          <!-- 3 Micro Summary Pills -->
+          <div class="progress-pills-row">
+            <!-- Box 1: Total Tasks -->
+            <div class="summary-pill-box">
+              <div class="pill-box-icon"><i class="bi bi-record-circle"></i></div>
+              <div class="pill-box-num">{{ getTotalTasksCount() || 0 }}</div>
+              <div class="pill-box-lbl">TOTAL TASKS</div>
+            </div>
+
+            <!-- Box 2: Pending Tasks -->
+            <div class="summary-pill-box">
+              <div class="pill-box-icon"><i class="bi bi-circle-half"></i></div>
+              <div class="pill-box-num">{{ getPendingTasksCount() || 0 }}</div>
+              <div class="pill-box-lbl">PENDING TASKS</div>
+            </div>
+
+            <!-- Box 3: Completed Tasks -->
+            <div class="summary-pill-box">
+              <div class="pill-box-icon"><i class="bi bi-check-circle"></i></div>
+              <div class="pill-box-num">{{ getCompletedTasksCount() || 0 }}</div>
+              <div class="pill-box-lbl">COMPLETED TASKS</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 2. Bottom Card: Team Members & Contact Manager -->
+        <div class="portal-team-manager-card">
+          <div class="team-manager-split-row">
+
+            <!-- Left Sub-column: Team Members (Display Only - Non Clickable) -->
+            <div class="split-col-team">
+              <h4 class="card-section-heading">Team Members</h4>
+              <div class="members-capsules-list custom-scrollbar">
+                <!-- Real Member Pills or Fallback (Display Only) -->
+                <ng-container *ngIf="members && members.length > 0; else fallbackMembers">
+                  <div class="member-pill-item member-display-only" *ngFor="let m of members">
+                    <div class="member-avatar-orb">{{ getMemberAvatarInitials(m.fullname || m.usr_name || m.username ||
+                      m.name || m.member) }}</div>
+                    <div class="member-pill-info">
+                      <div class="member-pill-name">{{ getMemberDisplayName(m.fullname || m.usr_name || m.username ||
+                        m.name || m.member) }}</div>
+                      <div class="member-pill-sub">{{ m.role || 'Team Member' }}</div>
+                    </div>
+                  </div>
+                </ng-container>
+                <ng-template #fallbackMembers>
+                  <div class="member-pill-item member-display-only">
+                    <div class="member-avatar-orb">CH</div>
+                    <div class="member-pill-info">
+                      <div class="member-pill-name">Charan</div>
+                      <div class="member-pill-sub">Team Member</div>
+                    </div>
+                  </div>
+                </ng-template>
+              </div>
+            </div>
+
+            <!-- Right Sub-column: Contact Manager -->
+            <div class="split-col-manager">
+              <h4 class="card-section-heading">Contact Manager</h4>
+              <div class="manager-card-content">
+                <div class="manager-pill-item member-display-only" style="cursor: default; pointer-events: none;">
+                  <div class="manager-avatar-orb">{{ getMemberAvatarInitials(managerName) }}</div>
+                  <div class="manager-pill-info">
+                    <div class="manager-pill-name">{{ managerName || 'Manager' }}</div>
+                    <div class="manager-pill-sub">Average response: 5 mins</div>
+                  </div>
+                </div>
+
+                <!-- Message Manager Button (Commented for future use) -->
+                <!-- <button class="btn-message-manager-glass" (click)="openManagerChat($event)">
+                  Message Manager
+                </button> -->
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- 3. Prominent Glowing Kansbe Red Floating Chat Button (Group Chat) -->
+        <button class="btn-portal-main-chat" (click)="openGroupChat($event)">
+          <i class="bi bi-chat-fill"></i>
+          <span>Chat</span>
+        </button>
+
+      </div>
+
+    </div>
+
+  </main>
+
+  <!-- ═════════════════════════════════════════════════════════════
+       FLOATING CHAT MESSENGER DRAWER (SLIDE-UP FROM BOTTOM)
+       ═════════════════════════════════════════════════════════════ -->
+  <div class="floating-chat-drawer" [class.expanded]="isPlayerExpanded" (click)="$event.stopPropagation()">
+
+    <!-- Drawer Header -->
+    <div class="chat-drawer-header">
+      <button class="chat-back-btn" (click)="closeChat($event)">
+        <i class="bi bi-arrow-left"></i>
+        <span>Back</span>
+      </button>
+      <div class="chat-header-center">
+        <h2 class="chat-header-title">{{ chatMode === 'group' ? 'Group Chat' : (managerName || 'Manager') }}
+        </h2>
+      </div>
+      <div class="chat-header-spacer"></div>
+    </div>
+
+    <!-- Messages Container (Receiver Left, Sender Right) -->
+    <div class="chat-messages-scroll-area custom-scrollbar" #chatContainer>
+      <div class="chat-date-separator"><span>TODAY</span></div>
+
+      <ng-container *ngFor="let msg of messages">
+
+        <!-- RECEIVER MESSAGE (LEFT ALIGNED) -->
+        <div class="chat-msg-row receiver" *ngIf="!msg.isCurrentUser">
+          <div class="msg-avatar-orb-red">
+            {{ getMemberAvatarInitials(msg.user || msg.userId) }}
+          </div>
+          <div class="msg-body-column">
+            <div class="msg-sender-meta">
+              <span class="msg-sender-name-red">{{ getMemberDisplayName(msg.user || msg.userId) }}</span>
+              <span class="msg-sender-role">• {{ getMemberRole(msg.user || msg.userId, msg.role) }}</span>
+            </div>
+
+            <div class="msg-bubble receiver-bubble">
+              <!-- Quoted reply if exists -->
+              <div class="msg-reply-quote" *ngIf="msg.replyToText">
+                <div class="reply-quote-user">Replying to {{ getMemberDisplayName(msg.replyToUser || 'User') }}</div>
+                <div class="reply-quote-text">{{ msg.replyToText }}</div>
+              </div>
+              <div class="msg-main-text">{{ msg.text }}</div>
+            </div>
+
+            <div class="msg-footer-row">
+              <span class="msg-timestamp">{{ msg.createdAt | date:'shortTime' }}</span>
+              <button class="btn-msg-reply" (click)="replyToMessage(msg)" title="Reply">
+                <i class="bi bi-reply-fill"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- SENDER MESSAGE (RIGHT ALIGNED - MY MESSAGE) -->
+        <div class="chat-msg-row sender" *ngIf="msg.isCurrentUser">
+          <div class="msg-body-column sender-col">
+            <div class="msg-bubble sender-bubble">
+              <!-- Quoted reply if exists -->
+              <div class="msg-reply-quote sender-quote" *ngIf="msg.replyToText">
+                <div class="reply-quote-user">Replying to {{ getMemberDisplayName(msg.replyToUser || 'User') }}</div>
+                <div class="reply-quote-text">{{ msg.replyToText }}</div>
+              </div>
+              <div class="msg-main-text">{{ msg.text }}</div>
+            </div>
+
+            <div class="msg-footer-row sender-footer">
+              <span class="msg-timestamp">{{ msg.createdAt | date:'shortTime' }}</span>
+              <span class="msg-status-check"><i class="bi bi-check2-all"></i></span>
+            </div>
+          </div>
+        </div>
+
+      </ng-container>
+
+      <div class="chat-empty-hint" *ngIf="messages.length === 0">
+        <div class="chat-empty-icon"><i class="bi bi-chat-dots"></i></div>
+        <p>No messages yet in this project.</p>
+        <span>Send a message below to start conversation!</span>
+      </div>
+    </div>
+
+    <!-- Replying Banner (if active) -->
+    <div class="chat-replying-banner" *ngIf="replyingToMessage">
+      <div class="replying-info">
+        <span class="replying-label">Replying to <strong>{{ getFormattedName(replyingToMessage.user) }}</strong></span>
+        <span class="replying-snippet">{{ replyingToMessage.text }}</span>
+      </div>
+      <button class="btn-cancel-reply" (click)="cancelReply()"><i class="bi bi-x-lg"></i></button>
+    </div>
+
+    <!-- Input Bar -->
+    <div class="chat-input-bar-wrap">
+      <div class="chat-input-pill">
+        <input type="file" id="portal-chat-file-input" class="d-none" (change)="onFileSelected($event)" />
+        <button class="btn-chat-tool" type="button" (click)="triggerFileUpload()" title="Add attachment"><i
+            class="bi bi-plus-circle"></i></button>
+
+        <div class="portal-chat-emoji-wrap">
+          <button class="btn-chat-tool" type="button" (click)="toggleEmojiPicker()" title="Add emoji"><i
+              class="bi bi-emoji-smile"></i></button>
+          <div class="msg-emoji-picker-dropdown" *ngIf="showEmojiPicker">
+            <span (click)="addEmoji('😊')">😊</span>
+            <span (click)="addEmoji('😂')">😂</span>
+            <span (click)="addEmoji('👍')">👍</span>
+            <span (click)="addEmoji('❤️')">❤️</span>
+            <span (click)="addEmoji('🔥')">🔥</span>
+            <span (click)="addEmoji('🎉')">🎉</span>
+            <span (click)="addEmoji('🚀')">🚀</span>
+          </div>
+        </div>
+
+        <input type="text" #chatInput [(ngModel)]="newMessage" (keydown)="handleKeyDown($event)"
+          [placeholder]="isProjectCompleted ? 'Project archived' : 'Type a message...'" class="chat-text-input"
+          [disabled]="isProjectCompleted">
+        <button class="chat-send-btn-circle" (click)="sendMessage(); $event.stopPropagation()"
+          [disabled]="isProjectCompleted || !newMessage.trim()" title="Send">
+          <i class="bi bi-send-fill"></i>
+        </button>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ═════════════════════════════════════════════════════════════
+       MODALS: LIQUID GLASS DARK THEME
+       ═════════════════════════════════════════════════════════════ -->
+
+  <!-- 1. Task Details Modal (653px x 580px, Radius 20px, Liquid Frosted Glass) -->
+  <div class="modal-overlay task-details-overlay" *ngIf="selectedTask" (click)="closeTaskDetails()">
+    <div class="task-details-popup-card" (click)="$event.stopPropagation()">
+
+      <!-- Top Header -->
+      <div class="task-details-modal-header">
+        <div>
+          <h3 class="task-details-modal-title">Task Details</h3>
+          <div class="task-details-modal-sub">Full milestone overview</div>
+        </div>
+        <button class="task-details-modal-close" (click)="closeTaskDetails()" title="Close">
+          <i class="bi bi-x-lg"></i>
+        </button>
+      </div>
+
+      <!-- Main Task Title & Status Pill -->
+      <h2 class="task-details-main-heading">{{ selectedTask.title || 'Task Details' }}</h2>
+
+      <div class="task-details-status-badge" [ngClass]="getStatusBadgeClass(selectedTask.status)">
+        <i class="bi bi-check-lg" *ngIf="getStatusBadgeClass(selectedTask.status) === 'status-completed'"></i>
+        <i class="bi bi-play-fill" *ngIf="getStatusBadgeClass(selectedTask.status) === 'status-in-progress'"></i>
+        <i class="bi bi-clock-history" *ngIf="getStatusBadgeClass(selectedTask.status) === 'status-pending'"></i>
+        <i class="bi bi-hourglass-split"
+          *ngIf="getStatusBadgeClass(selectedTask.status) === 'status-waiting-approval'"></i>
+        <i class="bi bi-circle" *ngIf="getStatusBadgeClass(selectedTask.status) === 'status-not-started'"></i>
+        <span>{{
+          getStatusBadgeClass(selectedTask.status) === 'status-in-progress' ? 'IN PROGRESS' :
+          getStatusBadgeClass(selectedTask.status) === 'status-completed' ? 'COMPLETED' :
+          getStatusBadgeClass(selectedTask.status) === 'status-waiting-approval' ? 'WAITING APPROVAL' :
+          getStatusBadgeClass(selectedTask.status) === 'status-need-changes' ? 'NEEDS CHANGES' :
+          getStatusBadgeClass(selectedTask.status) === 'status-not-started' ? 'NOT STARTED' : 'PENDING'
+          }}</span>
+      </div>
+
+      <!-- Divider -->
+      <div class="task-details-divider"></div>
+
+      <!-- Meta Grid: ASSIGNED TO | DUE DATE -->
+      <div class="task-details-meta-grid">
+        <div class="task-meta-item">
+          <span class="task-meta-label">ASSIGNED TO</span>
+          <div class="task-meta-val-row">
+            <div class="task-assignee-orb">{{ getMemberAvatarInitials(selectedTask.assignedTo || 'Unassigned') }}</div>
+            <span class="task-assignee-name">{{ getMemberDisplayName(selectedTask.assignedTo || 'Unassigned') }}</span>
+          </div>
+        </div>
+
+        <div class="task-meta-item">
+          <span class="task-meta-label">DUE DATE</span>
+          <div class="task-meta-val-row">
+            <i class="bi bi-calendar-event task-calendar-icon"></i>
+            <span class="task-due-date-val">{{ formatToDateOnlyIST(selectedTask.dueDate) || 'N/A' }}</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Divider -->
+      <div class="task-details-divider"></div>
+
+      <!-- Strategic Summary -->
+      <div class="task-summary-section">
+        <span class="task-meta-label">STRATEGIC SUMMARY</span>
+        <div class="task-summary-box custom-scrollbar">
+          {{ selectedTask.summary || 'No summary provided.' }}
+        </div>
+
+        <!-- Reason of Rejection -->
+        <ng-container *ngIf="selectedTask.reject_reason">
+          <span class="task-meta-label" style="margin-top: 15px; display: block; color: #ff5252;">REASON OF
+            REJECTION</span>
+          <div class="task-summary-box custom-scrollbar"
+            style="border-left: 3px solid #f44336; background: rgba(244, 67, 54, 0.1);">
+            {{ selectedTask.reject_reason }}
+          </div>
+        </ng-container>
+      </div>
+
+      <!-- Divider above Close Preview -->
+      <div class="task-details-divider"></div>
+
+      <!-- Footer Action: CLOSE PREVIEW and Role Buttons -->
+      <div class="task-details-footer" *ngIf="!showRejectReasonInput"
+        style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+        <div class="task-actions-left" style="display: flex; gap: 10px; align-items: center;">
+          <!-- Freelancer Actions -->
+          <ng-container *ngIf="currentUser?.role === 'Freelancer'">
+            <button class="btn-modal-submit"
+              *ngIf="getStatusBadgeClass(selectedTask.status) === 'status-not-started' || getStatusBadgeClass(selectedTask.status) === 'status-need-changes'"
+              (click)="startTask(selectedTask)">Start Task</button>
+            <button class="btn-modal-submit" *ngIf="getStatusBadgeClass(selectedTask.status) === 'status-in-progress'"
+              (click)="submitTaskForApproval(selectedTask)">Complete Task</button>
+            <span style="color: #FFC107; font-size: 13px; font-weight: 500;"
+              *ngIf="getStatusBadgeClass(selectedTask.status) === 'status-waiting-approval'">Waiting for Manager
+              Approval</span>
+          </ng-container>
+
+          <!-- Manager Actions -->
+          <ng-container *ngIf="currentUser?.role === 'Admin' || currentUser?.role === 'Manager'">
+            <ng-container *ngIf="getStatusBadgeClass(selectedTask.status) === 'status-waiting-approval'">
+              <button class="btn-modal-cancel" (click)="rejectTask(selectedTask)">Reject</button>
+              <button class="btn-modal-submit" (click)="approveTask(selectedTask)">Approve & Complete</button>
+            </ng-container>
+            <span style="color: #f44336; font-size: 13px; font-weight: 500;"
+              *ngIf="getStatusBadgeClass(selectedTask.status) === 'status-need-changes'">Task Rejected. Waiting for
+              Freelancer</span>
+          </ng-container>
+        </div>
+
+        <button class="btn-close-preview-text" (click)="closeTaskDetails()">CLOSE PREVIEW</button>
+      </div>
+
+      <!-- Footer Action: Reject Reason Input (Manager Only) -->
+      <div class="task-details-footer" *ngIf="showRejectReasonInput"
+        style="flex-direction: column; align-items: stretch; gap: 10px; width: 100%;">
+        <div style="font-size: 14px; color: #fff; margin-bottom: 5px; font-weight: 500;">Provide reason for rejection:
+        </div>
+        <textarea class="task-input-glass" rows="3" [(ngModel)]="rejectReasonText"
+          placeholder="Explain what needs to be changed..."
+          style="width: 100%; border-radius: 8px; padding: 10px; background: rgba(0,0,0,0.2); color: #fff; border: 1px solid rgba(255,255,255,0.1);"></textarea>
+        <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 5px;">
+          <button class="btn-modal-cancel" (click)="cancelTaskReject()">Cancel</button>
+          <button class="btn-modal-submit" style="background: #f44336; border-color: #f44336;"
+            (click)="submitRejectReason(selectedTask)">Confirm Reject</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- 2. Create Task Modal -->
+  <div class="modal-overlay" *ngIf="showCreateTaskModal" (click)="closeCreateTaskModal($event)">
+    <div class="glass-modal-card" (click)="$event.stopPropagation(); showAssigneeDropdown = false">
+      <div class="modal-header-glass">
+        <h3 class="modal-title-glass">Create Task</h3>
+        <button class="modal-close-btn" (click)="closeCreateTaskModal()"><i class="bi bi-x-lg"></i></button>
+      </div>
+
+      <form #taskForm="ngForm" (ngSubmit)="createNewTask()">
+        <div class="modal-body-glass custom-scrollbar">
+          <div class="mb-3">
+            <label class="modal-dim-lbl mb-1">Task Name</label>
+            <input type="text" class="modal-glass-input" [(ngModel)]="newTask.TaskTitle" name="TaskTitle" required
+              placeholder="Milestone title">
+          </div>
+
+          <div class="row g-3 mb-3">
+            <div class="col-4" style="position: relative;">
+              <label class="modal-dim-lbl mb-1">Assignee</label>
+
+              <!-- Custom Glassy Dropdown -->
+              <div class="modal-glass-input custom-dropdown-trigger"
+                (click)="showAssigneeDropdown = !showAssigneeDropdown; $event.stopPropagation()"
+                style="cursor: pointer; display: flex; justify-content: space-between; align-items: center; user-select: none;">
+                <span>{{ getSelectedAssigneeName() }}</span>
+                <i class="bi bi-chevron-down" style="opacity: 0.7;"></i>
+              </div>
+
+              <!-- Dropdown Menu -->
+              <div class="glassy-dropdown-menu custom-scrollbar" *ngIf="showAssigneeDropdown">
+                <div class="glassy-dropdown-item" (click)="selectAssignee('', $event)">Select Associate</div>
+                <div class="glassy-dropdown-item" *ngFor="let m of members" (click)="selectAssignee(m.member, $event)">
+                  {{ getFormattedName(m.fullname || m.member) }}
+                </div>
+              </div>
+
+              <!-- Hidden input for form validation -->
+              <input type="hidden" [(ngModel)]="newTask.assignedTo" name="assignedTo" required>
+            </div>
+            <div class="col-4">
+              <label class="modal-dim-lbl mb-1">Start Date</label>
+              <input type="date" class="modal-glass-input" [(ngModel)]="newTask.startDate" name="startDate" required
+                #startDateInput (click)="startDateInput.showPicker()">
+            </div>
+            <div class="col-4">
+              <label class="modal-dim-lbl mb-1">Due Date</label>
+              <input type="date" class="modal-glass-input" [(ngModel)]="newTask.dueDate" name="dueDate" required
+                #dueDateInput (click)="dueDateInput.showPicker()">
+            </div>
+          </div>
+
+          <div class="mb-0">
+            <label class="modal-dim-lbl mb-1">Summary</label>
+            <textarea class="modal-glass-input" rows="3" [(ngModel)]="newTask.summary" name="summary"
+              placeholder="Task summary..." required></textarea>
+          </div>
+        </div>
+
+        <div class="modal-footer-glass" style="flex-wrap: wrap;">
+          <div *ngIf="taskErrorMessage"
+            style="width: 100%; color: #FF0100; font-size: 13px; text-align: right; margin-bottom: 8px;">
+            {{ taskErrorMessage }}
+          </div>
+          <button type="button" class="btn-modal-cancel" (click)="closeCreateTaskModal()">Cancel</button>
+          <button type="button" class="btn-modal-submit" (click)="createNewTask()">Create Task</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ═════════════════════════════════════════════════════════════
+       3. SCHEDULE MEETING MODAL (MATCHING MESSAGES PAGE 1:1)
+       ═════════════════════════════════════════════════════════════ -->
+  <div class="msg-modal-backdrop" *ngIf="showScheduleModal" (click)="closeScheduleModal()">
+    <div class="msg-schedule-modal" (click)="$event.stopPropagation()">
+
+      <!-- Modal Header -->
+      <header class="msg-modal-header">
+        <div class="msg-modal-header__icon">
+          <i class="bi bi-camera-video-fill"></i>
+        </div>
+        <div class="msg-modal-header__text">
+          <h3 class="msg-modal-title">Schedule Meeting</h3>
+          <p class="msg-modal-subtitle">Request a project synchronization session</p>
+        </div>
+        <button class="msg-modal-close-btn" (click)="closeScheduleModal()">
+          <i class="bi bi-x-lg"></i>
+        </button>
+      </header>
+
+      <!-- Modal Body -->
+      <div class="msg-modal-body custom-scrollbar">
+
+        <!-- Field 1: Meeting Topic -->
+        <div class="msg-form-group">
+          <label class="msg-form-label">
+            <i class="bi bi-chat-left-text text-white me-2"></i> Meeting Topic
+          </label>
+          <div class="msg-input-wrap">
+            <input type="text" class="msg-form-input" [(ngModel)]="meetingRequest.topic"
+              placeholder="e.g., Sprint Review & Planning" />
+          </div>
+          <div class="msg-form-warning" *ngIf="meetingRequest.topic && !startsWithAlphabet(meetingRequest.topic)">
+            <i class="bi bi-exclamation-circle-fill me-1"></i> Topic must start with an alphabet letter (A-Z).
+          </div>
+        </div>
+
+        <!-- Field 2: Date & Time dual columns -->
+        <div class="msg-form-row">
+          <div class="msg-form-group">
+            <label class="msg-form-label">
+              <i class="bi bi-calendar-event text-white me-2"></i> Date
+            </label>
+            <div class="msg-input-wrap">
+              <input type="date" class="msg-form-input" [(ngModel)]="meetingRequest.date" [min]="minDate"
+                (keydown)="$event.preventDefault()" />
+            </div>
+          </div>
+
+          <div class="msg-form-group">
+            <label class="msg-form-label">
+              <i class="bi bi-clock text-white me-2"></i> Time
+            </label>
+            <div class="msg-input-wrap">
+              <input type="time" class="msg-form-input" [(ngModel)]="meetingRequest.time" />
+            </div>
+          </div>
+        </div>
+
+        <!-- Alert Banners -->
+        <div class="msg-alert msg-alert--danger"
+          *ngIf="meetingRequest.date && meetingRequest.time && isTimeCompletedOrPast(meetingRequest.date, meetingRequest.time)">
+          <i class="bi bi-exclamation-triangle-fill me-2"></i> This time has already passed. Please choose a future time
+          slot.
+        </div>
+        <div class="msg-alert msg-alert--warning"
+          *ngIf="meetingRequest.date && meetingRequest.time && !isTimeCompletedOrPast(meetingRequest.date, meetingRequest.time) && hasTimeConflict(meetingRequest.date, meetingRequest.time, (pendingMeetings || []).concat(meetingsHistory || []))">
+          <i class="bi bi-exclamation-triangle-fill me-2"></i> <strong>Schedule Conflict:</strong> Another meeting
+          occupies this time slot.
+        </div>
+
+        <!-- Field 3: Notify Team Members -->
+        <div class="msg-form-group">
+          <label class="msg-form-label">
+            <i class="bi bi-people text-white me-2"></i> Notify Team Members
+          </label>
+
+          <div class="msg-members-stack custom-scrollbar">
+            <!-- Manager Card (Mandatory & Locked Selected - Only shown if requester is NOT the Manager) -->
+            <div class="msg-member-select-card msg-member-select-card--mandatory selected"
+              *ngIf="manager_id && manager_id !== flid" (click)="$event.stopPropagation()">
+              <div class="msg-member-select-card__avatar msg-member-select-card__avatar--manager">
+                <i class="bi bi-person-badge"></i>
+              </div>
+              <div class="msg-member-select-card__info">
+                <span class="msg-member-select-card__name">{{ (ProjectDetails?.project_manager || 'Project Manager') |
+                  uppercase }}</span>
+                <span class="msg-member-select-card__role">PROJECT MANAGER (MANDATORY)</span>
+              </div>
+              <div class="msg-toggle-switch on locked"
+                title="Project Manager is always included and cannot be deselected">
+                <div class="msg-toggle-thumb">
+                  <i class="bi bi-lock-fill"></i>
+                </div>
+              </div>
+            </div>
+
+            <!-- Client Card (Optional - Only shown if requester is NOT the Client) -->
+            <div class="msg-member-select-card" *ngIf="client_id && client_id !== flid"
+              [class.selected]="isMemberSelected(client_id)" (click)="toggleMember(client_id)">
+              <div class="msg-member-select-card__avatar msg-member-select-card__avatar--client">
+                <i class="bi bi-briefcase"></i>
+              </div>
+              <div class="msg-member-select-card__info">
+                <span class="msg-member-select-card__name">{{ (client_name || 'Client') | uppercase }}</span>
+                <span class="msg-member-select-card__role">CLIENT</span>
+              </div>
+              <div class="msg-toggle-switch" [class.on]="isMemberSelected(client_id)">
+                <div class="msg-toggle-thumb"></div>
+              </div>
+            </div>
+
+            <!-- Other Assigned Team Members / Freelancers (Excludes requester) -->
+            <ng-container *ngIf="projectMembers && projectMembers.length > 0">
+              <ng-container *ngFor="let member of projectMembers">
+                <div class="msg-member-select-card" *ngIf="isOtherMemberValid(member)"
+                  [class.selected]="isMemberSelected(member.id || member._id || member.userId)"
+                  (click)="toggleMember(member.id || member._id || member.userId)">
+                  <div class="msg-member-select-card__avatar">
+                    <img [src]="member.profile_pic || member.avatar || 'assets/profile-placeholder.png'"
+                      class="msg-member-select-card__avatar-img" alt="">
+                  </div>
+                  <div class="msg-member-select-card__info">
+                    <span class="msg-member-select-card__name">{{ (member.fullname || member.name || 'Team Member') |
+                      uppercase }}</span>
+                    <span class="msg-member-select-card__role">{{ (member.role || 'TEAM MEMBER') | uppercase }}</span>
+                  </div>
+                  <div class="msg-toggle-switch"
+                    [class.on]="isMemberSelected(member.id || member._id || member.userId)">
+                    <div class="msg-toggle-thumb"></div>
+                  </div>
+                </div>
+              </ng-container>
+            </ng-container>
+          </div>
+        </div>
+
+        <!-- Field 4: Briefing Notes -->
+        <div class="msg-form-group">
+          <div class="d-flex justify-content-between align-items-center mb-1">
+            <label class="msg-form-label mb-0">
+              <i class="bi bi-card-text text-white me-2"></i> Briefing Notes
+            </label>
+            <span class="msg-form-optional-tag">OPTIONAL</span>
+          </div>
+          <div class="msg-input-wrap">
+            <textarea class="msg-form-textarea" rows="3" [(ngModel)]="meetingRequest.notes"
+              placeholder="Describe the agenda or objectives for this sync..."></textarea>
+          </div>
+          <div class="msg-form-warning" *ngIf="meetingRequest.notes && !startsWithAlphabet(meetingRequest.notes)">
+            <i class="bi bi-exclamation-circle-fill me-1"></i> Notes must start with an alphabet letter (A-Z).
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Modal Footer -->
+      <footer class="msg-modal-footer">
+        <button class="msg-modal-cancel-btn" (click)="closeScheduleModal()">Cancel</button>
+        <button class="msg-modal-submit-btn" (click)="scheduleMeeting()">
+          <i class="bi bi-send-fill me-1"></i> Send Request
+        </button>
+      </footer>
+
+    </div>
+  </div>
+
+  <!-- 4. File Versions History Modal -->
+  <div class="modal-overlay" *ngIf="showFileVersionsModal" (click)="closeFileVersionsModal()">
+    <div class="glass-modal-card" (click)="$event.stopPropagation()">
+      <div class="modal-header-glass">
+        <h3 class="modal-title-glass">Project File History</h3>
+        <button class="modal-close-btn" (click)="closeFileVersionsModal()"><i class="bi bi-x-lg"></i></button>
+      </div>
+
+      <div class="modal-body-glass custom-scrollbar">
+        <h6 class="modal-dim-lbl mb-2">CURRENT ACTIVE FILE</h6>
+        <div
+          class="p-3 mb-4 rounded-3 border border-secondary border-opacity-25 d-flex justify-content-between align-items-center"
+          style="background: rgba(255, 255, 255, 0.05);">
+          <div *ngIf="currentFileData" class="d-flex align-items-center gap-2">
+            <i class="bi fs-4 text-white" [ngClass]="getFileIcon(currentFileData.contentType)"></i>
+            <div>
+              <div class="text-white fw-semibold fs-6">{{ currentFileData.key.split('_').pop() }}</div>
+              <div class="small text-muted">Active Version</div>
+            </div>
+          </div>
+          <div *ngIf="!currentFileData" class="text-muted small">No active file found.</div>
+          <a [href]="currentFileData.url" target="_blank" class="btn-modal-submit py-1 px-3 fs-7"
+            *ngIf="currentFileData">Download</a>
+        </div>
+
+        <h6 class="modal-dim-lbl mb-2">PREVIOUS VERSIONS</h6>
+        <div class="d-flex flex-column gap-2" *ngIf="fileVersions.length > 0">
+          <div
+            class="p-2 rounded-3 border border-white border-opacity-10 d-flex justify-content-between align-items-center"
+            *ngFor="let v of fileVersions; let i = index" style="background: rgba(255, 255, 255, 0.03);">
+            <div class="d-flex align-items-center gap-2">
+              <span class="badge bg-secondary">v{{ v.version }}</span>
+              <span class="text-white fs-7">{{ v.key.split('_').pop() }}</span>
+            </div>
+            <button class="btn-modal-cancel py-1 px-3 fs-7" (click)="downloadFileVersion(i)">Download</button>
+          </div>
+        </div>
+        <div class="text-center py-4 text-muted small" *ngIf="fileVersions.length === 0">
+          No previous versions available.
+        </div>
+      </div>
+
+      <div class="modal-footer-glass">
+        <button class="btn-modal-cancel w-100" (click)="closeFileVersionsModal()">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 5. Meetings History Modal (Liquid Glass Theme) -->
+  <div class="modal-overlay" *ngIf="showMeetingsHistoryModal" (click)="closeMeetingsHistoryModal()">
+    <div class="glass-modal-card meeting-history-modal-card" (click)="$event.stopPropagation()">
+      <div class="modal-header-glass">
+        <div class="meeting-history-title-wrap">
+          <i class="bi bi-clock-history meeting-history-icon-red"></i>
+          <h3 class="modal-title-glass">Project Meetings History</h3>
+          <span class="meeting-actionable-pill" *ngIf="pendingMeetingCount > 0">
+            <i class="bi bi-bell-fill"></i>{{ pendingMeetingCount }} Actionable
+          </span>
+        </div>
+        <button class="modal-close-btn-glass" (click)="closeMeetingsHistoryModal()" title="Close">
+          <i class="bi bi-x-lg"></i>
+        </button>
+      </div>
+
+      <div class="modal-body-glass custom-scrollbar" style="max-height: 70vh; overflow-y: auto; padding: 4px 0 16px;">
+        <div class="meetings-cards-stack" *ngIf="meetingsHistory && meetingsHistory.length > 0; else noMeetings">
+          <div *ngFor="let meeting of meetingsHistory" class="meeting-card-red-white">
+
+            <!-- Top Bar: Topic & Status Badge -->
+            <div class="meeting-card-header">
+              <span class="meeting-topic-title">{{ meeting.topic || 'Meeting Request' }}</span>
+              <span class="meeting-status-badge text-capitalize" [ngClass]="'status-' + (meeting.status || 'pending')">
+                {{ meeting.status }}
+              </span>
+            </div>
+
+            <!-- Details: Date, Time & Requester -->
+            <div class="meeting-meta-chips-row">
+              <span class="meeting-meta-chip"><i class="bi bi-calendar3"></i>{{ meeting.date }}</span>
+              <span class="meeting-meta-chip"><i class="bi bi-clock"></i>{{ meeting.time }}</span>
+              <span class="meeting-meta-chip">
+                <i class="bi bi-person-circle"></i>
+                <span>Requested by <strong>{{ meeting.requestedBy_name || 'User' }}</strong> ({{ meeting.requesterRole
+                  || 'Member' }})</span>
+              </span>
+            </div>
+
+            <!-- Briefing Notes / Reason -->
+            <div *ngIf="meeting.reason" class="meeting-notes-box">
+              <span class="meeting-notes-label">Notes:</span>
+              <span class="meeting-notes-text">{{ meeting.reason }}</span>
+            </div>
+
+            <!-- Rejection Reason if Rejected -->
+            <div *ngIf="meeting.status === 'rejected' && meeting.rejectionReason" class="meeting-rejection-box">
+              <span class="meeting-rejection-label">Rejection Reason:</span>
+              <span class="meeting-rejection-text">{{ meeting.rejectionReason }}</span>
+            </div>
+
+            <!-- Join Link & Manager Complete Button if Scheduled -->
+            <div *ngIf="meeting.status === 'scheduled' && (meeting.meetingLink || meeting.managerStatus?.meetingLink)"
+              class="meeting-scheduled-box">
+              <div class="d-flex align-items-center gap-2">
+                <i class="bi bi-camera-video-fill text-accent-red fs-5"></i>
+                <span class="meeting-scheduled-text">Meeting Scheduled</span>
+              </div>
+              <div class="d-flex align-items-center gap-2">
+                <a [href]="meeting.meetingLink || meeting.managerStatus?.meetingLink" target="_blank"
+                  class="btn-meeting-join">
+                  <i class="bi bi-box-arrow-up-right me-1"></i>Join Now
+                </a>
+                <button *ngIf="isManager" class="btn-meeting-complete" (click)="markAsCompleted(meeting)">
+                  <i class="bi bi-check2-circle me-1"></i>Complete
+                </button>
+              </div>
+            </div>
+
+            <!-- Members List -->
+            <div *ngIf="meeting.members && meeting.members.length > 0" class="meeting-participants-section">
+              <div class="meeting-participants-lbl">Participants:</div>
+              <div class="d-flex flex-wrap gap-2">
+                <span *ngFor="let m of meeting.members" class="participant-pill">
+                  <span class="participant-name">{{ m.userId }}</span>
+                  <span class="participant-role">({{ getParticipantRole(m) }})</span>
+                  <span class="participant-status" [class.text-success]="m.status === 'accepted'"
+                    [class.text-warning]="m.status === 'pending'" [class.text-danger]="m.status === 'rejected'">
+                    • {{ m.status }}
+                  </span>
+                </span>
+              </div>
+            </div>
+
+            <!-- Decision & Manager Actions for Active Requests (Exclude Scheduled / Completed / Rejected) -->
+            <div *ngIf="meeting.status === 'pending-approvals' || meeting.status === 'waiting-for-schedule'"
+              class="meeting-decision-actions-section">
+
+              <!-- Manager Action: Display Accept & Schedule Button ONLY when every non-manager member accepted -->
+              <div
+                *ngIf="isManager && (meeting.status === 'waiting-for-schedule' || areAllNonManagerMembersAccepted(meeting))"
+                class="mb-2">
+                <button class="btn-meeting-accept-all"
+                  (click)="resolveMeeting(meeting.requestId || meeting._id, 'accepted', meeting)">
+                  <i class="bi bi-check-circle-fill me-1"></i> Accept & Provide Meeting Link
+                </button>
+              </div>
+
+              <!-- Manager Status Indicator when member responses are still pending -->
+              <div
+                *ngIf="isManager && meeting.status === 'pending-approvals' && !areAllNonManagerMembersAccepted(meeting)"
+                class="meeting-waiting-banner">
+                <i class="bi bi-clock-history me-1"></i> Waiting for all team members to accept before scheduling.
+              </div>
+
+              <!-- Accept / Reject Buttons for Invited Non-Manager Members -->
+              <div
+                *ngIf="!isManager && meeting.requestedBy !== (userId || getUserId()) && getMyMeetingStatus(meeting) === 'pending' && meeting.status === 'pending-approvals'">
+                <div *ngIf="rejectMeetingId !== (meeting.requestId || meeting._id)" class="d-flex gap-2">
+                  <button class="btn-meeting-invitation-accept"
+                    (click)="resolveMeeting(meeting.requestId || meeting._id, 'accepted', meeting)">
+                    <i class="bi bi-check-circle-fill me-1"></i> Accept Invitation
+                  </button>
+                  <button class="btn-meeting-invitation-reject"
+                    (click)="openRejectInput(meeting.requestId || meeting._id)">
+                    <i class="bi bi-x-circle-fill me-1"></i> Reject
+                  </button>
+                </div>
+
+                <!-- Rejection Reason Input (Mandatory) -->
+                <div *ngIf="rejectMeetingId === (meeting.requestId || meeting._id)" class="meeting-reject-form-box">
+                  <label class="meeting-reject-label">
+                    <i class="bi bi-exclamation-triangle-fill text-danger me-1"></i> Reason for Rejection (Mandatory):
+                  </label>
+                  <input type="text" class="meeting-reject-input" placeholder="Enter rejection reason..."
+                    [(ngModel)]="rejectReason" />
+                  <div class="d-flex justify-content-end gap-2">
+                    <button class="btn-meeting-submit-reject"
+                      (click)="confirmReject(meeting.requestId || meeting._id, meeting)">Submit Rejection</button>
+                    <button class="btn-meeting-cancel-reject" (click)="cancelReject()">Cancel</button>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+
+          </div>
+        </div>
+
+        <ng-template #noMeetings>
+          <div class="meeting-empty-state">
+            <i class="bi bi-calendar-x meeting-empty-icon"></i>
+            <span class="meeting-empty-text">No meeting history found for this project.</span>
+          </div>
+        </ng-template>
+      </div>
+
+      <div class="modal-footer-glass">
+        <button class="btn-modal-cancel w-100" (click)="closeMeetingsHistoryModal()">Close</button>
+      </div>
+    </div>
+  </div>
+
+</div>

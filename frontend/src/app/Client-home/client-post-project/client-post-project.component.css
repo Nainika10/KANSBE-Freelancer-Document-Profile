@@ -1,0 +1,916 @@
+/* ============================================================
+   POPPINS FONT STANDARDIZATION (400 REGULAR)
+   ============================================================ */
+:host {
+  font-family: 'Poppins', sans-serif !important;
+}
+
+:host *:not(i):not([class*="fa-"]):not([class*="bi-"]):not(.material-icons):not([class*="material-"]) {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 400;
+}
+
+h1, h2, h3, h4, h5, h6,
+input, textarea, select, button,
+.form-control, label, p,
+span:not(.material-icons):not([class*="material-"]):not([class*="fa-"]):not([class*="bi-"]),
+a, li, td, th {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 400;
+}
+
+.material-icons,
+.material-icons-outlined,
+.material-symbols-outlined,
+[class*="material-icons"],
+[class*="material-symbols"] {
+  font-family: 'Material Icons' !important;
+  font-weight: normal !important;
+  font-style: normal !important;
+  display: inline-block;
+  line-height: 1;
+  text-transform: none;
+  letter-spacing: normal;
+  word-wrap: normal;
+  white-space: nowrap;
+  direction: ltr;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   CLIENT POST PROJECT — DARK LIQUID GLASS REDESIGN
+   Strict Viewport Locked + Pure Internal Scrolling for fields
+   Onboarding-style Custom Liquid Glass Dropdowns
+   ═══════════════════════════════════════════════════════════ */
+
+:host {
+  display: block;
+  width: 100%;
+  min-height: 100vh;
+  min-height: 100dvh;
+  background-color: #060606;
+  color: #ffffff;
+  position: relative;
+  font-family: 'Poppins', sans-serif;
+  box-sizing: border-box;
+  -webkit-text-size-adjust: 100%;
+
+  /* Global Design Tokens */
+  --color-bg-primary: #060606;
+  --color-accent-red: #FF0100;
+  --color-accent-red-hover: #e00000;
+  --color-text-primary: #ffffff;
+  --color-text-secondary: #8c8c8c;
+  --color-text-dim: rgba(255, 255, 255, 0.45);
+
+  /* ─── Deep Liquid Crystal Glass Card Tokens ─── */
+  --color-card-bg: linear-gradient(135deg,
+      rgba(255, 255, 255, 0.08) 0%,
+      rgba(255, 255, 255, 0.02) 35%,
+      rgba(255, 255, 255, 0.005) 65%,
+      rgba(255, 255, 255, 0.05) 100%),
+      rgba(16, 16, 20, 0.85);
+  --color-card-bg-hover: linear-gradient(135deg,
+      rgba(255, 255, 255, 0.12) 0%,
+      rgba(255, 255, 255, 0.035) 35%,
+      rgba(255, 255, 255, 0.01) 65%,
+      rgba(255, 255, 255, 0.08) 100%),
+      rgba(20, 20, 26, 0.9);
+
+  --color-card-border: rgba(255, 255, 255, 0.25);
+  --color-card-border-top: rgba(255, 255, 255, 0.75);
+  --color-card-border-left: rgba(255, 255, 255, 0.45);
+  --color-card-border-bottom: rgba(255, 255, 255, 0.20);
+  --color-card-border-right: rgba(255, 255, 255, 0.25);
+
+  --color-card-shadow:
+    inset 0 2px 3px 0 rgba(255, 255, 255, 0.65),
+    inset 0 -2px 3px 0 rgba(255, 255, 255, 0.2),
+    inset 0 0 24px 0 rgba(255, 255, 255, 0.08),
+    0 16px 40px -10px rgba(0, 0, 0, 0.5),
+    0 4px 16px 0 rgba(0, 0, 0, 0.3);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+/* Page Root: Clean natural scroll with safe area padding */
+.post-page-root {
+  width: 100%;
+  min-height: 100vh;
+  min-height: 100dvh;
+  position: relative;
+  background-color: #060606;
+  padding-top: max(108px, calc(env(safe-area-inset-top) + 92px));
+  padding-bottom: max(60px, calc(env(safe-area-inset-bottom) + 30px));
+  padding-left: max(24px, env(safe-area-inset-left));
+  padding-right: max(24px, env(safe-area-inset-right));
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  overflow-x: hidden;
+}
+
+/* Atmospheric Full-Viewport Photographic Backdrop */
+.post-bg-canvas {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  height: 100dvh;
+  background-color: #060606;
+  background-image: url('/assets/projectpage bi.png');
+  background-position: left center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.post-ambient-glow {
+  display: none;
+}
+
+/* Main Container: Centered Column Shell */
+.post-main-container {
+  position: relative;
+  z-index: 10;
+  max-width: 1240px;
+  margin: 0 auto;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ─── Pinned Top Bar: Back Link & Header Post Project Button ─── */
+.post-top-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 18px;
+  flex-shrink: 0;
+}
+
+.btn-post-back {
+  background: none;
+  border: none;
+  color: #ffffff;
+  font-size: 20px;
+  font-weight: 400;
+  font-family: inherit;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  padding: 0;
+  transition: all 0.2s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.btn-post-back i {
+  font-size: 20px;
+  transition: transform 0.2s ease;
+}
+
+.btn-post-back:hover {
+  color: #ff0100;
+}
+
+.btn-post-back:hover i {
+  transform: translateX(-4px);
+}
+
+.btn-header-post-project {
+  background: linear-gradient(135deg, rgba(255, 1, 0, 0.95) 0%, rgba(200, 0, 0, 0.98) 100%);
+  -webkit-backdrop-filter: blur(16px);
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  border-top: 1.5px solid rgba(255, 255, 255, 0.55);
+  border-radius: 50px;
+  color: #ffffff;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 400;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  padding: 12px 36px;
+  cursor: pointer;
+  box-shadow:
+    inset 0 1.5px 2px rgba(255, 255, 255, 0.45),
+    0 6px 20px rgba(255, 1, 0, 0.5);
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.btn-header-post-project:hover {
+  background: linear-gradient(135deg, #ff1a1a 0%, #d60000 100%);
+  transform: translateY(-2px);
+  box-shadow:
+    inset 0 2px 3px rgba(255, 255, 255, 0.6),
+    0 10px 28px rgba(255, 1, 0, 0.75);
+}
+
+/* ─── Pinned Page Title Header ─── */
+.post-header-section {
+  margin-bottom: 22px;
+  flex-shrink: 0;
+}
+
+.post-page-title {
+  color: #ffffff;
+  font-size: 38px;
+  font-weight: 400;
+  margin: 0 0 6px 0;
+  letter-spacing: -0.5px;
+  line-height: 1.15;
+}
+
+.post-page-subtitle {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 14.5px;
+  margin: 0;
+  font-weight: 400;
+}
+
+/* ─── NATURAL SCROLLING CONTENT GRID ─── */
+.post-content-grid {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 36px;
+  width: 100%;
+  padding-bottom: 24px;
+}
+
+.post-left-col {
+  flex: 1.15;
+  display: flex;
+  flex-direction: column;
+}
+
+.post-right-col {
+  flex: 0.85;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ─── Glass Cards Styling ─── */
+.post-glass-card {
+  background: var(--color-card-bg);
+  border: 1px solid var(--color-card-border);
+  border-top: 1.5px solid var(--color-card-border-top);
+  border-left: 1.5px solid var(--color-card-border-left);
+  border-bottom: 1px solid var(--color-card-border-bottom);
+  border-right: 1px solid var(--color-card-border-right);
+  border-radius: 20px;
+  padding: 28px 30px;
+  backdrop-filter: blur(28px) saturate(190%) brightness(1.04);
+  -webkit-backdrop-filter: blur(28px) saturate(190%) brightness(1.04);
+  box-shadow: var(--color-card-shadow);
+  transition: all 0.3s ease;
+}
+
+.post-glass-card:hover {
+  border-color: rgba(255, 255, 255, 0.22);
+}
+
+.post-card-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 22px;
+}
+
+.post-card-title {
+  font-size: 20px;
+  font-weight: 400;
+  color: #ffffff;
+  margin: 0;
+  letter-spacing: -0.2px;
+}
+
+.header-icon {
+  font-size: 20px;
+  color: #ffffff !important;
+}
+
+/* ─── Form Inputs & Labels ─── */
+.post-field-group {
+  margin-bottom: 20px;
+}
+
+.dropdown-container-relative {
+  position: relative;
+}
+
+.post-label {
+  font-size: 13px;
+  font-weight: 400;
+  color: #ffffff;
+  margin-bottom: 8px;
+  display: block;
+}
+
+.text-muted-opt {
+  color: rgba(255, 255, 255, 0.4);
+  font-size: 11px;
+  font-weight: 400;
+}
+
+.post-input,
+.post-textarea {
+  width: 100%;
+  background: rgba(0, 0, 0, 0.45);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-top: 1.5px solid rgba(255, 255, 255, 0.35);
+  border-radius: 12px;
+  color: #ffffff;
+  padding: 13px 16px;
+  font-size: 14px;
+  font-family: inherit;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.4);
+  transition: all 0.25s ease;
+  outline: none;
+  box-sizing: border-box;
+}
+
+.post-input::placeholder,
+.post-textarea::placeholder {
+  color: rgba(255, 255, 255, 0.35);
+  font-size: 13px;
+}
+
+.post-input:focus,
+.post-textarea:focus {
+  border-color: #ff0100;
+  background: rgba(255, 255, 255, 0.08);
+  box-shadow: 0 0 14px rgba(255, 1, 0, 0.3), inset 0 1px 1.5px rgba(255, 255, 255, 0.15);
+}
+
+.post-input.is-invalid,
+.post-textarea.is-invalid {
+  border-color: #ff4d4d;
+}
+
+.post-textarea {
+  min-height: 130px;
+  resize: vertical;
+  line-height: 1.6;
+}
+
+.post-error-text {
+  color: #ff4d4d;
+  font-size: 11.5px;
+  margin-top: 5px;
+  font-weight: 400;
+}
+
+/* ─── Example Description Box ─── */
+.example-desc-box {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.06) 0%, rgba(255, 255, 255, 0.015) 100%), rgba(255, 255, 255, 0.02);
+  border: 1px dashed rgba(255, 255, 255, 0.18);
+  border-top: 1.5px dashed rgba(255, 255, 255, 0.35);
+  border-radius: 14px;
+  padding: 16px 18px;
+  margin-bottom: 14px;
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.1);
+}
+
+.example-desc-top {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+
+.example-desc-top i {
+  font-size: 14px;
+}
+
+.example-desc-label {
+  font-size: 10px;
+  font-weight: 400;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.example-desc-text {
+  font-size: 13px;
+  font-style: italic;
+  color: rgba(255, 255, 255, 0.7);
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* ─── Secure Transfer Protocol Upload Zone ─── */
+.post-upload-zone {
+  border: 1.5px dashed rgba(255, 255, 255, 0.2);
+  border-radius: 16px;
+  padding: 32px 20px;
+  text-align: center;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.04) 0%, rgba(255, 255, 255, 0.01) 100%), rgba(255, 255, 255, 0.015);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.15);
+  transition: all 0.25s ease;
+}
+
+.post-upload-zone:hover,
+.post-upload-zone.active-drag {
+  border-color: rgba(255, 1, 0, 0.5);
+  background: rgba(255, 1, 0, 0.05);
+  box-shadow: 0 0 20px rgba(255, 1, 0, 0.15);
+}
+
+.upload-icon-circle {
+  width: 52px;
+  height: 52px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, rgba(255, 1, 0, 0.18) 0%, rgba(180, 0, 0, 0.25) 100%);
+  border: 1px solid rgba(255, 1, 0, 0.4);
+  border-top: 1.5px solid rgba(255, 80, 80, 0.65);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 16px;
+  font-size: 24px;
+  box-shadow: 0 4px 14px rgba(255, 1, 0, 0.3);
+}
+
+.upload-protocol-title {
+  color: #ffffff;
+  font-size: 17px;
+  font-weight: 400;
+  margin-bottom: 4px;
+}
+
+.upload-protocol-sub {
+  color: rgba(255, 255, 255, 0.55);
+  font-size: 13px;
+  margin-bottom: 14px;
+}
+
+.upload-note-badge {
+  display: inline-flex;
+  align-items: center;
+  background: rgba(255, 1, 0, 0.12);
+  border: 1px solid rgba(255, 1, 0, 0.35);
+  border-top: 1.5px solid rgba(255, 80, 80, 0.55);
+  color: #ff0100;
+  font-size: 11px;
+  font-weight: 400;
+  padding: 4px 12px;
+  border-radius: 50px;
+  margin-bottom: 14px;
+  box-shadow: 0 2px 8px rgba(255, 1, 0, 0.2);
+}
+
+.upload-security-meta {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  font-size: 11px;
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.5);
+  letter-spacing: 0.8px;
+  margin-bottom: 20px;
+}
+
+.btn-initiate-upload {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.02) 100%), rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  border-top: 1.5px solid rgba(255, 255, 255, 0.45);
+  border-radius: 8px;
+  color: #ffffff;
+  font-size: 12px;
+  font-weight: 400;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  padding: 10px 28px;
+  cursor: pointer;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.25), 0 4px 12px rgba(0, 0, 0, 0.35);
+  transition: all 0.25s ease;
+}
+
+.btn-initiate-upload:hover {
+  background: rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.55);
+  transform: translateY(-1px);
+}
+
+.file-item-chip {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.02) 100%), rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-top: 1.5px solid rgba(255, 255, 255, 0.35);
+  border-radius: 10px;
+  padding: 8px 14px;
+  display: flex;
+  align-items: center;
+  max-width: 380px;
+  margin: 12px auto 0;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.2), 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.file-chip-name {
+  font-size: 13px;
+  color: #ffffff;
+  font-weight: 400;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ─── Required Expertise: Skill Add Row & Tags ─── */
+.skill-add-row {
+  display: flex;
+  align-items: center;
+  background: rgba(0, 0, 0, 0.45);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-top: 1.5px solid rgba(255, 255, 255, 0.35);
+  border-radius: 12px;
+  padding: 4px 4px 4px 16px;
+  gap: 8px;
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.4);
+  transition: all 0.25s ease;
+}
+
+.skill-add-row:focus-within {
+  border-color: #ff0100;
+  background: rgba(255, 255, 255, 0.08);
+  box-shadow: 0 0 12px rgba(255, 1, 0, 0.3), inset 0 1px 1.5px rgba(255, 255, 255, 0.15);
+}
+
+.skill-search-input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  color: #ffffff;
+  font-size: 13.5px;
+  outline: none;
+  font-family: inherit;
+}
+
+.skill-search-input::placeholder {
+  color: rgba(255, 255, 255, 0.35);
+  font-size: 13px;
+}
+
+.btn-skill-add-red {
+  background: linear-gradient(135deg, rgba(255, 1, 0, 0.95) 0%, rgba(200, 0, 0, 0.98) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-top: 1.5px solid rgba(255, 255, 255, 0.5);
+  color: #ffffff;
+  border-radius: 8px;
+  font-weight: 400;
+  font-size: 12px;
+  padding: 8px 18px;
+  cursor: pointer;
+  box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.35), 0 4px 14px rgba(255, 1, 0, 0.45);
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+}
+
+.btn-skill-add-red:hover {
+  background: linear-gradient(135deg, #ff1a1a 0%, #d40100 100%);
+  transform: translateY(-1px);
+}
+
+.skills-tags-stream {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 14px;
+}
+
+.post-skill-pill {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.02) 100%), rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-top: 1.5px solid rgba(255, 255, 255, 0.35);
+  border-radius: 50px;
+  color: #ffffff;
+  font-size: 12px;
+  font-weight: 400;
+  padding: 5px 14px;
+  display: inline-flex;
+  align-items: center;
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.2), 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.no-skills-text {
+  color: rgba(255, 255, 255, 0.45);
+  font-size: 13px;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   ONBOARDING-STYLE CUSTOM GLASS DROPDOWNS
+   ═══════════════════════════════════════════════════════════ */
+.glass-dropdown-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  background: rgba(0, 0, 0, 0.45);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-top: 1.5px solid rgba(255, 255, 255, 0.35);
+  border-radius: 12px;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.4);
+}
+
+.glass-dropdown-wrapper:hover {
+  border-color: rgba(255, 255, 255, 0.25);
+  background: rgba(255, 255, 255, 0.07);
+}
+
+.glass-dropdown-wrapper.is-active,
+.glass-dropdown-wrapper:focus-within {
+  border-color: #ff0100;
+  background: rgba(255, 255, 255, 0.08);
+  box-shadow: 0 0 12px rgba(255, 1, 0, 0.25), inset 0 1px 1px rgba(255, 255, 255, 0.1);
+}
+
+.glass-dropdown-wrapper.has-error {
+  border-color: rgba(255, 1, 0, 0.8) !important;
+  box-shadow: 0 0 0 2px rgba(255, 1, 0, 0.15) !important;
+}
+
+.glass-dropdown-input {
+  width: 100%;
+  height: 48px;
+  padding: 0 40px 0 16px;
+  background: transparent;
+  border: none;
+  color: #ffffff;
+  font-size: 14px;
+  font-family: inherit;
+  font-weight: 400;
+  outline: none;
+  border-radius: 12px;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.glass-dropdown-input::placeholder {
+  color: rgba(255, 255, 255, 0.35);
+}
+
+.glass-dropdown-arrow {
+  position: absolute;
+  right: 14px;
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 13px;
+  pointer-events: none;
+  transition: transform 0.25s ease, color 0.2s ease;
+}
+
+.glass-dropdown-arrow.arrow-rotated {
+  transform: rotate(180deg);
+  color: #ff0100;
+}
+.dropdown-container-relative {
+  position: relative;
+  z-index: 900;
+}
+
+.dropdown-container-relative:has(.glass-dropdown-menu),
+.dropdown-active {
+  z-index: 9999 !important;
+}
+
+.glass-dropdown-menu {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  right: 0;
+  max-height: 220px;
+  overflow-y: auto;
+  background: linear-gradient(135deg, rgba(22, 22, 28, 0.94) 0%, rgba(12, 12, 16, 0.98) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-top: 1.5px solid rgba(255, 255, 255, 0.48);
+  border-radius: 12px;
+  box-shadow: 0 16px 44px rgba(0, 0, 0, 0.9), inset 0 1.5px 2px rgba(255, 255, 255, 0.3);
+  z-index: 1000;
+  padding: 6px;
+  backdrop-filter: blur(28px) saturate(180%);
+  -webkit-backdrop-filter: blur(28px) saturate(180%);
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
+}
+
+.glass-dropdown-option {
+  padding: 10px 14px;
+  font-size: 13.5px;
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.85);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.glass-dropdown-option:hover,
+.glass-dropdown-option.selected {
+  background: rgba(255, 1, 0, 0.2);
+  color: #ffffff;
+  font-weight: 400;
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}
+
+.post-date-input::-webkit-calendar-picker-indicator {
+  filter: invert(1);
+  cursor: pointer;
+}
+
+/* ─── Popups & Overlays ─── */
+.success-popup-overlay {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  height: 100dvh;
+  background: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 99999;
+}
+
+.success-popup-card {
+  max-width: 440px;
+  width: 90%;
+  padding: 36px 28px;
+  background: linear-gradient(135deg, rgba(22, 22, 28, 0.94) 0%, rgba(12, 12, 16, 0.98) 100%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.18) !important;
+  border-top: 1.5px solid rgba(255, 255, 255, 0.48) !important;
+  border-radius: 24px !important;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.95), inset 0 1.5px 2px rgba(255, 255, 255, 0.35), 0 0 35px rgba(255, 1, 0, 0.15) !important;
+  backdrop-filter: blur(32px) saturate(190%) !important;
+  -webkit-backdrop-filter: blur(32px) saturate(190%) !important;
+  animation: popIn 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.text-muted-sub {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.progress-loader {
+  height: 4px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  overflow: hidden;
+  margin-top: 16px;
+}
+
+.progress-bar-fill {
+  height: 100%;
+  background: #28a745;
+  animation: fillProgress 3s linear forwards;
+}
+
+@keyframes popIn {
+  0% { transform: scale(0.9); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+@keyframes fillProgress {
+  0% { width: 0%; }
+  100% { width: 100%; }
+}
+
+/* ═══════════════════════════════════════════════════════════
+   RESPONSIVE BREAKPOINTS (STRICT INTERNAL SCROLLING)
+   ═══════════════════════════════════════════════════════════ */
+
+/* Tablet Landscape & Small Desktop */
+@media (max-width: 1100px) {
+  .post-content-grid {
+    gap: 28px;
+  }
+
+  .post-page-title {
+    font-size: 32px;
+  }
+}
+
+/* Tablet Portrait */
+@media (max-width: 900px) {
+  .post-page-root {
+    padding-top: max(92px, calc(env(safe-area-inset-top) + 76px));
+    padding-bottom: max(16px, calc(env(safe-area-inset-bottom) + 10px));
+  }
+
+  /* Prevent iOS Safari auto-zoom on input focus */
+  .post-input,
+  .post-textarea,
+  .skill-search-input,
+  .glass-dropdown-input,
+  .post-date-input {
+    font-size: 16px !important;
+  }
+
+  .post-content-grid {
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  .post-left-col,
+  .post-right-col {
+    width: 100%;
+    flex: 1 1 100%;
+  }
+}
+
+/* Mobile */
+@media (max-width: 600px) {
+  .post-page-root {
+    padding-top: max(85px, calc(env(safe-area-inset-top) + 68px));
+    padding-bottom: max(12px, calc(env(safe-area-inset-bottom) + 8px));
+    padding-left: max(14px, env(safe-area-inset-left));
+    padding-right: max(14px, env(safe-area-inset-right));
+  }
+
+  .post-top-bar {
+    margin-bottom: 14px;
+  }
+
+  .btn-post-back {
+    font-size: 17px;
+  }
+
+  .btn-header-post-project {
+    padding: 10px 24px;
+    font-size: 11.5px;
+  }
+
+  .post-page-title {
+    font-size: 24px;
+  }
+
+  .post-page-subtitle {
+    font-size: 12.5px;
+  }
+
+  .post-header-section {
+    margin-bottom: 16px;
+  }
+
+  .post-glass-card {
+    padding: 20px 16px;
+    border-radius: 16px;
+  }
+
+  .post-card-title {
+    font-size: 17px;
+  }
+
+  .upload-protocol-title {
+    font-size: 15px;
+  }
+
+  .upload-security-meta {
+    gap: 12px;
+    font-size: 10px;
+  }
+}
+
+/* Small Mobile */
+@media (max-width: 380px) {
+  .post-page-title {
+    font-size: 20px;
+  }
+
+  .btn-header-post-project {
+    padding: 8px 18px;
+    font-size: 11px;
+  }
+}

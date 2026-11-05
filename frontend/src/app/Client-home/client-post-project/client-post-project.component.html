@@ -1,0 +1,314 @@
+<div class="post-page-root">
+  
+  <!-- Atmospheric Cinematic Background Canvas -->
+  <div class="post-bg-canvas"></div>
+  <div class="post-ambient-glow"></div>
+
+  <!-- Main Viewport-Locked Container -->
+  <div class="post-main-container">
+    
+    <!-- Pinned Top Header Row: Back Navigation & Action Button -->
+    <div class="post-top-bar">
+      <button class="btn-post-back" (click)="goBack()">
+        <i class="bi bi-arrow-left"></i>
+        <span>Back</span>
+      </button>
+
+      <button class="btn-header-post-project" (click)="postProject()">
+        POST
+      </button>
+    </div>
+
+    <!-- Pinned Page Title & Subtitle -->
+    <div class="post-header-section">
+      <h1 class="post-page-title">Post New Project</h1>
+      <p class="post-page-subtitle">Define your vision, set the budget, and find the perfect partner.</p>
+    </div>
+
+    <!-- Main Internal Scrolling Content Grid (Zero Outer Page Scrolling) -->
+    <div class="post-content-grid">
+      
+      <!-- ═══ LEFT COLUMN: FOUNDATION & BRIEFING ASSETS ═══ -->
+      <div class="post-left-col">
+        
+        <!-- Section 1: Project Foundation Card -->
+        <div class="post-glass-card">
+          <div class="post-card-header">
+            <i class="bi bi-file-earmark-text text-white header-icon"></i>
+            <h3 class="post-card-title">Project Foundation</h3>
+          </div>
+
+          <!-- Project Title -->
+          <div class="post-field-group">
+            <label class="post-label">
+              Project Title <span class="text-danger">*</span>
+            </label>
+            <input type="text" class="post-input" 
+              placeholder="e.g., Build an E-commerce Website using React and Node.js"
+              [(ngModel)]="projects.title" name="title" 
+              [class.is-invalid]="formErrors.title"
+              (blur)="validateField('title')" maxlength="150">
+            <div class="post-error-text" *ngIf="formErrors.title">{{ formErrors.title }}</div>
+          </div>
+
+          <!-- Project Description -->
+          <div class="post-field-group mb-0">
+            <label class="post-label">
+              Project Description <span class="text-danger">*</span>
+            </label>
+            
+            <!-- Example Description Box -->
+            <div class="example-desc-box">
+              <div class="example-desc-top">
+                <i class="bi bi-lightbulb text-white"></i>
+                <span class="example-desc-label">EXAMPLE DESCRIPTION</span>
+              </div>
+              <p class="example-desc-text">
+                "We are looking for a skilled professional to bring our project to life. This could involve design, development, branding, or content creation. We need someone who understands our goals, suggests the best approach, and delivers great results. Please share examples of your past work and an estimated timeline."
+              </p>
+            </div>
+
+            <!-- Description Textarea -->
+            <textarea class="post-textarea"
+              placeholder="Describe the scope of work, key deliverables, and any specific requirements. The more details you provide, the better proposals you'll receive."
+              [(ngModel)]="projects.description" name="description" 
+              [class.is-invalid]="formErrors.description"
+              (input)="validateField('description')" 
+              (blur)="validateField('description')"></textarea>
+            <div class="post-error-text" *ngIf="formErrors.description">{{ formErrors.description }}</div>
+          </div>
+        </div>
+
+        <!-- Section 2: Briefing Assets Card -->
+        <div class="post-glass-card mt-4">
+          <div class="post-card-header">
+            <i class="bi bi-cloud-arrow-up text-white header-icon"></i>
+            <h3 class="post-card-title">Briefing Assets</h3>
+          </div>
+
+          <!-- Secure Transfer Protocol Upload Zone -->
+          <div class="post-upload-zone" [class.active-drag]="isDragging">
+            <div class="upload-icon-circle">
+              <i class="bi" [ngClass]="selectedFiles.length > 0 ? 'bi-file-earmark-check-fill text-success' : 'bi-file-earmark-arrow-up text-white'"></i>
+            </div>
+            
+            <h4 class="upload-protocol-title">
+              {{ selectedFiles.length > 0 ? 'Document Attached Successfully' : 'Secure Transfer Protocol' }}
+            </h4>
+            
+            <p class="upload-protocol-sub">
+              {{ selectedFiles.length > 0 ? selectedFiles[0].name : 'Proprietary assets, PDF briefs, or moodboards.' }}
+            </p>
+
+            <div class="upload-badge-wrap">
+              <span class="upload-note-badge">
+                <i class="bi bi-exclamation-circle me-1"></i> Note: .pdf, .doc, .docx only
+              </span>
+            </div>
+
+            <div class="upload-security-meta">
+              <span><i class="bi bi-shield-lock me-1"></i> ENCRYPTED</span>
+              <span><i class="bi bi-hdd-fill me-1"></i> 50MB LIMIT</span>
+            </div>
+
+            <label for="postFileUpload" class="btn-initiate-upload">
+              {{ selectedFiles.length > 0 ? 'CHANGE DOCUMENTATION' : 'INITIATE UPLOAD' }}
+              <input type="file" id="postFileUpload" class="d-none" (change)="onFileChange($event)" accept=".pdf,.doc,.docx">
+            </label>
+
+            <!-- File Item Chip (When selected) -->
+            <div class="file-item-chip mt-3" *ngIf="selectedFiles.length > 0">
+              <i class="bi bi-file-earmark-text text-white me-2"></i>
+              <span class="file-chip-name">{{ selectedFiles[0].name }}</span>
+              <i class="bi bi-trash3 text-white ms-auto cursor-pointer" (click)="removeFile(selectedFiles[0])" title="Remove File"></i>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- ═══ RIGHT COLUMN: EXPERTISE & LOGISTICS ═══ -->
+      <div class="post-right-col">
+        
+        <!-- Section 3: Required Expertise Card -->
+        <div class="post-glass-card">
+          <div class="post-card-header">
+            <i class="bi bi-gear text-white header-icon"></i>
+            <h3 class="post-card-title">Required Expertise <span class="text-danger">*</span></h3>
+          </div>
+
+          <!-- Skill Input & Add Button -->
+          <div class="skill-add-row mb-3">
+            <input type="text" #skillInput class="skill-search-input"
+              placeholder="e.g., Graphic Design, Python, React, Copywriting..." 
+              (keyup.enter)="addSkill(skillInput)"
+              (blur)="validateField('skills')">
+            <button type="button" class="btn-skill-add-red" (click)="addSkill(skillInput)">
+              <i class="bi bi-plus-lg me-1"></i> Add
+            </button>
+          </div>
+
+          <!-- Dynamic Skills Tags Stream -->
+          <div class="skills-tags-stream">
+            <span *ngFor="let s of skills" class="post-skill-pill">
+              {{ s }}
+              <i class="bi bi-x-circle ms-1 cursor-pointer" (click)="removeSkill(s)" title="Remove skill"></i>
+            </span>
+
+            <div class="no-skills-text" *ngIf="skills.length === 0">
+              No expertise added yet. Define the skills you need.
+            </div>
+          </div>
+          <div class="post-error-text mt-2" *ngIf="formErrors.skills">{{ formErrors.skills }}</div>
+        </div>
+
+        <!-- Section 4: Project Logistics Card -->
+        <div class="post-glass-card mt-4">
+          <div class="post-card-header">
+            <h3 class="post-card-title">Project Logistics</h3>
+          </div>
+
+          <!-- Allocated Budget -->
+          <div class="post-field-group">
+            <label class="post-label">
+              Allocated Budget <span class="text-danger">*</span>
+            </label>
+            <input type="text" class="post-input" 
+              placeholder="e.g., 500" 
+              [ngModel]="budgetDisplay" 
+              (ngModelChange)="onBudgetChange($event)"
+              name="budgetDisplay" 
+              [class.is-invalid]="formErrors.budget" 
+              (blur)="validateField('budget')"
+              (keypress)="preventNonNumeric($event)" 
+              inputmode="numeric" maxlength="13">
+            <div class="post-error-text" *ngIf="formErrors.budget">{{ formErrors.budget }}</div>
+          </div>
+
+          <!-- Classification (Onboarding Style Custom Glass Dropdown) -->
+          <div class="post-field-group dropdown-container-relative" [class.dropdown-active]="showCategoryDropdown">
+            <label class="post-label">
+              Classification <span class="text-danger">*</span>
+            </label>
+            <div class="glass-dropdown-wrapper cursor-pointer" 
+              [class.has-error]="formErrors.category"
+              [class.is-active]="showCategoryDropdown"
+              (click)="toggleCategoryDropdown($event)">
+              <input type="text" class="glass-dropdown-input cursor-pointer" 
+                [value]="getSelectedCategoryLabel()" 
+                placeholder="Select Core Field" 
+                readonly 
+                (blur)="validateField('category')">
+              <i class="bi bi-chevron-down glass-dropdown-arrow" [class.arrow-rotated]="showCategoryDropdown"></i>
+            </div>
+            
+            <!-- Onboarding-style Dropdown Menu -->
+            <div class="glass-dropdown-menu" *ngIf="showCategoryDropdown" (click)="$event.stopPropagation()">
+              <div class="glass-dropdown-option" 
+                *ngFor="let c of categories" 
+                [class.selected]="projects.category === c.value"
+                (mousedown)="selectCategory(c.value)">
+                {{ c.label }}
+              </div>
+            </div>
+            <div class="post-error-text" *ngIf="formErrors.category">{{ formErrors.category }}</div>
+          </div>
+
+          <!-- Freelancers Needed (Onboarding Style Custom Glass Dropdown) -->
+          <div class="post-field-group dropdown-container-relative" [class.dropdown-active]="showFreelancersDropdown">
+            <label class="post-label">
+              Freelancers Needed <span class="text-muted-opt">(OPTIONAL)</span>
+            </label>
+            <div class="glass-dropdown-wrapper cursor-pointer" 
+              [class.is-active]="showFreelancersDropdown"
+              (click)="toggleFreelancersDropdown($event)">
+              <input type="text" class="glass-dropdown-input cursor-pointer" 
+                [value]="getSelectedFreelancersLabel()" 
+                placeholder="Not Specified" 
+                readonly>
+              <i class="bi bi-chevron-down glass-dropdown-arrow" [class.arrow-rotated]="showFreelancersDropdown"></i>
+            </div>
+
+            <!-- Onboarding-style Dropdown Menu -->
+            <div class="glass-dropdown-menu" *ngIf="showFreelancersDropdown" (click)="$event.stopPropagation()">
+              <div class="glass-dropdown-option" 
+                [class.selected]="!projects.freelancersNeeded || projects.freelancersNeeded === 0"
+                (mousedown)="selectFreelancersNeeded(0)">
+                Not Specified
+              </div>
+              <div class="glass-dropdown-option" 
+                *ngFor="let n of [1,2,3,4,5]" 
+                [class.selected]="projects.freelancersNeeded === n"
+                (mousedown)="selectFreelancersNeeded(n)">
+                {{ n }} {{ n === 1 ? 'Freelancer' : 'Freelancers' }}
+              </div>
+            </div>
+          </div>
+
+          <!-- Start Date -->
+          <div class="post-field-group">
+            <label class="post-label">
+              Start Date <span class="text-danger">*</span>
+            </label>
+            <input type="date" class="post-input post-date-input" 
+              [(ngModel)]="projects.startDate" name="startDate"
+              [min]="minStartDate" [class.is-invalid]="formErrors.startDate" 
+              (blur)="validateField('startDate')">
+            <div class="post-error-text" *ngIf="formErrors.startDate">{{ formErrors.startDate }}</div>
+          </div>
+
+          <!-- Deadline -->
+          <div class="post-field-group mb-0">
+            <label class="post-label">
+              Deadline <span class="text-danger">*</span>
+            </label>
+            <input type="date" class="post-input post-date-input" 
+              [(ngModel)]="projects.endDate" name="endDate"
+              [min]="projects.startDate || minStartDate" 
+              [class.is-invalid]="formErrors.endDate"
+              (blur)="validateField('endDate')">
+            <div class="post-error-text" *ngIf="formErrors.endDate">{{ formErrors.endDate }}</div>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- Profile Incomplete Popup -->
+  <app-profile-complete-popup
+    [visible]="showProfilePopup"
+    [userType]="'client'"
+    [missingFields]="profileMissingFields"
+    [actionBlocked]="'posting a project'"
+    (navigateToSettings)="onProfilePopupNavigate()"
+    (closePopup)="onProfilePopupClose()">
+  </app-profile-complete-popup>
+
+  <!-- Success Popup -->
+  <div class="success-popup-overlay" *ngIf="showSuccessPopup">
+    <div class="post-glass-card success-popup-card animate-pop text-center">
+      <div class="success-icon-wrapper mb-4 mx-auto">
+        <i class="bi bi-check-circle-fill text-success h1"></i>
+      </div>
+      <h2 class="fw-bold text-white mb-3">Project Posted Successfully!</h2>
+      <p class="text-muted-sub mb-4 px-4 small">
+        Your project has been submitted for review. You will be redirected to your dashboard shortly.
+      </p>
+
+      <div class="d-flex flex-column gap-2 px-4 mb-4">
+        <button class="btn-header-post-project w-100" (click)="navigateToDashboard()">
+          Return to Dashboard Now
+        </button>
+      </div>
+
+      <div class="progress-loader mb-2">
+        <div class="progress-bar-fill"></div>
+      </div>
+    </div>
+  </div>
+
+</div>

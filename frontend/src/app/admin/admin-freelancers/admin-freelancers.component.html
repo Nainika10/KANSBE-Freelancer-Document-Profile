@@ -1,0 +1,252 @@
+<div class="main-admin-wrapper">
+  <button class="back-btn" (click)="goBack()"> ↩ Back</button>
+
+<div class="page-container">
+
+  <!-- Header -->
+
+  <div class="header">
+    <div class="header-title-row">
+      <h1>Top Freelancers</h1>
+      <span class="count-badge" *ngIf="filteredFreelancers.length > 0">{{ filteredFreelancers.length }} Results</span>
+    </div>
+    <p class="subtitle">
+      Find your perfect match ({{getFreelancerCount()}} total)
+    </p>
+  </div>
+
+  <!-- Search -->
+  <div class="search-section">
+    <div class="category-selector">
+      <select [(ngModel)]="searchCategory" (change)="onSearch()">
+        <option value="all">All Fields</option>
+        <option value="skills">Skills Only</option>
+        <option value="name">Name Only</option>
+        <option value="email">Email Only</option>
+      </select>
+    </div>
+
+    <div class="search-box">
+      <span class="icon">🔍</span>
+      <input type="text" [placeholder]="searchCategory === 'skills' ? 'Search by skill (e.g. AI, Python)...' : 'Search freelancers...'" [(ngModel)]="searchText"
+        (input)="onSearch()" />
+    </div>
+
+    <button class="filter-btn" (click)="onSearch()">
+      Search
+    </button>
+  </div>
+
+  <!-- Freelancer Cards -->
+
+  <div class="freelancer-card" *ngFor="let f of filteredFreelancers" (click)="openModal(f)">
+
+    <div class="card-header">
+
+      <div class="profile">
+
+        <img class="profile-img" src="https://i.pravatar.cc/150?img=3" />
+
+        <div>
+          <h3>{{f.fullname || 'Freelancer'}}</h3>
+          <p>ID: {{f.fl_id}} • Joined {{convertUTCtoIST(f.createdAt)}}</p>
+        </div>
+
+      </div>
+
+      <span class="status" [ngClass]="f.status === 'available' ? 'online' : 'busy'">
+        {{f.status}}
+      </span>
+
+    </div>
+
+
+    <!-- Skills + Bio -->
+
+    <div class="card-body">
+      <div class="skills">
+        <p class="label">PRIMARY SKILLS</p>
+
+        <ng-container *ngIf="(skillsMap[f.fl_id] || []).length; else noSkills">
+          <div class="skills-row">
+            <ng-container *ngFor="let skillGroup of skillsMap[f.fl_id]">
+              <div class="skill" *ngFor="let s of skillGroup.skills">
+                {{s.skill}}
+              </div>
+            </ng-container>
+          </div>
+        </ng-container>
+        <ng-template #noSkills>
+          <span class="skill-none">No skills listed</span>
+        </ng-template>
+
+      </div>
+
+
+
+      <div class="bio">
+        <p class="label">BIO</p>
+        <p class="bio-preview">{{f.description | slice:0:120}}{{f.description?.length > 120 ? '...' : ''}}</p>
+      </div>
+
+    </div>
+
+
+    <!-- Footer -->
+
+    <div class="card-footer">
+
+      <span class="email">{{f.email}}</span>
+      <span class="view-more">View Full Profile →</span>
+
+    </div>
+
+  </div>
+
+</div>
+
+<!-- Freelancer Detail Modal -->
+<div class="modal-overlay" *ngIf="isModalOpen" (click)="closeModal()">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <button class="close-modal" (click)="closeModal()">&times;</button>
+    
+    <div class="modal-header">
+      <img class="modal-profile-img" src="https://i.pravatar.cc/150?img=3" />
+      <div class="modal-header-info">
+        <h2>{{selectedFreelancer?.fullname}}</h2>
+        <div class="modal-badges">
+          <span class="modal-status" [ngClass]="selectedFreelancer?.status === 'available' ? 'online' : 'busy'">
+            {{selectedFreelancer?.status}}
+          </span>
+          <span class="modal-badge-id">#{{selectedFreelancer?.fl_id}}</span>
+        </div>
+        <p class="modal-tagline">{{selectedFreelancer?.skillTitle || 'Professional Freelancer'}}</p>
+      </div>
+    </div>
+
+    <div class="modal-body">
+      
+      <!-- Section 1: Basic & Personal Info -->
+      <div class="modal-section-title">
+        <span class="section-icon">👤</span> Personal Information
+      </div>
+      <div class="detail-grid">
+        <div class="detail-item">
+          <label>Full Name</label>
+          <p>{{selectedFreelancer?.fullname}}</p>
+        </div>
+        <div class="detail-item">
+          <label>Username</label>
+          <p>{{selectedFreelancer?.username || 'N/A'}}</p>
+        </div>
+        <div class="detail-item">
+          <label>Email Address</label>
+          <p>{{selectedFreelancer?.email}}</p>
+        </div>
+        <div class="detail-item">
+          <label>Contact Number</label>
+          <p>{{selectedFreelancer?.contact || 'N/A'}}</p>
+        </div>
+        <div class="detail-item">
+          <label>Gender</label>
+          <p>{{selectedFreelancer?.gender || 'N/A'}}</p>
+        </div>
+        <div class="detail-item">
+          <label>Date of Birth</label>
+          <p>{{selectedFreelancer?.dob ? (selectedFreelancer.dob | date:'dd MMM yyyy') : 'N/A'}}</p>
+        </div>
+        <div class="detail-item">
+          <label>Nationality</label>
+          <p>{{selectedFreelancer?.nationality || 'N/A'}}</p>
+        </div>
+        <div class="detail-item">
+          <label>Country</label>
+          <p>{{selectedFreelancer?.country || 'N/A'}}</p>
+        </div>
+      </div>
+
+      <!-- Section 2: Professional Details -->
+      <div class="modal-section-title">
+        <span class="section-icon">💼</span> Professional Details
+      </div>
+      <div class="detail-grid">
+        <div class="detail-item">
+          <label>Experience Level</label>
+          <p>{{selectedFreelancer?.experience || 'N/A'}}</p>
+        </div>
+        <div class="detail-item">
+          <label>Languages</label>
+          <p>{{selectedFreelancer?.languages?.join(', ') || selectedFreelancer?.languages || 'N/A'}}</p>
+        </div>
+        <div class="detail-item">
+          <label>Joined Platform</label>
+          <p>{{convertUTCtoIST(selectedFreelancer?.createdAt)}}</p>
+        </div>
+      </div>
+
+      <!-- Section 3: Skills -->
+      <div class="modal-section-title">
+        <span class="section-icon">⚡</span> Skills & Expertise
+      </div>
+      <div class="detail-section">
+        <label>Primary Expertise</label>
+        <p class="modal-skill-title">{{selectedFreelancer?.skillTitle || 'General Freelancing'}}</p>
+        
+        <label style="margin-top: 15px;">Specific Skills</label>
+        <div class="modal-skills">
+          <ng-container *ngIf="(skillsMap[selectedFreelancer?.fl_id] || []).length; else modalNoSkills">
+            <ng-container *ngFor="let skillGroup of skillsMap[selectedFreelancer?.fl_id]">
+              <div class="skill-tag" *ngFor="let s of skillGroup.skills">
+                {{s.skill}}
+              </div>
+            </ng-container>
+          </ng-container>
+          <ng-template #modalNoSkills>
+            <span class="no-skills-text">No matching skills found in skills table.</span>
+          </ng-template>
+        </div>
+      </div>
+
+      <!-- Section 4: Bio -->
+      <div class="modal-section-title">
+        <span class="section-icon">📝</span> Professional Biography
+      </div>
+      <div class="detail-section">
+        <p class="full-bio">{{selectedFreelancer?.description || 'No description provided.'}}</p>
+      </div>
+
+      <!-- Section 5: Social Presence -->
+      <div class="modal-section-title">
+        <span class="section-icon">🌐</span> Social Profiles
+      </div>
+      <div class="social-grid">
+        <div class="social-item" *ngIf="selectedFreelancer?.linkedin">
+          <span class="social-label">LinkedIn:</span>
+          <a [href]="selectedFreelancer.linkedin" target="_blank">{{selectedFreelancer.linkedin}}</a>
+        </div>
+        <div class="social-item" *ngIf="selectedFreelancer?.twitter">
+          <span class="social-label">Twitter/X:</span>
+          <a [href]="selectedFreelancer.twitter" target="_blank">{{selectedFreelancer.twitter}}</a>
+        </div>
+        <div class="social-item" *ngIf="selectedFreelancer?.instagram">
+          <span class="social-label">Instagram:</span>
+          <a [href]="selectedFreelancer.instagram" target="_blank">{{selectedFreelancer.instagram}}</a>
+        </div>
+        <div class="social-item" *ngIf="selectedFreelancer?.facebook">
+          <span class="social-label">Facebook:</span>
+          <a [href]="selectedFreelancer.facebook" target="_blank">{{selectedFreelancer.facebook}}</a>
+        </div>
+        <div class="no-socials" *ngIf="!selectedFreelancer?.linkedin && !selectedFreelancer?.twitter && !selectedFreelancer?.instagram && !selectedFreelancer?.facebook">
+          No social profiles provided.
+        </div>
+      </div>
+
+    </div>
+
+    <div class="modal-footer">
+      <button class="action-btn secondary" (click)="closeModal()">Close Details</button>
+      <button class="action-btn primary">Download Profile PDF</button>
+    </div>
+  </div>
+</div>
+</div>

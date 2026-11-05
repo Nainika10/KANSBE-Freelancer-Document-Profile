@@ -1,0 +1,453 @@
+<app-header></app-header>
+
+<main class="blogs-wrapper">
+    <!-- Back Button Navigation -->
+    <div class="back-navigation-container">
+        <button class="btn-back-pill" (click)="navigateToHome()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
+                stroke-linejoin="round" class="back-arrow">
+                <line x1="19" y1="12" x2="5" y2="12"></line>
+                <polyline points="12 19 5 12 12 5"></polyline>
+            </svg>
+            Back
+        </button>
+    </div>
+
+    <!-- HERO SECTION -->
+    <section class="hero-section">
+        <div class="container">
+            <div class="editorial-tag">EDITORIAL EXCELLENCE</div>
+            <h1 class="hero-title">
+                Insights to Build<br>
+                Better <span class="text-red">Creative &<br>
+                    Tech</span> Projects
+            </h1>
+            <p class="hero-subtitle">
+                Guides, ideas, and perspectives across design, content, development, and growth helping you make better
+                decisions.
+            </p>
+            <div class="hero-cta">
+                <button class="btn-primary" (click)="toggleModal()">
+                    Create an Account
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                        stroke-linecap="round" stroke-linejoin="round" style="margin-left: 8px;">
+                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                        <polyline points="12 5 19 12 12 19"></polyline>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- PROFESSIONALS GRID -->
+    <section class="professionals-section">
+        <div class="container">
+            <h2 class="section-title">Find the Right Creative & Tech Professionals</h2>
+            <div class="row g-4">
+                <!-- Top Row: 2 Columns (50/50) -->
+                <div class="col-12 col-lg-6">
+                    <div class="grid-item full-bg overlay large h-100"
+                        [style.background-image]="'url(assets/tech-bg.webp)'" (click)="navigateToDeveloper()"
+                        style="min-height: 350px;">
+                        <div class="grid-content">
+                            <h3>Best Web Developers</h3>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 col-lg-6">
+                    <div class="grid-item full-bg overlay large h-100"
+                        [style.background-image]="'url(assets/camera.webp)'" (click)="navigateToPhotography()"
+                        style="min-height: 350px;">
+                        <div class="grid-content">
+                            <h3>Best Photographers</h3>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Bottom Row: 3 Columns (33/33/33) -->
+                <div class="col-12 col-md-6 col-lg-4">
+                    <div class="grid-item full-bg overlay small h-100"
+                        [style.background-image]="'url(assets/video-bg.webp)'" (click)="navigateToVideoEditing()"
+                        style="min-height: 300px;">
+                        <div class="grid-content">
+                            <h3>Best Video Editors</h3>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 col-md-6 col-lg-4">
+                    <div class="grid-item full-bg overlay small h-100"
+                        [style.background-image]="'url(assets/design-bg.webp)'" (click)="navigateToDesign()"
+                        style="min-height: 300px;">
+                        <div class="grid-content">
+                            <h3>Best Designers</h3>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 col-lg-4">
+                    <div class="d-flex flex-column gap-4 h-100">
+                        <div class="grid-item gray-bg flex-grow-1" (click)="navigateToContentCreators()"
+                            style="min-height: 140px;">
+                            <div class="grid-content">
+                                <h3>Content Creators & Social Media Managers</h3>
+                            </div>
+                        </div>
+                        <div class="grid-item gray-bg flex-grow-1" (click)="navigateToSeo()" style="min-height: 140px;">
+                            <div class="grid-content">
+                                <h3>SEO Experts</h3>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- EXPLORE BY CATEGORY -->
+    <section class="category-section">
+        <div class="container">
+            <h2 class="category-label">EXPLORE BY CATEGORY</h2>
+            <div class="row row-cols-2 row-cols-md-4 g-3 category-grid-premium">
+                <div class="col" *ngFor="let cat of categories">
+                    <div class="cat-card-new" (click)="navigateToCategory(cat)">
+                        <span class="cat-name">{{cat}}</span>
+                        <span class="cat-arrow-icon">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                <line x1="7" y1="17" x2="17" y2="7"></line>
+                                <polyline points="7 7 17 7 17 17"></polyline>
+                            </svg>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- BLUEPRINT SECTION -->
+    <section class="blueprint-section">
+        <div class="container">
+            <div class="row g-5 align-items-center">
+                <div class="col-12 col-lg-6">
+                    <div class="blueprint-left">
+                        <h2>A Blueprint for<br>Seamless<br><span class="text-red">Execution</span></h2>
+                        <p class="blueprint-desc">
+                            We've removed the friction from high-end collaboration. From defining your vision to final
+                            delivery, the
+                            process is engineered for clarity.
+                        </p>
+                        <div class="quality-card-premium">
+                            <div class="quality-header">
+                                <div class="quality-icon-red">
+                                    <svg viewBox="0 0 24 24" fill="currentColor">
+                                        <path
+                                            d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" />
+                                    </svg>
+                                </div>
+                                <span class="quality-label">QUALITY GUARANTEED</span>
+                            </div>
+                            <p class="quality-text">Every creative on Kansbe undergoes a rigorous vetting process to
+                                ensure your
+                                project exceeds industry standards.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 col-lg-6">
+                    <div class="blueprint-list-numbered">
+                        <div class="numbered-step">
+                            <div class="step-count">01</div>
+                            <div class="step-body">
+                                <h4>Create Your Account</h4>
+                                <p>Access a curated ecosystem designed for serious creative and technology buyers.</p>
+                            </div>
+                        </div>
+                        <div class="numbered-step">
+                            <div class="step-count">02</div>
+                            <div class="step-body">
+                                <h4>Share Your Requirement</h4>
+                                <p>Define your vision. The more clarity you provide, the better the alignment we
+                                    deliver.</p>
+                            </div>
+                        </div>
+                        <div class="numbered-step">
+                            <div class="step-count">03</div>
+                            <div class="step-body">
+                                <h4>Get Matched with the Right Creatives</h4>
+                                <p>Our algorithm pairs your unique requirements with specialists who fit your aesthetic
+                                    and technical
+                                    needs.</p>
+                            </div>
+                        </div>
+                        <div class="numbered-step">
+                            <div class="step-count">04</div>
+                            <div class="step-body">
+                                <h4>Start Collaborating</h4>
+                                <p>Work directly with professionals using our integrated toolset for communication and
+                                    feedback.</p>
+                            </div>
+                        </div>
+                        <div class="numbered-step">
+                            <div class="step-count">05</div>
+                            <div class="step-body">
+                                <h4>Structured and Seamless Payments</h4>
+                                <p>Secure milestone-based transactions that protect both the client and the creative
+                                    professional.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- BETTER WAY SECTION -->
+    <section class="better-way-section">
+        <div class="container">
+            <h2 class="better-way-title">A Better Way to Collaborate</h2>
+            <div class="row g-5 better-grid-refined">
+                <div class="col-12 col-md-6 col-lg-4">
+                    <div class="better-item-premium">
+                        <div class="better-icon-red"><i class="bi bi-dash-circle-fill"></i></div>
+                        <h4>No endless scrolling</h4>
+                        <p>Stop wasting hours looking at portfolios. We bring the experts to you based on fit.</p>
+                    </div>
+                </div>
+                <div class="col-12 col-md-6 col-lg-4">
+                    <div class="better-item-premium">
+                        <div class="better-icon-red"><i class="bi bi-check-circle-fill"></i></div>
+                        <h4>Curated professionals</h4>
+                        <p>We maintain a selective network of the top 5% talent across design and tech.</p>
+                    </div>
+                </div>
+                <div class="col-12 col-md-6 col-lg-4">
+                    <div class="better-item-premium">
+                        <div class="better-icon-red"><i class="bi bi-lightning-fill"></i></div>
+                        <h4>Requirement-based matching</h4>
+                        <p>Our match-engine focuses on the "what" and "why" of your specific project.</p>
+                    </div>
+                </div>
+                <div class="col-12 col-md-6 col-lg-4">
+                    <div class="better-item-premium">
+                        <div class="better-icon-red"><i class="bi bi-eye-fill"></i></div>
+                        <h4>Focus on clarity and alignment</h4>
+                        <p>Ensuring every stakeholder is on the same page from day one.</p>
+                    </div>
+                </div>
+                <div class="col-12 col-md-6 col-lg-4">
+                    <div class="better-item-premium">
+                        <div class="better-icon-red"><i class="bi bi-lightbulb-fill"></i></div>
+                        <h4>Designed for better outcomes</h4>
+                        <p>Our platform is optimized for the successful delivery of complex projects.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- Fixed Join Us Button - Visible Throughout Homepage -->
+    <div class="fixed-join-us-wrapper" [class.near-footer]="isNearFooter">
+        <button class="btn-join-fixed" (click)="toggleModal()">Join Us</button>
+
+        <!-- Join Us Modal - Single Pill with Divider -->
+        <div class="modal-buttons-fixed" [class.show]="showModal">
+            <div class="pill-container">
+                <button class="pill-button pill-left" (click)="startAsFreelancer()">
+                    Start as Freelancer
+                </button>
+                <div class="pill-divider"></div>
+                <button class="pill-button pill-right" (click)="joinAsClient()">
+                    Join as Client
+                </button>
+            </div>
+        </div>
+    </div>
+</main>
+
+<!-- FOOTER SECTION -->
+<footer class="kansbe-footer-section" id="contact">
+    <div class="footer-container container-fluid">
+
+        <!-- TOP FOOTER: BRAND & CONNECT -->
+        <div class="footer-top-row">
+            <div class="footer-brand">
+                <img src="../../assets/pics.webp" alt="KANSBE" class="footer-primary-logo">
+                <p class="footer-tagline">
+                    For people who care about how their days feel, who value freedom, balance, clarity, and build
+                    everything else
+                    around that.
+                </p>
+            </div>
+
+            <div class="footer-social-block">
+                <h4 class="footer-heading">CONNECT WITH US</h4>
+                <div class="footer-social-icons">
+                    <a *ngFor="let social of socialLinks" [href]="social.url" class="social-btn" target="_blank"
+                        rel="noopener noreferrer" [attr.aria-label]="social.name">
+                        <span class="social-tooltip">{{ social.name }}</span>
+                        <svg *ngIf="social.icon === 'linkedin'" viewBox="0 0 24 24">
+                            <path
+                                d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z" />
+                        </svg>
+                        <svg *ngIf="social.icon === 'instagram'" viewBox="0 0 24 24">
+                            <path
+                                d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" />
+                        </svg>
+                        <svg *ngIf="social.icon === 'x'" viewBox="0 0 24 24">
+                            <path
+                                d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+                        </svg>
+                        <svg *ngIf="social.icon === 'facebook'" viewBox="0 0 24 24">
+                            <path
+                                d="M22.675 0h-21.35c-.732 0-1.325.593-1.325 1.325v21.351c0 .731.593 1.324 1.325 1.324h11.495v-9.294h-3.128v-3.622h3.128v-2.671c0-3.1 1.893-4.788 4.659-4.788 1.325 0 2.463.099 2.795.143v3.24l-1.918.001c-1.504 0-1.795.715-1.795 1.763v2.313h3.587l-.467 3.622h-3.12v9.293h6.116c.73 0 1.323-.593 1.323-1.325v-21.35c0-.732-.593-1.325-1.325-1.325z" />
+                        </svg>
+                    </a>
+                </div>
+                <div class="footer-email-block">
+                    <p class="footer-heading" style="margin-bottom: 10px;">FOR ANY SUPPORT</p>
+                    <a href="mailto:support@kansbe.com" class="footer-email">support@kansbe.com</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-divider"></div>
+
+        <!-- MIDDLE FOOTER: NAVIGATION -->
+        <div class="footer-mid-row row">
+            <div class="col-lg-4 col-md-6 footer-nav-col">
+                <h4 class="footer-heading">Company</h4>
+                <nav class="footer-links-list">
+                    <button (click)="scrollToTop()" class="f-link">Home</button>
+                    <button (click)="navigateToAbout()" class="f-link">About Kansbe</button>
+                    <button (click)="navigateToHowItWorks()" class="f-link">How Kansbe Works</button>
+                    <button (click)="navigateToWhyFreelancers()" class="f-link">Why Kansbe Freelancers</button>
+                    <button (click)="navigateToBlogs()" class="f-link">Blogs</button>
+                </nav>
+            </div>
+
+            <div class="col-lg-4 col-md-6 footer-nav-col">
+                <h4 class="footer-heading">Independence</h4>
+                <nav class="footer-links-list">
+                    <button (click)="registerAsFreelancer()" class="f-link">For Freelancers</button>
+                    <button (click)="registerAsClient()" class="f-link">For Clients</button>
+                    <button (click)="toggleModal()" class="f-link">Join the Network</button>
+                </nav>
+            </div>
+
+            <div class="col-lg-4 col-md-12 footer-nav-col">
+                <h4 class="footer-heading">Legal</h4>
+                <nav class="footer-links-list">
+                    <button (click)="openModal('privacy')" class="f-link">Privacy Statement</button>
+                    <button (click)="openModal('terms')" class="f-link">Terms & Conditions</button>
+                    <span class="f-location">Singapore Inc. HQ</span>
+                </nav>
+            </div>
+        </div>
+
+        <!-- BOTTOM FOOTER: COPYRIGHT -->
+        <div class="footer-bottom-row">
+            <div class="copyright-container">
+                <span class="copyright-text">© {{ currentYear }} KANSBE. ALL RIGHTS RESERVED.</span>
+            </div>
+            <div class="footer-accent-line"></div>
+        </div>
+    </div>
+
+    <!-- ================= PRIVACY & TERMS MODAL ================= -->
+    <div class="modal-overlay" *ngIf="isModalOpen" (click)="closeModal()">
+        <div class="modal-box" (click)="$event.stopPropagation()">
+            <div class="modal-content-wrapper">
+                <!-- Privacy Policy -->
+                <div *ngIf="modalType === 'privacy'" class="modal-content">
+                    <h2>Privacy Policy and Data Security</h2>
+                    <p><strong>Kansbe privacy policy last updated on (Date)</strong></p>
+                    <h3>Update to Our Terms</h3>
+                    <p>
+                        We are updating our terms on (Date). See here to know what's coming in our updated privacy
+                        policy.
+                    </p>
+                    <h3>Data Sharing & Confidentiality</h3>
+                    <p>
+                        Kansbe does not sell or share your personal data (including contact information, financial
+                        details,
+                        or specific project files) with other clients or freelancers. Only profile details necessary for
+                        matching and collaboration are used within the platform. Protecting your identity and fostering
+                        trusted professional connections is a core value for us.
+                    </p>
+                    <h3>Data Encryption</h3>
+                    <p>
+                        All critical information transmitted across the Kansbe platform is currently protected using
+                        modern
+                        encryption protocols to maintain security and integrity during transmission.
+                    </p>
+                    <h3>Current Security Status (MVP Disclosure)</h3>
+                    <p>
+                        Kansbe is operating as a Minimum Viable Product (MVP). While we use standard security practices
+                        and
+                        encrypted data transmission, our platform infrastructure does not yet provide the comprehensive
+                        protection typical of fully scaled services. By using Kansbe at this stage, you acknowledge that
+                        we
+                        cannot accept responsibility for loss, misuse, or unauthorized access to your data outside our
+                        current controls.
+                    </p>
+                    <h3>User Responsibility</h3>
+                    <p>
+                        To help keep your information secure, you are requested to only provide data that is necessary
+                        or
+                        specifically requested by the platform. Please do not submit sensitive personal data (such as
+                        identification documents, private addresses, or other confidential information) unless
+                        essential, as
+                        Kansbe cannot accept responsibility for any compromise to such details.
+                    </p>
+                    <p>
+                        Kansbe is committed to continuously enhancing our security measures and will introduce more
+                        robust
+                        protections in the future. Thank you for your understanding as we grow to serve you better.
+                    </p>
+                </div>
+
+                <!-- Terms & Conditions -->
+                <div *ngIf="modalType === 'terms'" class="modal-content">
+                    <h2>KANSBE – Terms & Conditions</h2>
+                    <h3>Scope of These Terms</h3>
+                    <p>
+                        These Terms apply to all users of the KANSBE Platform: Freelancers, Clients, and Visitors.
+                        "You" refers to the specific user type where relevant. Clauses are clearly marked for each
+                        group.
+                    </p>
+                    <h3>Account Registration</h3>
+                    <ul>
+                        <li>Provide accurate, up-to-date information.</li>
+                        <li>You're responsible for all activity under your account.</li>
+                        <li>Only one verified account is allowed per user.</li>
+                    </ul>
+                    <h3>Platform Usage</h3>
+                    <ul>
+                        <li>KANSBE connects clients and freelancers — it does not manage project execution.</li>
+                        <li>All communication and deals must stay within the platform.</li>
+                        <li>Subcontracting (giving the work to someone else) without permission is not allowed.</li>
+                    </ul>
+                    <h3>Payments & Fees</h3>
+                    <ul>
+                        <li>KANSBE may charge service fees or commissions.</li>
+                        <li>Payments go through secure, third-party gateways.</li>
+                        <li>Bypassing KANSBE for off-platform deals is strictly prohibited and will lead to a permanent
+                            ban.</li>
+                        <li>Refunds and cancellations follow KANSBE's policies.</li>
+                    </ul>
+                    <h3>Termination</h3>
+                    <ul>
+                        <li>KANSBE can suspend or delete your account for any violation.</li>
+                        <li>Inactivity for 6+ months may result in account removal.</li>
+                        <li>You can request account deletion at any time.</li>
+                    </ul>
+                    <h3>Updates</h3>
+                    <p>We may update these Terms. Continued use of the platform implies your acceptance.</p>
+                </div>
+            </div>
+            <!-- Close Button -->
+            <div class="modal-footer">
+                <button class="close-btn" (click)="closeModal()">Close</button>
+            </div>
+        </div>
+    </div>
+</footer>

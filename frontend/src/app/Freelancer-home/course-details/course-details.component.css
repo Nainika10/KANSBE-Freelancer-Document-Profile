@@ -1,0 +1,678 @@
+/* ============================================================
+   POPPINS FONT STANDARDIZATION (400 REGULAR)
+   ============================================================ */
+:host {
+  font-family: 'Poppins', sans-serif !important;
+}
+
+:host *:not(i):not([class*="fa-"]):not([class*="bi-"]):not(.material-icons):not([class*="material-"]) {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 400;
+}
+
+h1, h2, h3, h4, h5, h6,
+input, textarea, select, button,
+.form-control, label, p,
+span:not(.material-icons):not([class*="material-"]):not([class*="fa-"]):not([class*="bi-"]),
+a, li, td, th {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 400;
+}
+
+.material-icons,
+.material-icons-outlined,
+.material-symbols-outlined,
+[class*="material-icons"],
+[class*="material-symbols"] {
+  font-family: 'Material Icons' !important;
+  font-weight: normal !important;
+  font-style: normal !important;
+  display: inline-block;
+  line-height: 1;
+  text-transform: none;
+  letter-spacing: normal;
+  word-wrap: normal;
+  white-space: nowrap;
+  direction: ltr;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+
+
+/* ═════════════════════════════════════════════════════════════════
+   KANSBE COURSE DETAILS - PIXEL-PERFECT LIQUID GLASS REDESIGN
+   Theme: Pure Deep Black (#060606) · Liquid Glass · Kansbe Red (#FF0100)
+   Typography: 'Poppins', sans-serif
+   Behavior: Fixed page viewport, non-scrolling right panel, maximized hero preview
+   ═════════════════════════════════════════════════════════════════ */
+
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,600&display=swap');
+
+:host {
+  display: block;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+  box-sizing: border-box;
+  font-family: 'Poppins', sans-serif !important;
+
+  --color-bg-primary: #060606;
+  --color-accent-red: #FF0100;
+  --color-accent-red-hover: #e00000;
+  --color-text-primary: #ffffff;
+  --color-text-secondary: #999999;
+  --color-text-muted: #777777;
+
+  /* ─── Profile Pure Liquid Glass Tokens ─── */
+  --color-card-bg: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.07) 0%,
+    rgba(255, 255, 255, 0.015) 40%,
+    rgba(255, 255, 255, 0.003) 70%,
+    rgba(255, 255, 255, 0.04) 100%
+  );
+  --color-card-bg-hover: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.12) 0%,
+    rgba(255, 255, 255, 0.035) 40%,
+    rgba(255, 255, 255, 0.008) 70%,
+    rgba(255, 255, 255, 0.08) 100%
+  );
+  
+  --color-card-border: rgba(255, 255, 255, 0.14);
+  --color-card-border-top: rgba(255, 255, 255, 0.42);
+  --color-card-border-left: rgba(255, 255, 255, 0.28);
+  --color-card-border-bottom: rgba(255, 255, 255, 0.08);
+  --color-card-border-right: rgba(255, 255, 255, 0.12);
+
+  --color-card-shadow: 
+    inset 0 1.5px 2px 0 rgba(255, 255, 255, 0.42),
+    inset 0 -1.5px 2px 0 rgba(0, 0, 0, 0.5),
+    inset 0 0 12px 0 rgba(255, 255, 255, 0.03),
+    0 16px 44px -8px rgba(0, 0, 0, 0.85),
+    0 6px 14px rgba(0, 0, 0, 0.5);
+
+  --glass-blur: blur(18px) saturate(110%) brightness(1.03);
+  --font-family: 'Poppins', sans-serif;
+}
+
+:host * {
+  font-family: 'Poppins', sans-serif !important;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+/* ─── Page Wrapper: Fixed to Viewport (Zero Page Scrolling) ─── */
+.player-page-wrapper {
+  height: 100vh;
+  height: 100dvh;
+  max-height: 100vh;
+  max-height: 100dvh;
+  background-color: var(--color-bg-primary);
+  color: var(--color-text-primary);
+  font-family: var(--font-family);
+  position: relative;
+  overflow: hidden;
+  padding-top: max(86px, calc(env(safe-area-inset-top) + 70px));
+  padding-bottom: max(16px, calc(env(safe-area-inset-bottom) + 8px));
+  padding-left: max(0px, env(safe-area-inset-left));
+  padding-right: max(0px, env(safe-area-inset-right));
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+}
+
+/* Atmospheric Character Backdrop with projectpage bi.png */
+.ambient-glow-mesh {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  height: 100dvh;
+  background-color: #060606;
+  background-image: url('/assets/projectpage bi.png');
+  background-position: left center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Main Container: Aligned 1:1 with 1240px Floating Navbar */
+.player-container {
+  position: relative;
+  z-index: 1;
+  width: min(100%, 1240px);
+  margin: 0 auto;
+  padding: 6px 20px 18px;
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - 86px);
+  max-height: calc(100vh - 86px);
+  gap: 10px;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+/* Top Bar: Back Link */
+.player-top-bar {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.btn-back-link {
+  background: transparent;
+  border: none;
+  color: #ffffff;
+  font-size: 22px;
+  font-weight: 400;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  padding: 0;
+  transition: all 0.2s ease;
+  font-family: inherit;
+}
+
+.btn-back-link:hover {
+  color: #FF0100;
+  transform: translateX(-3px);
+}
+
+.btn-back-link i {
+  font-size: 20px;
+}
+
+/* ═════════════════════════════════════════════════════════════
+   2-COLUMN MAIN LAYOUT (ZERO PAGE SCROLL)
+   ═════════════════════════════════════════════════════════════ */
+.player-layout-grid {
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  gap: 24px;
+  flex: 1;
+  min-height: 0;
+  height: 100%;
+  overflow: hidden;
+}
+
+@media (max-width: 900px) {
+  .player-layout-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Shared Glass Card Style */
+.glass-card {
+  background: var(--color-card-bg);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--color-card-border);
+  border-top: 1.5px solid var(--color-card-border-top);
+  border-left: 1.5px solid var(--color-card-border-left);
+  border-radius: 20px;
+  box-shadow: var(--color-card-shadow);
+}
+
+/* ─── Left Sidebar (Progress + Modules) ─── */
+.player-sidebar-col {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  height: 100%;
+  min-height: 0;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+/* Card 1: Your Progress */
+.player-progress-card {
+  padding: 16px 18px;
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+}
+
+.progress-card-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: 2px;
+}
+
+.progress-card-title {
+  font-size: 13px;
+  font-weight: 400;
+  color: #ffffff;
+  margin: 0;
+}
+
+.progress-ratio-text {
+  font-size: 10.5px;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.progress-large-num {
+  font-size: 34px;
+  font-weight: 400;
+  color: #ffffff;
+  margin: 2px 0 8px 0;
+  line-height: 1;
+}
+
+.progress-track-bar {
+  height: 4px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 2px;
+  overflow: hidden;
+  margin-bottom: 12px;
+}
+
+.progress-track-fill {
+  height: 100%;
+  background: #FF0100;
+  transition: width 0.3s ease;
+}
+
+.btn-start-course {
+  width: 100%;
+  background: #FF0100;
+  color: #ffffff;
+  border: none;
+  border-radius: 12px;
+  padding: 9px 0;
+  font-size: 12.5px;
+  font-weight: 400;
+  cursor: pointer;
+  box-shadow: 0 4px 16px rgba(255, 1, 0, 0.5);
+  transition: all 0.2s ease;
+  font-family: inherit;
+  text-align: center;
+}
+
+.btn-start-course:hover {
+  background: #e60000;
+  box-shadow: 0 6px 20px rgba(255, 1, 0, 0.7);
+}
+
+/* Card 2: Course Content Accordion */
+.course-content-card {
+  padding: 16px 18px;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.content-card-title {
+  font-size: 13.5px;
+  font-weight: 400;
+  color: #ffffff;
+  margin: 0 0 10px 0;
+  flex-shrink: 0;
+}
+
+.modules-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  padding-right: 4px;
+}
+
+.module-item-box {
+  display: flex;
+  flex-direction: column;
+}
+
+.module-header-pill {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 10px 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.module-header-pill:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.module-num-label {
+  font-size: 9px;
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.6);
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  margin-bottom: 2px;
+  display: block;
+}
+
+.module-title-label {
+  font-size: 12.5px;
+  font-weight: 400;
+  color: #ffffff;
+}
+
+.module-header-pill i {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 11px;
+}
+
+.module-lessons-list {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  margin-top: 6px;
+}
+
+.lesson-item-row {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 10px;
+  padding: 8px 10px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.lesson-item-row:hover {
+  background: rgba(255, 255, 255, 0.07);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.lesson-item-row.active {
+  background: rgba(255, 1, 0, 0.12);
+  border-color: #FF0100;
+  box-shadow: 0 0 12px rgba(255, 1, 0, 0.25);
+}
+
+.lesson-play-icon {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.08);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10.5px;
+  color: #ffffff;
+  flex-shrink: 0;
+}
+
+.lesson-play-icon i.bi-check-lg {
+  color: #4cd964;
+}
+
+.lesson-info-wrap {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.lesson-name-text {
+  font-size: 11.5px;
+  font-weight: 400;
+  color: #ffffff;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.lesson-duration-text {
+  font-size: 10px;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+/* ─── Right Column: Fully Fixed, Maximized Preview Screen & Info Card ─── */
+.player-main-col {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  height: 100%;
+  min-height: 0;
+  overflow: hidden;
+}
+
+/* Preview Screen: Maximized Size */
+.player-screen-wrapper {
+  flex: 1;
+  min-height: 0;
+  width: 100%;
+  border-radius: 18px;
+  overflow: hidden;
+  background: #000000;
+  position: relative;
+  box-shadow: 0 16px 44px -8px rgba(0, 0, 0, 0.85);
+}
+
+.player-empty-screen {
+  width: 100%;
+  height: 100%;
+}
+
+.empty-screen-inner {
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  background-position: center;
+  position: relative;
+}
+
+.empty-screen-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  transition: all 0.2s ease;
+}
+
+.empty-screen-overlay:hover {
+  background: rgba(0, 0, 0, 0.45);
+}
+
+.play-preview-icon {
+  font-size: 52px;
+  color: #FF0100;
+  margin-bottom: 10px;
+  transition: transform 0.2s ease;
+}
+
+.empty-screen-overlay:hover .play-preview-icon {
+  transform: scale(1.1);
+}
+
+/* Course Info Card */
+.player-info-card {
+  padding: 16px 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex-shrink: 0;
+  border-radius: 18px;
+}
+
+.info-badges-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+
+.info-tag-red {
+  background: #FF0100;
+  color: #ffffff;
+  font-size: 9.5px;
+  font-weight: 400;
+  padding: 3.5px 12px;
+  border-radius: 20px;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+}
+
+.info-tag-glass {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  color: #ffffff;
+  font-size: 9.5px;
+  font-weight: 400;
+  padding: 3.5px 12px;
+  border-radius: 20px;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+}
+
+.player-course-title {
+  font-size: 20px;
+  font-weight: 400;
+  color: #ffffff;
+  line-height: 1.25;
+  margin: 0 0 3px 0;
+}
+
+.player-instructor-credit {
+  font-size: 11.5px;
+  color: rgba(255, 255, 255, 0.7);
+  margin: 0 0 10px 0;
+}
+
+.player-instructor-credit span {
+  color: #ffffff;
+  font-weight: 400;
+}
+
+.info-card-divider {
+  height: 1px;
+  background: rgba(255, 255, 255, 0.08);
+  margin-bottom: 10px;
+}
+
+.about-block-title {
+  font-size: 13.5px;
+  font-weight: 400;
+  color: #ffffff;
+  margin: 0 0 4px 0;
+}
+
+.about-block-text {
+  font-size: 11.5px;
+  color: rgba(255, 255, 255, 0.75);
+  line-height: 1.5;
+  margin: 0;
+  max-height: 48px;
+  overflow-y: auto;
+}
+
+/* Custom Sleek Scrollbar */
+.custom-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.16) transparent;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+  width: 4px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.16);
+  border-radius: 999px;
+  transition: background 0.2s ease;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.38);
+}
+
+/* Loading State */
+.player-loading-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 60vh;
+  color: #888888;
+}
+
+.player-spinner {
+  width: 36px;
+  height: 36px;
+  border: 3px solid rgba(255, 255, 255, 0.1);
+  border-top-color: #FF0100;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  margin-bottom: 14px;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ═════════════════════════════════════════════════════════════
+   RESPONSIVE DESIGN (TABLET & MOBILE)
+   ═════════════════════════════════════════════════════════════ */
+@media (max-width: 900px) {
+  :host, .player-page-wrapper {
+    height: auto;
+    min-height: 100vh;
+    min-height: 100dvh;
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
+  
+  .player-container {
+    height: auto;
+    max-height: none;
+    overflow: visible;
+  }
+  
+  .player-layout-grid {
+    grid-template-columns: 1fr;
+    display: flex;
+    flex-direction: column;
+    height: auto;
+    overflow: visible;
+  }
+
+  .player-sidebar-col,
+  .player-main-col {
+    height: auto;
+    overflow: visible;
+  }
+
+  .course-content-card {
+    min-height: 300px;
+    max-height: 500px;
+  }
+
+  .player-screen-wrapper {
+    min-height: 250px;
+  }
+}

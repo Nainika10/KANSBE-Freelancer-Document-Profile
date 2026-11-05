@@ -1,0 +1,618 @@
+<app-header></app-header>
+
+<main class="video-page-content">
+    <!-- Back Button Navigation -->
+    <div class="back-navigation-container">
+        <button class="btn-back-pill" (click)="navigateToBlogs()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
+                stroke-linejoin="round" class="back-arrow">
+                <line x1="19" y1="12" x2="5" y2="12"></line>
+                <polyline points="12 19 5 12 12 5"></polyline>
+            </svg>
+            <span>Back</span>
+        </button>
+    </div>
+
+    <!-- HERO SECTION -->
+    <section class="hero-section" style="background-image: url('assets/editing1.webp');">
+        <div class="hero-overlay"></div>
+        <div class="container hero-container">
+            <div class="hero-content">
+                <h1 class="hero-title" *ngIf="!isGlobal">Best Editors <br>in <span class="text-red">India</span></h1>
+                <div *ngIf="isGlobal">
+                    <h1 class="hero-title">Editors</h1>
+                    <h2 class="hero-subheading">and How to <span class="text-red">Choose</span> the Right One</h2>
+                </div>
+
+                <p class="hero-subtitle" *ngIf="!isGlobal">
+                    Finding the right editor in India can be more difficult than it seems. There are countless options
+                    available,
+                    but choosing the right one isn't about quantity it's about finding someone whose style, pace, and
+                    understanding align with your vision.
+                </p>
+                <p class="hero-subtitle" *ngIf="isGlobal">
+                    Before choosing an editor, it's important to understand your content, format, and the level of
+                    refinement your work needs.
+                </p>
+
+                <p class="hero-bold-text" *ngIf="!isGlobal">
+                    The real challenge is not finding editors it's finding the right fit without wasting time.
+                </p>
+                <div class="hero-action">
+                    <button class="btn-hero-pill" (click)="joinAsClient()">
+                        Create an Account <svg class="arrow-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M5 12h14M12 5l7 7-7 7" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- REQUIREMENT-BASED MATCHING -->
+    <section class="matching-section">
+        <div class="container">
+            <h2 class="section-title" *ngIf="!isGlobal">Requirement-Based Matching</h2>
+            <p class="section-subtitle" *ngIf="!isGlobal">How starting with a clear vision saves time and elevates the
+                final product.</p>
+
+            <h2 class="section-title" *ngIf="isGlobal">WHY THIS DECISION MATTERS</h2>
+            <p class="section-subtitle" *ngIf="isGlobal">Editing is where raw content becomes meaningful. Whether it's
+                visuals, videos, or written content, editing shapes clarity, flow, and impact.</p>
+
+            <div class="row g-4">
+                <!-- Top Left: Large White Card -->
+                <div class="col-12 col-lg-8">
+                    <div class="match-card white-card h-100">
+                        <div class="card-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="#FF0100" stroke-width="2.5">
+                                <circle cx="12" cy="12" r="10" />
+                                <circle cx="12" cy="12" r="6" />
+                                <circle cx="12" cy="12" r="2" />
+                            </svg>
+                        </div>
+                        <h3 *ngIf="!isGlobal">You avoid unnecessary back-and-forth</h3>
+                        <p *ngIf="!isGlobal">Stop sifting through hundreds of profiles. Our algorithm prioritizes
+                            editors whose portfolio
+                            matches your
+                            specific genre, whether it's commercial storytelling or long-form documentary.</p>
+
+                        <h3 *ngIf="isGlobal">Enhance Your Work</h3>
+                        <p *ngIf="isGlobal">The right editor enhances your work without taking away its intent.</p>
+                    </div>
+                </div>
+
+                <!-- Top Right: Small Dark Card -->
+                <div class="col-12 col-lg-4">
+                    <div class="match-card glass-card h-100">
+                        <div class="card-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="#FF0100" stroke-width="2.5"
+                                stroke-linecap="round">
+                                <path
+                                    d="M12 2v2M4.93 4.93l1.41 1.41M2 12h2M4.93 19.07l1.41-1.41M12 22v-2M19.07 19.07l-1.41-1.41M22 12h-2M19.07 4.93l-1.41 1.41M12 12l4 4" />
+                            </svg>
+                        </div>
+                        <h3 *ngIf="!isGlobal">The right editors can be identified faster</h3>
+                        <p *ngIf="!isGlobal">Matching happens in minutes, not days. We focus on active availability to
+                            ensure no lead time
+                            is wasted.
+                        </p>
+
+                        <h3 *ngIf="isGlobal">Finding The Right Fit</h3>
+                        <p *ngIf="isGlobal">With many editors available, the challenge isn't finding someone — it's
+                            finding the right fit for your specific requirement.</p>
+                    </div>
+                </div>
+
+                <!-- Bottom Left: Small Dark Card -->
+                <div class="col-12 col-lg-4">
+                    <div class="match-card glass-card h-100">
+                        <div class="card-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="#FF0100" stroke-width="2.5"
+                                stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                                <path d="M9 12l2 2 4-4" />
+                            </svg>
+                        </div>
+                        <h3 *ngIf="!isGlobal">The process becomes structured</h3>
+                        <p *ngIf="!isGlobal">Every editor on Kansbe undergoes a rigorous stylistic audit before joining
+                            the roster.</p>
+
+                        <h3 *ngIf="isGlobal">Seamless Collaboration</h3>
+                        <p *ngIf="isGlobal">We ensure you only connect with professionals who can truly bring your
+                            vision to life.</p>
+                    </div>
+                </div>
+
+                <!-- Bottom Right: Large Red Card -->
+                <div class="col-12 col-lg-8">
+                    <div class="match-card red-card h-100">
+                        <div class="red-card-content">
+                            <h3 *ngIf="!isGlobal">Direct Access to India's Elite</h3>
+                            <p *ngIf="!isGlobal">Connect with editors who have shaped national campaigns and cinematic
+                                masterpieces.</p>
+
+                            <h3 *ngIf="isGlobal">A MORE FOCUSED WAY TO MOVE FORWARD</h3>
+                            <p *ngIf="isGlobal">NO ENDLESS SCROLLING | NO UNNECESSARY NOISE | NO RANDOM SELECTION</p>
+                        </div>
+                        <div class="red-card-accent">
+                            <svg viewBox="0 0 100 100" class="red-accent-svg">
+                                <path d="M0 80 Q 25 20 50 80 T 100 80 V 100 H 0 Z" />
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- HOW KANSBE WORKS -->
+    <section class="how-it-works-section">
+        <div class="container">
+            <h2 class="section-title center small-caps">HOW KANSBE WORKS</h2>
+            <p class="section-subtitle center" *ngIf="isGlobal" style="text-transform: uppercase; margin-top: -15px;">
+                FROM REQUIREMENT TO COLLABORATION</p>
+            <div class="row g-4 mt-5 justify-content-center">
+                <div class="col-lg-2-4 col-md-6 d-flex" *ngFor="let step of (isGlobal ? globalWorkSteps : workSteps)">
+                    <div class="work-step h-100">
+                        <div class="step-num">{{ step.step }}</div>
+                        <h3 [style.text-transform]="isGlobal ? 'uppercase' : 'none'">{{ step.title }}</h3>
+                        <p>{{ step.description }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- WHAT MAKES KANSBE DIFFERENT -->
+    <section class="different-section">
+        <div class="container">
+            <div class="row g-5 align-items-center">
+                <div class="col-12 col-lg-6">
+                    <img src="assets/editing2.webp" alt="Video Waves" class="different-image w-100 rounded-4">
+                </div>
+                <div class="col-12 col-lg-6">
+                    <h2 class="different-title mb-5" *ngIf="!isGlobal">What Makes Kansbe Different</h2>
+                    <h2 class="different-title mb-5" *ngIf="isGlobal" style="text-transform: uppercase;">TYPES OF
+                        EDITING BASED ON YOUR REQUIREMENT</h2>
+                    <ul class="different-list list-unstyled" *ngIf="!isGlobal">
+                        <li class="mb-4 d-flex align-items-center gap-3">
+                            <svg class="list-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2.5">
+                                <circle cx="12" cy="12" r="10" />
+                                <line x1="4.93" y1="4.93" x2="19.07" y2="19.07" />
+                            </svg>
+                            <span>NO ENDLESS SCROLLING</span>
+                        </li>
+                        <li class="mb-4 d-flex align-items-center gap-3">
+                            <svg class="list-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2.5">
+                                <path
+                                    d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+                                <circle cx="12" cy="12" r="3" />
+                            </svg>
+                            <span>CURATED EDITORS ONLY</span>
+                        </li>
+                        <li class="mb-4 d-flex align-items-center gap-3">
+                            <svg class="list-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2.5">
+                                <rect x="2" y="5" width="20" height="14" rx="2" />
+                                <line x1="2" y1="10" x2="22" y2="10" />
+                                <line x1="7" y1="15" x2="7" y2="15" />
+                                <line x1="11" y1="15" x2="11" y2="15" />
+                            </svg>
+                            <span>REQUIREMENT-BASED MATCHING</span>
+                        </li>
+                        <li class="mb-4 d-flex align-items-center gap-3">
+                            <svg class="list-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2.5">
+                                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+                            </svg>
+                            <span>FOCUS ON QUALITY AND CLARITY</span>
+                        </li>
+                        <li class="mb-4 d-flex align-items-center gap-3">
+                            <svg class="list-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2.5">
+                                <path d="M7 11l5-5 5 5M17 13l-5 5-5-5" />
+                            </svg>
+                            <span>SMOOTH END-TO-END PROCESS</span>
+                        </li>
+                    </ul>
+
+                    <ul class="different-list list-unstyled" *ngIf="isGlobal">
+                        <li class="mb-4" *ngFor="let spec of globalSpecialists">
+                            <div class="d-flex align-items-start gap-3">
+                                <svg class="list-icon mt-1" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2.5">
+                                    <path
+                                        d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+                                    <circle cx="12" cy="12" r="3" />
+                                </svg>
+                                <div>
+                                    <h4
+                                        style="margin: 0; color: white; font-weight: 400; 'Syne', sans-serif;">
+                                        {{ spec.title }}</h4>
+                                    <span style="font-size: 0.9rem; color: rgba(255,255,255,0.7);">{{ spec.description
+                                        }}</span>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- WHY BETTER SECTION -->
+    <section class="why-better-section">
+        <div class="container">
+            <div class="why-better-box">
+                <div class="why-bg-text">WHY</div>
+                <div class="why-flex">
+                    <div class="why-left">
+                        <h2 class="why-title" *ngIf="!isGlobal">Why This<br>Approach<br>Works Better.</h2>
+                        <h2 class="why-title" *ngIf="isGlobal"
+                            style="font-size: clamp(2rem, 4vw, 3rem); text-transform: uppercase;">START WITH<br>CLARITY
+                            BEFORE<br>YOU CHOOSE</h2>
+                    </div>
+                    <div class="why-right">
+                        <ul class="why-list" *ngIf="!isGlobal">
+                            <li>Decisions become faster</li>
+                            <li>Better alignment happens</li>
+                            <li>Content quality improves</li>
+                        </ul>
+                        <ul class="why-list global-why-list" *ngIf="isGlobal">
+                            <li><span style="color: #FF0100; font-weight: 400; margin-right: 10px;">01</span> What type
+                                of content are you working with?</li>
+                            <li><span style="color: #FF0100; font-weight: 400; margin-right: 10px;">02</span> What
+                                level of editing is required?</li>
+                            <li><span style="color: #FF0100; font-weight: 400; margin-right: 10px;">03</span> What
+                                style or outcome are you aiming for?</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- REGION SECTION -->
+    <section class="region-section">
+        <div class="container">
+            <div class="region-card">
+                <div class="row align-items-center">
+                    <div class="col-lg-6">
+                        <h2 class="region-title" *ngIf="!isGlobal">Looking for a perfect Video Editor<br>in your region?
+                        </h2>
+                        <h2 class="region-title" *ngIf="isGlobal">Looking for a perfect Video Editor<br>in your region?
+                        </h2>
+                        <p class="region-subtitle" *ngIf="!isGlobal">Connect with elite professionals in India's major
+                            tech and creative hubs.</p>
+                        <p class="region-subtitle" *ngIf="isGlobal" style="color: rgba(255, 255, 255, 0.6);">Connect
+                            with elite professionals in major global tech and creative hubs.</p>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="city-grid" *ngIf="!isGlobal">
+                            <a [routerLink]="['/hire-freelancers-in-noida']"
+                                [queryParams]="{ from: 'videoediting-page' }" class="city-link">
+                                <span>Noida</span>
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                    stroke-linecap="round" stroke-linejoin="round">
+                                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                                    <polyline points="12 5 19 12 12 19"></polyline>
+                                </svg>
+                            </a>
+                            <a [routerLink]="['/hire-freelancers-in-hyderabad']"
+                                [queryParams]="{ from: 'videoediting-page' }" class="city-link">
+                                <span>Hyderabad</span>
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                    stroke-linecap="round" stroke-linejoin="round">
+                                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                                    <polyline points="12 5 19 12 12 19"></polyline>
+                                </svg>
+                            </a>
+                            <a [routerLink]="['/hire-freelancers-in-bengaluru']"
+                                [queryParams]="{ from: 'videoediting-page' }" class="city-link">
+                                <span>Bangalore</span>
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                    stroke-linecap="round" stroke-linejoin="round">
+                                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                                    <polyline points="12 5 19 12 12 19"></polyline>
+                                </svg>
+                            </a>
+                            <a [routerLink]="['/hire-freelancers-in-mumbai']"
+                                [queryParams]="{ from: 'videoediting-page' }" class="city-link">
+                                <span>Mumbai</span>
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                    stroke-linecap="round" stroke-linejoin="round">
+                                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                                    <polyline points="12 5 19 12 12 19"></polyline>
+                                </svg>
+                            </a>
+                            <a [routerLink]="['/hire-freelancers-in-pune']"
+                                [queryParams]="{ from: 'videoediting-page' }" class="city-link">
+                                <span>Pune</span>
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                    stroke-linecap="round" stroke-linejoin="round">
+                                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                                    <polyline points="12 5 19 12 12 19"></polyline>
+                                </svg>
+                            </a>
+                            <a [routerLink]="['/hire-freelancers-in-chennai']"
+                                [queryParams]="{ from: 'videoediting-page' }" class="city-link">
+                                <span>Chennai</span>
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                    stroke-linecap="round" stroke-linejoin="round">
+                                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                                    <polyline points="12 5 19 12 12 19"></polyline>
+                                </svg>
+                            </a>
+                        </div>
+
+                        <!-- GLOBAL city grid -->
+                        <div class="city-grid" *ngIf="isGlobal">
+                            <a [routerLink]="['/best-video-editors-india']" class="city-link">
+                                <span>India</span>
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                    stroke-linecap="round" stroke-linejoin="round">
+                                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                                    <polyline points="12 5 19 12 12 19"></polyline>
+                                </svg>
+                            </a>
+                            <a (click)="showComingSoon('UK')" class="city-link"
+                                [class.active-soon]="activeComingSoon === 'UK'">
+                                <div class="city-content">
+                                    <span>UK</span>
+                                    <svg *ngIf="activeComingSoon === 'UK'" viewBox="0 0 24 24" fill="none"
+                                        stroke="currentColor" stroke-width="2" class="lock-icon">
+                                        <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                                        <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                                    </svg>
+                                </div>
+                                <svg *ngIf="activeComingSoon !== 'UK'" viewBox="0 0 24 24" fill="none"
+                                    stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round">
+                                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                                    <polyline points="12 5 19 12 12 19"></polyline>
+                                </svg>
+                                <span class="soon-dot" *ngIf="activeComingSoon === 'UK'"></span>
+                            </a>
+                            <a (click)="showComingSoon('Dubai')" class="city-link"
+                                [class.active-soon]="activeComingSoon === 'Dubai'">
+                                <div class="city-content">
+                                    <span>Dubai</span>
+                                    <svg *ngIf="activeComingSoon === 'Dubai'" viewBox="0 0 24 24" fill="none"
+                                        stroke="currentColor" stroke-width="2" class="lock-icon">
+                                        <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                                        <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                                    </svg>
+                                </div>
+                                <svg *ngIf="activeComingSoon !== 'Dubai'" viewBox="0 0 24 24" fill="none"
+                                    stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round">
+                                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                                    <polyline points="12 5 19 12 12 19"></polyline>
+                                </svg>
+                                <span class="soon-dot" *ngIf="activeComingSoon === 'Dubai'"></span>
+                            </a>
+                            <a (click)="showComingSoon('Singapore')" class="city-link"
+                                [class.active-soon]="activeComingSoon === 'Singapore'">
+                                <div class="city-content">
+                                    <span>Singapore</span>
+                                    <svg *ngIf="activeComingSoon === 'Singapore'" viewBox="0 0 24 24" fill="none"
+                                        stroke="currentColor" stroke-width="2" class="lock-icon">
+                                        <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                                        <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                                    </svg>
+                                </div>
+                                <svg *ngIf="activeComingSoon !== 'Singapore'" viewBox="0 0 24 24" fill="none"
+                                    stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round">
+                                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                                    <polyline points="12 5 19 12 12 19"></polyline>
+                                </svg>
+                                <span class="soon-dot" *ngIf="activeComingSoon === 'Singapore'"></span>
+                            </a>
+                            <a (click)="showComingSoon('USA')" class="city-link"
+                                [class.active-soon]="activeComingSoon === 'USA'">
+                                <div class="city-content">
+                                    <span>USA</span>
+                                    <svg *ngIf="activeComingSoon === 'USA'" viewBox="0 0 24 24" fill="none"
+                                        stroke="currentColor" stroke-width="2" class="lock-icon">
+                                        <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                                        <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                                    </svg>
+                                </div>
+                                <svg *ngIf="activeComingSoon !== 'USA'" viewBox="0 0 24 24" fill="none"
+                                    stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round">
+                                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                                    <polyline points="12 5 19 12 12 19"></polyline>
+                                </svg>
+                                <span class="soon-dot" *ngIf="activeComingSoon === 'USA'"></span>
+                            </a>
+                            <a (click)="showComingSoon('Australia')" class="city-link"
+                                [class.active-soon]="activeComingSoon === 'Australia'">
+                                <div class="city-content">
+                                    <span>Australia</span>
+                                    <svg *ngIf="activeComingSoon === 'Australia'" viewBox="0 0 24 24" fill="none"
+                                        stroke="currentColor" stroke-width="2" class="lock-icon">
+                                        <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                                        <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                                    </svg>
+                                </div>
+                                <svg *ngIf="activeComingSoon !== 'Australia'" viewBox="0 0 24 24" fill="none"
+                                    stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round">
+                                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                                    <polyline points="12 5 19 12 12 19"></polyline>
+                                </svg>
+                                <span class="soon-dot" *ngIf="activeComingSoon === 'Australia'"></span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ SECTION -->
+    <section class="faq-section">
+        <div class="container">
+            <h2 class="faq-title">Frequently Asked Questions</h2>
+            <div class="faq-list">
+                <div class="faq-item" *ngFor="let faq of (isGlobal ? globalFaqs : faqs); let i = index">
+                    <div class="faq-header" (click)="toggleFaq(i)">
+                        <h3>{{ faq.question }}</h3>
+                        <svg class="chevron-icon" [class.rotated]="faq.isOpen" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2">
+                            <path d="M6 9l6 6 6-6" />
+                        </svg>
+                    </div>
+                    <div class="faq-body" *ngIf="faq.isOpen">
+                        <p>{{ faq.answer }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+
+    <!-- Fixed Join Us Button - Visible Throughout -->
+    <div class="fixed-join-us-wrapper" [class.near-footer]="isNearFooter">
+        <button class="btn-join-fixed" (click)="toggleModal()">Join Us</button>
+
+        <!-- Join Us Modal - Single Pill with Divider -->
+        <div class="modal-buttons-fixed" [class.show]="showModal">
+            <div class="pill-container">
+                <button class="pill-button pill-left" (click)="startAsFreelancer()">
+                    Start as Freelancer
+                </button>
+                <div class="pill-divider"></div>
+                <button class="pill-button pill-right" (click)="joinAsClient()">
+                    Join as Client
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scroll Down Indicator -->
+    <div class="scroll-indicator" [class.visible]="showScrollIndicator">
+        <span class="scroll-text">Scroll</span>
+        <div class="scroll-arrow"></div>
+    </div>
+</main>
+
+<!-- FOOTER SECTION (Exact Master Sync) -->
+<footer class="kansbe-footer-section" id="contact">
+    <div class="footer-container container-fluid">
+        <!-- TOP FOOTER: BRAND & CONNECT -->
+        <div class="footer-top-row">
+            <div class="footer-brand">
+                <img src="assets/pics.webp" alt="KANSBE" class="footer-primary-logo">
+                <p class="footer-tagline">
+                    For people who care about how their days feel, who value freedom, balance, clarity, and build
+                    everything else
+                    around that.
+                </p>
+            </div>
+
+            <div class="footer-social-block">
+                <h4 class="footer-heading">CONNECT WITH US</h4>
+                <div class="footer-social-icons">
+                    <a *ngFor="let social of socialLinks" [href]="social.url" class="social-btn" target="_blank"
+                        rel="noopener noreferrer" [attr.aria-label]="social.name">
+                        <span class="social-tooltip">{{ social.name }}</span>
+                        <svg *ngIf="social.icon === 'linkedin'" viewBox="0 0 24 24">
+                            <path
+                                d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z" />
+                        </svg>
+                        <svg *ngIf="social.icon === 'instagram'" viewBox="0 0 24 24">
+                            <path
+                                d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" />
+                        </svg>
+                        <svg *ngIf="social.icon === 'x'" viewBox="0 0 24 24">
+                            <path
+                                d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+                        </svg>
+                        <svg *ngIf="social.icon === 'facebook'" viewBox="0 0 24 24">
+                            <path
+                                d="M22.675 0h-21.35c-.732 0-1.325.593-1.325 1.325v21.351c0 .731.593 1.324 1.325 1.324h11.495v-9.294h-3.128v-3.622h3.128v-2.671c0-3.1 1.893-4.788 4.659-4.788 1.325 0 2.463.099 2.795.143v3.24l-1.918.001c-1.504 0-1.795.715-1.795 1.763v2.313h3.587l-.467 3.622h-3.12v9.293h6.116c.73 0 1.323-.593 1.323-1.325v-21.35c0-.732-.593-1.325-1.325-1.325z" />
+                        </svg>
+                    </a>
+                </div>
+                <div class="footer-email-block">
+                    <p class="footer-heading" style="margin-bottom: 10px;">FOR ANY SUPPORT</p>
+                    <a href="mailto:support@kansbe.com" class="footer-email">support@kansbe.com</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-divider"></div>
+
+        <!-- MIDDLE FOOTER: NAVIGATION -->
+        <div class="footer-mid-row row">
+            <div class="col-lg-4 col-md-6 footer-nav-col">
+                <h4 class="footer-heading">Company</h4>
+                <nav class="footer-links-list">
+                    <button (click)="scrollToTop()" class="f-link">Home</button>
+                    <button (click)="navigateToAbout()" class="f-link">About Kansbe</button>
+                    <button (click)="navigateToHowItWorks()" class="f-link">How Kansbe Works</button>
+                    <button (click)="navigateToWhyFreelancers()" class="f-link">Why Kansbe Freelancers</button>
+                    <button (click)="navigateToBlogs()" class="f-link">Blogs</button>
+                </nav>
+            </div>
+
+            <div class="col-lg-4 col-md-6 footer-nav-col">
+                <h4 class="footer-heading">Independence</h4>
+                <nav class="footer-links-list">
+                    <button (click)="registerAsFreelancer()" class="f-link">For Freelancers</button>
+                    <button (click)="registerAsClient()" class="f-link">For Clients</button>
+                    <button (click)="toggleModal()" class="f-link">Join the Network</button>
+                </nav>
+            </div>
+
+            <div class="col-lg-4 col-md-12 footer-nav-col">
+                <h4 class="footer-heading">Legal</h4>
+                <nav class="footer-links-list">
+                    <button (click)="openModal('privacy')" class="f-link">Privacy Statement</button>
+                    <button (click)="openModal('terms')" class="f-link">Terms & Conditions</button>
+                    <span class="f-location">Singapore Inc. HQ</span>
+                </nav>
+            </div>
+        </div>
+
+        <!-- BOTTOM FOOTER: COPYRIGHT -->
+        <div class="footer-bottom-row">
+            <div class="copyright-container">
+                <span class="copyright-text">© {{ currentYear }} KANSBE. ALL RIGHTS RESERVED.</span>
+            </div>
+            <div class="footer-accent-line"></div>
+        </div>
+    </div>
+
+    <!-- LEGAL MODAL (Exact Master Sync) -->
+    <div class="modal-overlay" *ngIf="isModalOpen" (click)="closeModal()">
+        <div class="modal-box" (click)="$event.stopPropagation()">
+            <div class="modal-content-wrapper">
+                <div *ngIf="modalType === 'privacy'" class="modal-content">
+                    <h2>Privacy Policy and Data Security</h2>
+                    <p><strong>Kansbe privacy policy last updated on {{ currentYear }}</strong></p>
+                    <p>Kansbe does not sell or share your personal data with other clients or freelancers. Only profile
+                        details
+                        necessary for matching and collaboration are used within the platform.</p>
+                </div>
+                <div *ngIf="modalType === 'terms'" class="modal-content">
+                    <h2>KANSBE – Terms & Conditions</h2>
+                    <p>These Terms apply to all users of the KANSBE Platform: Freelancers, Clients, and Visitors.</p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="close-btn" (click)="closeModal()">Close</button>
+            </div>
+        </div>
+    </div>
+</footer>

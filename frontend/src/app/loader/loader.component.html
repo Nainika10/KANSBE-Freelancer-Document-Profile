@@ -1,0 +1,6 @@
+<div class="loader-container"
+     [class.loader-container--full]="isFullPage"
+     [class.loader-container--content]="!isFullPage"
+     *ngIf="loaderService.loading$ | async">
+  <span class="loader" data-text="Kansbe">Kansbe</span>
+</div>

@@ -1,0 +1,226 @@
+<div class="futuristic-projects-page" *ngIf="usr">
+  <!-- Atmospheric Cinematic Background Elements -->
+  <div class="projects-bg-canvas"></div>
+
+  <!-- Main Content Container -->
+  <div class="projects-main-container">
+
+    <!-- ═══ 1. PROJECT STATUS TABS & POST A PROJECT ═══ -->
+    <div class="projects-status-header">
+      <div class="projects-status-tabs-capsule">
+        <button class="status-tab-btn" [class.active]="activeTab === 'Current Projects'" (click)="selectTab('Current Projects')">
+          Current Projects
+        </button>
+        <button class="status-tab-btn" [class.active]="activeTab === 'Project Request'" (click)="selectTab('Project Request')">
+          Project Request
+        </button>
+        <button class="status-tab-btn" [class.active]="activeTab === 'Accepted Projects'" (click)="selectTab('Accepted Projects')">
+          Accepted Projects
+        </button>
+        <button class="status-tab-btn" [class.active]="activeTab === 'Rejected Projects'" (click)="selectTab('Rejected Projects')">
+          Rejected Projects
+        </button>
+      </div>
+
+      <!-- Post a Project Button -->
+      <button class="btn-post-project" (click)="navigateToPostProject()">
+        + Post a Project
+      </button>
+    </div>
+
+    <!-- ═══ 2A. PROJECT REQUEST TAB VIEW (MATCHING DESIGN IMAGE) ═══ -->
+    <div class="project-request-list-section" *ngIf="activeTab === 'Project Request' && filteredProjects.length > 0">
+      <div class="project-request-card" *ngFor="let p of filteredProjects">
+        <!-- Left Side: Icon + Title + Meta + Description + View Details -->
+        <div class="request-card-left">
+          <div class="project-icon-glass">
+            <i class="bi bi-briefcase"></i>
+          </div>
+
+          <div class="request-info-col">
+            <h2 class="request-title-text">{{ p.title || 'Untitled Project' }}</h2>
+            <div class="request-meta-strip">
+              <span class="request-id-text">ID: {{ p.id || 'P668' }}</span>
+              <span class="meta-dot">·</span>
+              <span class="request-category-text">{{ p.category || 'web-development' }}</span>
+            </div>
+            <p class="request-description-text">
+              {{ getTruncatedDescription(p) }} <a class="view-details-link-inline" (click)="viewProjectDetails(p.id)">View Details</a>
+            </p>
+          </div>
+        </div>
+
+        <!-- Right Side: SELECT FREELANCERS Pill Button -->
+        <div class="request-card-right">
+          <button class="btn-select-freelancers" (click)="selectFreelancers(p.id)">
+            SELECT FREELANCERS
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ 2B. CURRENT PROJECTS TAB VIEW (WITH CIRCULAR PROGRESS) ═══ -->
+    <div class="project-list-section" *ngIf="activeTab === 'Current Projects' && filteredProjects.length > 0">
+      <div class="project-row-item" *ngFor="let p of filteredProjects">
+
+        <!-- Left Side: Header (Icon + Title + Portal Button) & Details Card Below -->
+        <div class="project-content-left">
+          <!-- Top Row: Icon + Title + Project Portal Button -->
+          <div class="project-header-inline">
+            <div class="project-icon-glass">
+              <i class="bi bi-briefcase"></i>
+            </div>
+            <h2 class="project-title-text">{{ p.title || 'Untitled Project' }}</h2>
+            <button class="btn-select-freelancers" *ngIf="p.needsMoreFreelancers || p.rawStatus === 'assigned' || p.rawStatus === 'available'" (click)="selectFreelancers(p.id)">
+              SELECT FREELANCERS
+            </button>
+            <button class="btn-project-portal" *ngIf="(p.membersAccepted != null && p.membersAccepted > 0) || (!p.needsMoreFreelancers && p.rawStatus !== 'available' && p.rawStatus !== 'assigned')" (click)="openProjectPortal(p.id)">
+              PROJECT PORTAL
+            </button>
+          </div>
+
+          <!-- Description Glass Card -->
+          <div class="project-details-card">
+            <div class="project-meta-strip">
+              <span class="project-id-text">ID: {{ p.id || 'P668' }}</span>
+              <span class="meta-dot">·</span>
+              <span class="project-category-text">{{ p.category || 'web-development' }}</span>
+            </div>
+            <p class="project-description-text">
+              {{ getTruncatedDescription(p) }} <a class="view-details-link-inline" (click)="viewProjectDetails(p.id)">View Details</a>
+            </p>
+          </div>
+        </div>
+
+        <!-- Right Side: Circular Progress Indicator & Project Progress Label -->
+        <div class="project-progress-right">
+          <div class="progress-ring-wrap">
+            <svg class="progress-svg-ring" viewBox="0 0 120 120">
+              <circle class="ring-bg-track" cx="60" cy="60" r="48" />
+              <circle class="ring-progress-arc" cx="60" cy="60" r="48"
+                stroke-dasharray="301.59"
+                [style.strokeDashoffset]="getProgressOffset(p.completion)" />
+            </svg>
+            <div class="progress-percentage-text">
+              {{ p.completion != null ? p.completion : 0 }}%
+            </div>
+          </div>
+
+          <div class="progress-label-wrap">
+            <span class="progress-label-text">Project<br>Progress</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ═══ 2C. ACCEPTED PROJECTS TAB VIEW ═══ -->
+    <div class="project-request-list-section" *ngIf="activeTab === 'Accepted Projects' && filteredProjects.length > 0">
+      <div class="project-request-card" *ngFor="let p of filteredProjects">
+        <div class="request-card-left">
+          <div class="project-icon-glass">
+            <i class="bi bi-briefcase"></i>
+          </div>
+          <div class="request-info-col">
+            <h2 class="request-title-text">{{ p.title || 'Untitled Project' }}</h2>
+            <div class="request-meta-strip">
+              <span class="request-id-text">ID: {{ p.id || 'P668' }}</span>
+              <span class="meta-dot">·</span>
+              <span class="request-category-text">{{ p.category || 'web-development' }}</span>
+            </div>
+            <p class="request-description-text">
+              {{ getTruncatedDescription(p) }} <a class="view-details-link-inline" (click)="viewProjectDetails(p.id)">View Details</a>
+            </p>
+          </div>
+        </div>
+        <div class="request-card-right">
+          <button [ngClass]="p.status === 'COMPLETED' ? 'btn-completed' : 'btn-ongoing'" style="text-transform: uppercase;" (click)="openProjectPortal(p.id)">
+            {{p.status}}
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ 2D. REJECTED PROJECTS TAB VIEW ═══ -->
+    <div class="project-request-list-section" *ngIf="activeTab === 'Rejected Projects' && filteredProjects.length > 0">
+      <div class="project-request-card" *ngFor="let p of filteredProjects">
+        <div class="request-card-left">
+          <div class="project-icon-glass">
+            <i class="bi bi-briefcase"></i>
+          </div>
+          <div class="request-info-col">
+            <h2 class="request-title-text">{{ p.title || 'Untitled Project' }}</h2>
+            <div class="request-meta-strip">
+              <span class="request-id-text">ID: {{ p.id || 'P668' }}</span>
+              <span class="meta-dot">·</span>
+              <span class="request-category-text">{{ p.category || 'web-development' }}</span>
+            </div>
+            <p class="request-description-text">
+              {{ getTruncatedDescription(p) }} <a class="view-details-link-inline" (click)="viewProjectDetails(p.id)">View Details</a>
+            </p>
+          </div>
+        </div>
+        <div class="request-card-right">
+          <button class="status-badge-rejected">
+            REJECTED
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Empty State when no projects match tab -->
+    <div class="projects-empty-state" *ngIf="filteredProjects.length === 0">
+      <div class="empty-icon-circle">
+        <i class="bi bi-folder2-open"></i>
+      </div>
+      <h3 class="empty-state-title">No {{ activeTab }} Found</h3>
+      <p class="empty-state-text">Your {{ activeTab }} list is currently empty.</p>
+    </div>
+
+    <!-- ═══ 3. BOTTOM OVERALL STATISTICS ROW ═══ -->
+    <div class="projects-summary-bar">
+      <div class="summary-stat-column">
+        <div class="summary-number">{{ projectCount | number:'2.0-0' }}</div>
+        <div class="summary-label">Total Projects</div>
+      </div>
+      <div class="summary-divider"></div>
+
+      <div class="summary-stat-column">
+        <div class="summary-number">{{ approvedProjects.length | number:'2.0-0' }}</div>
+        <div class="summary-label">Accepted Projects</div>
+      </div>
+      <div class="summary-divider"></div>
+
+      <div class="summary-stat-column">
+        <div class="summary-number">{{ stats.completed | number:'2.0-0' }}</div>
+        <div class="summary-label">Completed Projects</div>
+      </div>
+      <div class="summary-divider"></div>
+
+      <div class="summary-stat-column">
+        <div class="summary-number">{{ rejectedCount | number:'2.0-0' }}</div>
+        <div class="summary-label">Rejected Projects</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- Incomplete Profile Warning Popup -->
+<div class="modal-backdrop-glass" *ngIf="showProfileIncompletePopup">
+  <div class="glass-modal-box">
+    <div class="modal-header-glass">
+      <h5 class="modal-title-glass">Profile Incomplete</h5>
+      <button type="button" class="btn-close-glass" (click)="showProfileIncompletePopup = false">
+        <i class="bi bi-x-lg"></i>
+      </button>
+    </div>
+    <div class="modal-body-glass">
+      <p>Please complete your profile before posting a new project.</p>
+    </div>
+    <div class="modal-footer-glass">
+      <button type="button" class="btn-glass-secondary" (click)="showProfileIncompletePopup = false">Close</button>
+      <button type="button" class="btn-glass-danger" routerLink="/home/csettings">Go to Profile Settings</button>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,565 @@
+<div class="futuristic-projects-page" *ngIf="data">
+  <!-- Atmospheric Cinematic Background Elements -->
+  <div class="projects-bg-canvas"></div>
+
+  <!-- Main Content Container -->
+  <div class="projects-main-container">
+
+    <!-- ═══ 1. PROJECT STATUS TABS ═══ -->
+    <div class="projects-status-tabs-container">
+      <div class="projects-status-tabs-capsule">
+        <button class="status-tab-btn" [class.active]="activeTab === 'current'" (click)="setActiveTab('current')">
+          Current Projects
+        </button>
+        <button class="status-tab-btn" [class.active]="activeTab === 'requests' || activeTab === 'upcoming'"
+          (click)="setActiveTab('requests')">
+          Project Request
+        </button>
+        <button class="status-tab-btn" [class.active]="activeTab === 'accepted'" (click)="setActiveTab('accepted')">
+          Accepted Projects
+        </button>
+        <button class="status-tab-btn" [class.active]="activeTab === 'rejected'" (click)="setActiveTab('rejected')">
+          Rejected Projects
+        </button>
+      </div>
+    </div>
+
+    <!-- ═══ LOADING STATE ═══ -->
+    <div class="projects-loading-state" *ngIf="isLoading">
+      <div class="spinner-border text-danger" role="status" style="width: 2.5rem; height: 2.5rem;">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+      <p class="text-secondary mt-3 fw-semibold">Loading your projects...</p>
+    </div>
+
+    <!-- ═══ 2A. PROJECT REQUESTS VIEW (WHEN IN PROJECT REQUEST TAB) ═══ -->
+    <div class="project-requests-list-section"
+      *ngIf="!isLoading && (activeTab === 'requests' || activeTab === 'upcoming') && getFilteredProjects().length > 0">
+      <div class="project-request-row-item" *ngFor="let p of getFilteredProjects()">
+
+        <!-- Left Side: Icon + Details (Title + Inline Stats + Meta + Description) -->
+        <div class="request-content-left">
+
+          <!-- Icon -->
+          <div class="request-icon-glass">
+            <i class="bi bi-briefcase"></i>
+          </div>
+
+          <!-- Main Info Column -->
+          <div class="request-details-col">
+
+            <!-- Top Line: Title + Budget + Days Left (Inline) -->
+            <div class="request-header-inline">
+              <h2 class="request-title-text">{{ getProjectDetails(p).title || 'Kansbe Application' }}</h2>
+
+              <div class="request-stats-group">
+                <!-- Inline Budget Stat -->
+                <div class="request-stat-box">
+                  <div class="request-stat-number">₹{{ getProjectDetails(p).budget || getProjectDetails(p).price || '3000'
+                    }}</div>
+                  <div class="request-stat-label">Budget</div>
+                </div>
+
+                <!-- Inline Days Left Stat -->
+                <div class="request-stat-box">
+                  <div class="request-stat-number">{{ getDaysLeft(p) || '3' }}</div>
+                  <div class="request-stat-label">Days Left</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Meta: ID · Category -->
+            <div class="request-meta-strip">
+              <span class="request-id-text">ID: {{ getProjectDetails(p).p_id || 'P668' }}</span>
+              <span class="meta-dot">·</span>
+              <span class="request-category-text">{{ getProjectDetails(p).category || 'web-development' }}</span>
+            </div>
+
+            <!-- Description -->
+            <p class="request-description-text">
+              {{ getTruncatedDescription(p) }} <a class="view-details-link-inline" (click)="viewProject(p)">View Details</a>
+            </p>
+
+            <!-- Terms & Conditions Checkbox (Required to enable INTRESTED) -->
+            <div class="request-terms-wrapper" *ngIf="isPending(p)">
+              <label class="terms-checkbox-container" [class.checked]="isTermsAccepted(p.grp_id)">
+                <input type="checkbox"
+                  class="terms-checkbox-input"
+                  [checked]="isTermsAccepted(p.grp_id)"
+                  (change)="onTermsChange(p.grp_id, $event)">
+                <span class="terms-checkbox-custom">
+                  <i class="bi bi-check-lg" *ngIf="isTermsAccepted(p.grp_id)"></i>
+                </span>
+                <span class="terms-label-text">
+                  I agree to the <a class="terms-hyperlink" (click)="openTermsModal(p.grp_id, $event)">Terms and Conditions</a>
+                </span>
+              </label>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Right Side: Action Buttons (INTRESTED / NOT-INTRESTED) -->
+        <div class="request-actions-right">
+
+          <ng-container *ngIf="isPending(p)">
+            <!-- Top Button: INTRESTED (Liquid Transparent Glassy Capsule - Enabled ONLY when Terms are agreed) -->
+            <button class="btn-request-interested"
+              [class.disabled-btn]="!isTermsAccepted(p.grp_id) || hasActiveProject()"
+              (click)="acceptProject(p.grp_id)"
+              [title]="!isTermsAccepted(p.grp_id) ? 'Please agree to Terms and Conditions first' : (hasActiveProject() ? 'Complete your active project first' : 'Accept project request')">
+              <i class="bi bi-lock-fill me-1" *ngIf="hasActiveProject()"></i>INTRESTED
+            </button>
+
+            <!-- Bottom Button: NOT-INTRESTED (Rich Red Solid Pill) -->
+            <button class="btn-request-not-interested" (click)="openRejectModal(p)">
+              NOT-INTRESTED
+            </button>
+          </ng-container>
+          
+          <ng-container *ngIf="isWaitingForClient(p)">
+            <button class="btn-request-waiting" disabled>
+              <i class="bi bi-hourglass-split me-1"></i>Waiting for client approve
+            </button>
+          </ng-container>
+
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ═══ 2B. ACCEPTED PROJECTS VIEW (WHEN IN ACCEPTED PROJECTS TAB) ═══ -->
+    <div class="project-accepted-list-section"
+      *ngIf="!isLoading && activeTab === 'accepted' && getFilteredProjects().length > 0">
+      <div class="project-accepted-row-item" *ngFor="let p of getFilteredProjects()">
+
+        <!-- Left Side: Icon + Details (Title + Meta + Description) -->
+        <div class="accepted-content-left">
+
+          <!-- Icon -->
+          <div class="request-icon-glass">
+            <i class="bi bi-briefcase"></i>
+          </div>
+
+          <!-- Main Info Column -->
+          <div class="accepted-details-col">
+            <h2 class="accepted-title-text">{{ getProjectDetails(p).title || 'Kansbe Application' }}</h2>
+
+            <!-- Meta: ID · Category -->
+            <div class="accepted-meta-strip">
+              <span class="accepted-id-text">ID: {{ getProjectDetails(p).p_id || 'P668' }}</span>
+              <span class="meta-dot">·</span>
+              <span class="accepted-category-text">{{ getProjectDetails(p).category || 'web-development' }}</span>
+            </div>
+
+            <!-- Description -->
+            <p class="accepted-description-text">
+              {{ getTruncatedDescription(p) }} <a class="view-details-link-inline" (click)="viewProject(p)">View Details</a>
+            </p>
+          </div>
+
+        </div>
+
+        <!-- Right Side: Status Badge Capsule (ONGOING / COMPLETED) -->
+        <div class="accepted-actions-right">
+          <button class="accepted-status-capsule" [ngClass]="getAcceptedProjectStatusClass(p)"
+            (click)="isAccepted(p) && getProjectDetails(p).p_id ? openProjectPortal(p) : null"
+            [title]="isAccepted(p) && getProjectDetails(p).p_id ? 'Click to open Project Portal' : ''">
+            {{ getAcceptedProjectStatusLabel(p) }}
+          </button>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ═══ 2C. REJECTED PROJECTS VIEW (WHEN IN REJECTED PROJECTS TAB) ═══ -->
+    <div class="project-rejected-list-section"
+      *ngIf="!isLoading && activeTab === 'rejected' && getFilteredProjects().length > 0">
+      <div class="project-rejected-row-item" *ngFor="let p of getFilteredProjects()">
+
+        <!-- Left Side: Icon + Details (Title + Meta + Description) -->
+        <div class="rejected-content-left">
+
+          <!-- Icon -->
+          <div class="request-icon-glass">
+            <i class="bi bi-briefcase"></i>
+          </div>
+
+          <!-- Main Info Column -->
+          <div class="rejected-details-col">
+            <h2 class="rejected-title-text">{{ getProjectDetails(p).title || 'Kansbe Application' }}</h2>
+
+            <!-- Meta: ID · Category -->
+            <div class="rejected-meta-strip">
+              <span class="rejected-id-text">ID: {{ getProjectDetails(p).p_id || 'P668' }}</span>
+              <span class="meta-dot">·</span>
+              <span class="rejected-category-text">{{ getProjectDetails(p).category || 'web-development' }}</span>
+            </div>
+
+            <!-- Description -->
+            <p class="rejected-description-text">
+              {{ getTruncatedDescription(p) }} <a class="view-details-link-inline" (click)="viewProject(p)">View Details</a>
+            </p>
+          </div>
+
+        </div>
+
+        <!-- Right Side: Status Badge Capsule (REJECTED) -->
+        <div class="rejected-actions-right">
+          <button class="status-badge-rejected" (click)="viewProject(p)">
+            REJECTED
+          </button>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ═══ 2D. PRIMARY PROJECT HERO SECTION (FOR CURRENT TAB) ═══ -->
+    <div class="project-hero-section"
+      *ngIf="!isLoading && activeTab !== 'requests' && activeTab !== 'upcoming' && activeTab !== 'accepted' && activeTab !== 'rejected' && getSelectedProject()">
+
+      <!-- Project Header Row -->
+      <div class="project-hero-header">
+        <div class="project-title-group">
+          <div class="project-icon-glass">
+            <i class="bi bi-briefcase"></i>
+          </div>
+          <h1 class="project-title-text">
+            {{ getProjectDetails(getSelectedProject()).title || 'Kansbe Application' }}
+          </h1>
+          <button class="btn-project-portal-glass"
+            *ngIf="getProjectDetails(getSelectedProject()).p_id || isAccepted(getSelectedProject())"
+            (click)="openProjectPortal(getSelectedProject())">
+            PROJECT PORTAL
+          </button>
+        </div>
+      </div>
+
+      <!-- Main 2-Column Hero Grid -->
+      <div class="project-hero-grid">
+
+        <!-- Left Column: Info Card & Metrics -->
+        <div class="project-info-column">
+
+          <!-- Project Info Glass Card -->
+          <div class="project-glass-card">
+            <div class="project-meta-strip">
+              <span class="project-id-text" *ngIf="getProjectDetails(getSelectedProject()).p_id">
+                ID: {{ getProjectDetails(getSelectedProject()).p_id }}
+              </span>
+              <span class="meta-dot"
+                *ngIf="getProjectDetails(getSelectedProject()).p_id && getProjectDetails(getSelectedProject()).category">·</span>
+              <span class="project-category-text" *ngIf="getProjectDetails(getSelectedProject()).category">
+                {{ getProjectDetails(getSelectedProject()).category }}
+              </span>
+            </div>
+
+            <p class="project-description-text">
+              {{ getTruncatedDescription(getSelectedProject()) }} <a class="view-details-link-inline" (click)="viewProject(getSelectedProject())">View Details</a>
+            </p>
+          </div>
+
+          <!-- Project Metrics Row (Pending Tasks, Total Tasks, Days Left) -->
+          <div class="project-metrics-row">
+            <div class="metric-item">
+              <div class="metric-value">{{ formatStatNumber(getPendingTasksCount(getSelectedProject())) }}</div>
+              <div class="metric-label">Pending<br class="desktop-br"> Tasks</div>
+            </div>
+            <div class="metric-item">
+              <div class="metric-value">{{ formatStatNumber(getTotalTasksCount(getSelectedProject())) }}</div>
+              <div class="metric-label">Total<br class="desktop-br"> Tasks</div>
+            </div>
+            <div class="metric-item">
+              <div class="metric-value">{{ formatStatNumber(getDaysLeft(getSelectedProject())) }}</div>
+              <div class="metric-label">Days<br class="desktop-br"> Left</div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Right Column: Circular Progress Gauge (Moved Right & Increased Size) -->
+        <div class="project-progress-column">
+          <div class="progress-gauge-wrapper">
+            <div class="progress-gauge-label">
+              Project<br>Progress
+            </div>
+
+            <div class="circular-progress-box">
+              <svg class="progress-ring-svg" viewBox="0 0 260 260">
+                <!-- Background Remaining Track -->
+                <circle class="progress-ring-track" cx="130" cy="130" r="112" stroke-width="18" fill="transparent" />
+                <!-- Active Red Progress Arc -->
+                <circle class="progress-ring-indicator" cx="130" cy="130" r="112" stroke-width="18" fill="transparent"
+                  [attr.stroke-dasharray]="703.72"
+                  [attr.stroke-dashoffset]="getProgressStrokeOffset(getProgressPercentage(getSelectedProject()))" />
+              </svg>
+              <div class="progress-percentage-display">
+                {{ getProgressPercentage(getSelectedProject()) }}%
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- ═══ EMPTY STATE (WHEN NO PROJECTS IN SELECTED TAB) ═══ -->
+    <div class="projects-empty-state"
+      *ngIf="!isLoading && (!getSelectedProject() || getFilteredProjects().length === 0)">
+      <div class="empty-icon-circle">
+        <i class="bi bi-folder2-open"></i>
+      </div>
+      <h3 class="empty-state-title">
+        No {{ activeTab === 'current' ? 'Current' : (activeTab === 'requests' || activeTab === 'upcoming' ? 'Requested'
+        : (activeTab === 'accepted' ? 'Accepted' : 'Rejected')) }} Projects
+      </h3>
+      <p class="empty-state-text">
+        Your {{ activeTab === 'current' ? 'current' : activeTab }} project list is currently empty.
+      </p>
+    </div>
+
+    <!-- ═══ 3. OVERALL PROJECT STATISTICS (BOTTOM 4-COLUMN BAR) ═══ -->
+    <div class="projects-summary-bar" *ngIf="!isLoading">
+      <div class="summary-stat-column">
+        <div class="summary-number">{{ formatStatNumber(projectdata.length) }}</div>
+        <div class="summary-label">Total Projects</div>
+      </div>
+      <div class="summary-divider"></div>
+
+      <div class="summary-stat-column">
+        <div class="summary-number">{{ formatStatNumber(getAcceptedCount()) }}</div>
+        <div class="summary-label">Accepted Projects</div>
+      </div>
+      <div class="summary-divider"></div>
+
+      <div class="summary-stat-column">
+        <div class="summary-number">{{ formatStatNumber(getCompletedCount()) }}</div>
+        <div class="summary-label">Completed Projects</div>
+      </div>
+      <div class="summary-divider"></div>
+
+      <div class="summary-stat-column">
+        <div class="summary-number">{{ formatStatNumber(getRejectedCount()) }}</div>
+        <div class="summary-label">Rejected Projects</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ═══ MODALS & POPUPS (PRESERVED 100%) ═══ -->
+
+<!-- Kansbe Terms Modal -->
+<div class="modal-overlay" *ngIf="showTermsModal" [class.show]="showTermsModal" (click)="closeTermsModal()"></div>
+<div class="terms-modal-glass" *ngIf="showTermsModal" (click)="$event.stopPropagation()">
+  <div class="terms-modal-header">
+    <div class="d-flex align-items-center gap-2">
+      <div class="terms-modal-icon-orb">
+        <i class="bi bi-file-earmark-text"></i>
+      </div>
+      <h5 class="terms-modal-title">Terms and Conditions</h5>
+    </div>
+    <button class="terms-modal-close-btn" (click)="closeTermsModal()" title="Close">
+      <i class="bi bi-x-lg"></i>
+    </button>
+  </div>
+  <div class="terms-modal-divider"></div>
+  <div class="terms-modal-body">
+    <p class="terms-modal-intro">By accepting this project request, you agree to comply with the following freelance engagement terms:</p>
+    <ul class="terms-list">
+      <li>
+        <i class="bi bi-check-circle-fill text-danger me-2"></i>
+        <span><strong>Timely Delivery:</strong> Complete the project tasks and milestones within agreed deadlines.</span>
+      </li>
+      <li>
+        <i class="bi bi-check-circle-fill text-danger me-2"></i>
+        <span><strong>Confidentiality:</strong> Keep all client assets, communication, and project data strictly confidential.</span>
+      </li>
+      <li>
+        <i class="bi bi-check-circle-fill text-danger me-2"></i>
+        <span><strong>Quality Standards:</strong> Deliver clean, professional, and well-tested deliverables meeting client specifications.</span>
+      </li>
+      <li>
+        <i class="bi bi-check-circle-fill text-danger me-2"></i>
+        <span><strong>Transparent Updates:</strong> Provide regular status and progress updates via the Kansbe Project Portal.</span>
+      </li>
+    </ul>
+  </div>
+  <div class="terms-modal-footer">
+    <button class="btn-terms-close" (click)="acceptTermsAndClose()">I Understand</button>
+  </div>
+</div>
+
+<!-- Skill Management Modal -->
+<div class="modal-overlay" *ngIf="showSkillModal" [class.show]="showSkillModal" (click)="closeSkillModal()"></div>
+<div class="skill-modal" *ngIf="showSkillModal" [class.show]="showSkillModal" (click)="$event.stopPropagation()">
+  <div class="skill-modal-header">
+    <div class="d-flex align-items-center gap-3">
+      <div class="skill-modal-icon">
+        <i class="bi bi-stars"></i>
+      </div>
+      <div>
+        <h5 class="fw-bold mb-0 text-white" style="font-size: 17px;">Manage Skills</h5>
+        <p class="mb-0 text-secondary" style="font-size: 11px;">Add or remove your professional skills</p>
+      </div>
+    </div>
+    <button class="skill-modal-close" (click)="closeSkillModal()">
+      <i class="bi bi-x-lg"></i>
+    </button>
+  </div>
+
+  <div class="skill-modal-body">
+    <div class="current-skills-section" *ngIf="getSkillsArray().length > 0">
+      <label class="section-label">
+        <i class="bi bi-check2-circle text-danger me-2"></i>My Skills
+        <span class="badge bg-danger bg-opacity-25 text-danger ms-2 rounded-pill" style="font-size: 10px;">
+          {{ getSkillsArray().length }}
+        </span>
+      </label>
+      <div class="skills-chips-grid">
+        <div class="skill-chip" *ngFor="let skill of getSkillsArray()">
+          <div class="skill-chip-info">
+            <span class="skill-chip-name">{{ skill.skill }}</span>
+            <span class="skill-chip-level" *ngIf="skill.status">{{ skill.status }}</span>
+          </div>
+          <button class="skill-chip-delete" (click)="$event.stopPropagation(); openConfirmDelete(skill.id || skill._id)"
+            title="Remove skill">
+            <i class="bi bi-x"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="no-skills-empty" *ngIf="getSkillsArray().length === 0">
+      <i class="bi bi-lightning-charge text-danger opacity-50" style="font-size: 2rem;"></i>
+      <p class="text-secondary mb-0 mt-2" style="font-size: 13px;">No skills added yet. Start building your profile!</p>
+    </div>
+
+    <div class="skill-modal-divider" *ngIf="getSkillsArray().length > 0"></div>
+
+    <div class="add-skill-section">
+      <label class="section-label">
+        <i class="bi bi-plus-circle text-danger me-2"></i>Add New Skill
+      </label>
+
+      <div class="skill-error-banner" *ngIf="skillErrorMessage"
+        style="background: rgba(220, 53, 69, 0.15); border: 1px solid #dc3545; border-radius: 10px; padding: 12px 16px; margin-bottom: 16px; display: flex; align-items: center; gap: 10px;">
+        <i class="bi bi-exclamation-triangle-fill text-danger" style="font-size: 18px;"></i>
+        <span style="color: #ff6b6b; font-size: 13px; font-weight: 600;">{{ skillErrorMessage }}</span>
+      </div>
+
+      <div class="skill-input-group">
+        <div class="skill-input-wrapper">
+          <i class="bi bi-code-slash skill-input-icon"></i>
+          <input type="text" class="skill-text-input" [(ngModel)]="skilldetails.skill"
+            placeholder="e.g. Angular, Figma, Python..." (keyup.enter)="addNewSkill()">
+        </div>
+      </div>
+
+      <div class="proficiency-section">
+        <label class="section-sublabel">Proficiency Level</label>
+        <div class="proficiency-pills">
+          <button class="proficiency-pill" [class.active]="skilldetails.status === 'Beginner'"
+            (click)="setSkillLevel('Beginner')">
+            <i class="bi bi-circle me-1" style="font-size: 10px;"></i>Beginner
+          </button>
+          <button class="proficiency-pill" [class.active]="skilldetails.status === 'Intermediate'"
+            (click)="setSkillLevel('Intermediate')">
+            <i class="bi bi-circle-half me-1" style="font-size: 10px;"></i>Intermediate
+          </button>
+          <button class="proficiency-pill" [class.active]="skilldetails.status === 'Experienced'"
+            (click)="setSkillLevel('Experienced')">
+            <i class="bi bi-circle-fill me-1" style="font-size: 10px;"></i>Experienced
+          </button>
+        </div>
+      </div>
+
+      <button class="skill-add-btn" (click)="addNewSkill()" [disabled]="!skilldetails.skill || !skilldetails.status">
+        <i class="bi bi-plus-lg me-2"></i>Add to Profile
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Delete Confirmation Modal -->
+<div class="modal-overlay" *ngIf="showConfirmModal" (click)="cancelDelete()" style="z-index: 9998;"></div>
+<div class="confirm-delete-modal glass-modal-card p-4 rounded-4" *ngIf="showConfirmModal">
+  <div class="confirm-delete-icon">
+    <i class="bi bi-trash3-fill text-danger"></i>
+  </div>
+  <h6 class="fw-bold text-white mb-1" style="font-size: 16px;">Remove Skill?</h6>
+  <p class="text-secondary mb-4" style="font-size: 13px;">This skill will be permanently removed from your profile.</p>
+  <div class="d-flex gap-3">
+    <button class="btn-confirm-cancel flex-grow-1" (click)="cancelDelete()">Cancel</button>
+    <button class="btn-confirm-delete flex-grow-1" (click)="confirmDelete()">
+      <i class="bi bi-trash3 me-1"></i>Remove
+    </button>
+  </div>
+</div>
+
+<!-- ═══ DECLINE / NOT-INTERESTED MODAL (CREATIVE LIQUID GLASS) ═══ -->
+<div class="modal-overlay reject-modal-backdrop" *ngIf="showRejectModal" (click)="closeRejectModal()">
+  <div class="reject-glass-card" (click)="$event.stopPropagation()">
+    
+    <!-- Header with Hex Shield Glow Icon -->
+    <div class="reject-modal-header">
+      <div class="reject-icon-badge">
+        <i class="bi bi-shield-x"></i>
+      </div>
+      <div class="reject-header-text">
+        <h3 class="reject-modal-title">Decline Project Request</h3>
+        <p class="reject-modal-subtitle" *ngIf="selectedRejectProject">
+          ID: {{ getProjectDetails(selectedRejectProject).p_id || 'P668' }} • {{ getProjectDetails(selectedRejectProject).title || 'Kansbe Application' }}
+        </p>
+      </div>
+      <button class="reject-close-btn" (click)="closeRejectModal()">
+        <i class="bi bi-x-lg"></i>
+      </button>
+    </div>
+
+    <!-- Body -->
+    <div class="reject-modal-body custom-scrollbar">
+      <div class="reject-custom-section">
+        <div class="d-flex justify-content-between align-items-center mb-2">
+          <label class="reject-section-lbl mb-0">
+            <i class="bi bi-chat-left-text text-danger me-2"></i>Reason for Decline
+          </label>
+          <span class="reject-required-tag">REQUIRED</span>
+        </div>
+        <textarea
+          class="reject-glass-textarea"
+          rows="4"
+          placeholder="Please explain why you are not interested in this project..."
+          [(ngModel)]="rejectReasonText"
+        ></textarea>
+        <p class="reject-hint-text">
+          <i class="bi bi-info-circle me-1"></i>Your feedback will be shared with the project manager to help align future opportunities.
+        </p>
+      </div>
+    </div>
+
+    <!-- Footer Actions -->
+    <div class="reject-modal-footer">
+      <button class="btn-reject-cancel-glass" (click)="closeRejectModal()">
+        Keep Request
+      </button>
+      <button
+        class="btn-reject-confirm-solid"
+        [disabled]="!rejectReasonText.trim()"
+        (click)="confirmReject()"
+      >
+        <i class="bi bi-x-circle-fill me-1"></i> Confirm Decline
+      </button>
+    </div>
+
+  </div>
+</div>
+
+<!-- Profile Complete Popup -->
+<app-profile-complete-popup [visible]="showProfilePopup" [userType]="'freelancer'"
+  [missingFields]="profileMissingFields" [actionBlocked]="'adding skills'"
+  (navigateToSettings)="onProfilePopupNavigate()" (closePopup)="onProfilePopupClose()">
+</app-profile-complete-popup>
+
+<app-error-message *ngIf="!data"></app-error-message>

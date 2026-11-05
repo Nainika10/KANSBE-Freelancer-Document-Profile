@@ -1,0 +1,259 @@
+<div class="desc-page-root" [class.desc-page-locked]="showSkillsModal">
+  
+  <!-- Atmospheric Cinematic Background Canvas (Matching Profile/Projects) -->
+  <div class="desc-bg-canvas"></div>
+  <div class="desc-ambient-glow"></div>
+
+  <!-- Loading State -->
+  <div class="desc-loading-state text-center py-5" *ngIf="isLoading">
+    <div class="spinner-border text-danger" role="status" style="width: 2.5rem; height: 2.5rem;">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+    <p class="text-secondary small mt-3 fw-semibold">Loading project details...</p>
+  </div>
+
+  <!-- Empty / No Project State -->
+  <div class="desc-empty-state text-center py-5" *ngIf="!isLoading && (!hasData || !selectedProject)">
+    <div class="empty-icon-circle mb-3">
+      <i class="bi bi-folder2-open text-white" style="font-size: 52px;"></i>
+    </div>
+    <h3 class="text-white fw-semibold">No Project Selected</h3>
+    <p class="text-secondary">Please return to the projects page to select a project.</p>
+    <button class="btn-desc-back-action mt-3" (click)="goBack()">
+      <i class="bi bi-arrow-left me-2"></i>Back to Projects
+    </button>
+  </div>
+
+  <!-- Main Container -->
+  <div class="desc-main-container" *ngIf="!isLoading && hasData && selectedProject">
+    
+    <!-- Top Back Navigation -->
+    <div class="desc-back-row">
+      <button class="btn-desc-back" (click)="goBack()">
+        <i class="bi bi-arrow-left"></i>
+        <span>Back</span>
+      </button>
+    </div>
+
+    <!-- Main 2-Column Content Grid -->
+    <div class="desc-content-grid">
+      
+      <!-- ═══ LEFT COLUMN: MAIN PROJECT INFO & OVERVIEW ═══ -->
+      <div class="desc-left-col">
+        
+        <!-- Project Title Header -->
+        <div class="desc-header-box">
+          <div class="desc-title-row">
+            <h1 class="desc-project-title">
+              {{ selectedProjectDetails.title || 'Kansbe Application' }}
+            </h1>
+
+            <!-- Project Portal Button (Right Side of Title) -->
+            <button class="btn-desc-portal-capsule"
+              (click)="openProjectPortal()">
+              PROJECT PORTAL
+            </button>
+          </div>
+
+          <div class="desc-project-meta">
+            ID: {{ selectedProjectDetails.p_id || 'P503' }} • {{ (selectedProjectDetails.category || 'SCRIPTWRITTING') | uppercase }}
+          </div>
+        </div>
+
+        <!-- About the Project Section -->
+        <div class="desc-about-section">
+          <h2 class="desc-section-heading">About the Project</h2>
+          <p class="desc-paragraph">
+            {{ selectedProjectDetails.description || 'We are looking for a skilled professional to bring our project to life. This could involve design, development, branding or content creation, we need someone who can understand our goals and suggests the best approach, and delivers great results. Please share examples of your past work and an estimated timeline We are looking for a skilled professional to bring our project to life. This could involve design, development, branding or content creation,we need someone who can understand our goals and suggests the best approach, and delivers great results. Please share examples of your past work and an estimated timeline' }}
+          </p>
+        </div>
+
+        <!-- Attached File / Resource (if available) -->
+        <div class="desc-file-attachment" *ngIf="fileUrl || selectedProjectDetails.filedata">
+          <div class="desc-file-card">
+            <div class="desc-file-icon">
+              <i class="bi bi-paperclip"></i>
+            </div>
+            <div class="desc-file-info">
+              <div class="desc-file-name">{{ selectedProjectDetails.filedata?.name || 'Project Attachment' }}</div>
+              <div class="desc-file-sub">Click to download project brief file</div>
+            </div>
+            <a [href]="fileUrl" target="_blank" download class="btn-desc-download" *ngIf="fileUrl">
+              <i class="bi bi-download me-1"></i> Download
+            </a>
+          </div>
+        </div>
+
+        <!-- Action Buttons (for pending requests) -->
+        <div class="desc-action-strip" *ngIf="isPending()">
+          <button class="btn-desc-interested" 
+            [class.disabled-btn]="hasActiveProject()"
+            (click)="hasActiveProject() ? handleActiveProjectBlocked() : acceptProject()"
+            [title]="hasActiveProject() ? 'Complete your active project first' : ''">
+            <i class="bi bi-lock-fill me-1" *ngIf="hasActiveProject()"></i>INTRESTED
+          </button>
+          <button class="btn-desc-not-interested" (click)="toggleRejectReason()">
+            NOT-INTRESTED
+          </button>
+        </div>
+
+        <div class="desc-action-strip" *ngIf="isWaitingForClient()">
+          <button class="btn-desc-waiting" disabled>
+            <i class="bi bi-hourglass-split me-1"></i>Waiting for client approve
+          </button>
+        </div>
+
+        <!-- Inline Rejection Form -->
+        <div class="desc-reject-form" *ngIf="showRejectReason">
+          <label class="desc-reject-label">Reason for Rejection:</label>
+          <input type="text" class="desc-reject-input" placeholder="Enter reason..." [(ngModel)]="rejectReasonText">
+          <div class="desc-reject-buttons">
+            <button class="btn-desc-reject-submit" [disabled]="!rejectReasonText" (click)="submitRejection()">Submit</button>
+            <button class="btn-desc-reject-cancel" (click)="toggleRejectReason()">Cancel</button>
+          </div>
+        </div>
+
+        <!-- Bottom Left: PRO-TIP Section -->
+        <div class="desc-protip-section">
+          <h4 class="desc-protip-heading">PRO-TIP</h4>
+          <p class="desc-protip-text">
+            Enhance your profile with similar project case studies to increase your visibility by up to 40%.
+          </p>
+        </div>
+
+      </div>
+
+      <!-- ═══ RIGHT COLUMN: DETAILS & METRICS ═══ -->
+      <div class="desc-right-col">
+        
+        <h2 class="desc-details-heading">Details</h2>
+
+        <!-- Vertical Metrics List -->
+        <div class="desc-metrics-list">
+          
+          <!-- Metric 1: Budget -->
+          <div class="desc-metric-row">
+            <div class="desc-metric-icon-glass">
+              <span class="currency-symbol">₹</span>
+            </div>
+            <div class="desc-metric-text-group">
+              <div class="desc-metric-value">₹{{ selectedProjectDetails.actualBudget || selectedProjectDetails.budget || selectedProjectDetails.price || '3000' }}</div>
+              <div class="desc-metric-label">BUDGET</div>
+            </div>
+          </div>
+
+          <!-- Metric 2: Start Date -->
+          <div class="desc-metric-row">
+            <div class="desc-metric-icon-glass">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#ff0100" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="4" width="18" height="18" rx="3" ry="3"></rect>
+                <line x1="16" y1="2" x2="16" y2="6"></line>
+                <line x1="8" y1="2" x2="8" y2="6"></line>
+                <line x1="3" y1="10" x2="21" y2="10"></line>
+              </svg>
+            </div>
+            <div class="desc-metric-text-group">
+              <div class="desc-metric-value">{{ formatDate(selectedProjectDetails.actualStartDate || selectedProjectDetails.startDate) || '2026-08-15' }}</div>
+              <div class="desc-metric-label">START DATE</div>
+            </div>
+          </div>
+
+          <!-- Metric 3: Due Date -->
+          <div class="desc-metric-row">
+            <div class="desc-metric-icon-glass">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#ff0100" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="4" width="18" height="18" rx="3" ry="3"></rect>
+                <line x1="16" y1="2" x2="16" y2="6"></line>
+                <line x1="8" y1="2" x2="8" y2="6"></line>
+                <line x1="3" y1="10" x2="21" y2="10"></line>
+              </svg>
+            </div>
+            <div class="desc-metric-text-group">
+              <div class="desc-metric-value">{{ formatDate(selectedProjectDetails.actualEndDate || selectedProjectDetails.endDate) || '2026-08-15' }}</div>
+              <div class="desc-metric-label">DUE DATE</div>
+            </div>
+          </div>
+
+          <!-- Metric 4: Team Members -->
+          <div class="desc-metric-row">
+            <div class="desc-metric-icon-glass">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#ff0100" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                <circle cx="9" cy="7" r="4"></circle>
+                <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+              </svg>
+            </div>
+            <div class="desc-metric-text-group">
+              <div class="desc-metric-value">{{ getMembersCount() || '3' }}</div>
+              <div class="desc-metric-label">TEAM MEMBERS</div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Bottom Row 2 Cards: Skills Required & Budget Glass Cards -->
+        <div class="desc-bottom-cards-row">
+          
+          <!-- Skills Required Card (Smart +N More & Modal Trigger) -->
+          <div class="desc-bottom-glass-card desc-skills-card" (click)="openSkillsModal()" title="Click to view all skills">
+            <div class="desc-card-top-row">
+              <i class="bi bi-code-slash desc-card-red-icon"></i>
+              <span class="desc-card-title">Skills Required</span>
+              <span class="desc-skills-total-badge" *ngIf="getSkillsArray().length > 3">
+                {{ getSkillsArray().length }} total
+              </span>
+            </div>
+            <div class="desc-skills-pills-stream">
+              <span class="desc-skill-pill" *ngFor="let skill of getVisibleSkills(3)">
+                {{ skill }}
+              </span>
+              <span class="desc-skill-pill-more" *ngIf="getExtraSkillsCount(3) > 0">
+                +{{ getExtraSkillsCount(3) }} more
+              </span>
+            </div>
+          </div>
+
+          <!-- Budget Card -->
+          <div class="desc-bottom-glass-card desc-budget-card">
+            <div class="desc-card-top-row">
+              <i class="bi bi-credit-card desc-card-red-icon"></i>
+              <span class="desc-card-title">Budget</span>
+            </div>
+            <div class="desc-card-big-value">
+              ₹{{ selectedProjectDetails.actualBudget || selectedProjectDetails.budget || selectedProjectDetails.price || '3000' }}
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- ═══ Cyber Liquid Glass Skills Modal (Handles 20+ Skills Cleanly) ═══ -->
+  <div class="desc-modal-backdrop" *ngIf="showSkillsModal" (click)="closeSkillsModal()" (wheel)="$event.preventDefault()" (touchmove)="$event.preventDefault()"></div>
+  <div class="desc-skills-modal" *ngIf="showSkillsModal" (click)="$event.stopPropagation()">
+    <div class="desc-skills-modal-header">
+      <div class="d-flex align-items-center gap-2">
+        <i class="bi bi-stars text-white fs-5"></i>
+        <h5 class="desc-skills-modal-title mb-0">Skills Required ({{ getSkillsArray().length }})</h5>
+      </div>
+      <button class="btn-desc-modal-close" (click)="closeSkillsModal()">
+        <i class="bi bi-x-lg"></i>
+      </button>
+    </div>
+
+    <div class="desc-skills-modal-body" (wheel)="$event.stopPropagation()">
+      <div class="desc-skills-modal-pills">
+        <span class="desc-skill-modal-pill" *ngFor="let skill of getSkillsArray()">
+          <i class="bi bi-check2 text-white me-1"></i>
+          {{ skill }}
+        </span>
+      </div>
+    </div>
+  </div>
+
+</div>

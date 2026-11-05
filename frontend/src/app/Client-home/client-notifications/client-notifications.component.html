@@ -1,0 +1,142 @@
+<div class="notifications-page-wrapper" *ngIf="data">
+
+  <!-- Cinematic Photographic Background (Character Fade on Far Right) -->
+  <div class="notif-bg-canvas"></div>
+
+  <!-- Main Centered Content Container (Fixed Viewport) -->
+  <main class="notif-main-container">
+
+    <!-- Top Utility / Quick Actions Bar -->
+    <div class="notif-top-bar" *ngIf="notificationList.length > 0">
+      <div class="notif-top-left">
+        <h1 class="notif-page-title d-none">Client Notifications</h1>
+      </div>
+      <div class="notif-top-right">
+        <button *ngIf="hasUnread" class="btn-mark-all-read" (click)="markAllAsRead()">
+          <i class="bi bi-check-all"></i>
+          <span>Mark all read</span>
+        </button>
+        <span class="badge-unread-count" *ngIf="hasUnread">
+          {{ unreadCount }} UNREAD
+        </span>
+      </div>
+    </div>
+
+    <!-- Centered Notifications Cards List (ONLY THIS STACK SCROLLS) -->
+    <div class="notif-cards-stack custom-scrollbar" *ngIf="notificationList.length > 0">
+
+      <div class="notif-glass-card cursor-pointer" *ngFor="let n of notificationList" [class.unread-card]="n.unread"
+        [class.read-card]="!n.unread" (click)="handleNotificationClick(n)">
+
+        <!-- Left Column: Circular Icon Orb -->
+        <div class="notif-icon-col">
+          <div class="notif-icon-orb">
+            <i class="bi" [ngClass]="getNotificationIcon(n.title, n.category)"></i>
+          </div>
+        </div>
+
+        <!-- Center Column: Title & Description -->
+        <div class="notif-content-col">
+          <h3 class="notif-card-title">{{ n.title }}</h3>
+          <p class="notif-card-desc">{{ n.description }}</p>
+        </div>
+
+        <!-- Right Column: Timestamp & Arrow -->
+        <div class="notif-meta-col">
+          <div class="notif-card-time">{{ n.time }}</div>
+          <div class="notif-card-arrow">
+            <i class="bi bi-arrow-right"></i>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- Empty State (Kansbe Pure Liquid Glass Dark Theme) -->
+    <div class="notif-empty-state-card" *ngIf="notificationList.length === 0">
+      <div class="empty-icon-circle">
+        <i class="bi bi-bell-slash"></i>
+      </div>
+      <h3 class="empty-title">No notifications yet</h3>
+      <p class="empty-sub">When you receive project updates, proposal alerts, or messages, they will appear here.</p>
+    </div>
+
+  </main>
+
+  <!-- ═════════════════════════════════════════════════════════════
+       CREATIVE LIQUID GLASS GREETING & ANNOUNCEMENT MODAL
+       ═════════════════════════════════════════════════════════════ -->
+  <div class="modal-overlay" *ngIf="showGreetingModal" [class.show]="showGreetingModal" (click)="closeGreetingModal()">
+  </div>
+  <div class="greeting-modal-glass" *ngIf="showGreetingModal && activeGreeting" (click)="$event.stopPropagation()">
+
+    <!-- Radiant Red Ambient Beam Flare -->
+    <div class="greeting-beam-flare"></div>
+
+    <!-- Header Section -->
+    <div class="greeting-modal-header">
+      <div class="greeting-icon-wrapper">
+        <div class="greeting-icon-orb">
+          <i class="bi" [ngClass]="getNotificationIcon(activeGreeting.title, activeGreeting.category)"></i>
+        </div>
+        <div class="greeting-pulse-ring"></div>
+      </div>
+      <button class="modal-close-btn-glass" (click)="closeGreetingModal()" title="Close">
+        <i class="bi bi-x-lg"></i>
+      </button>
+    </div>
+
+    <!-- Content Body -->
+    <div class="greeting-modal-body custom-scrollbar">
+      <!-- Tag / Category Chip -->
+      <div class="greeting-tag-row">
+        <span class="greeting-category-chip">
+          <i class="bi bi-stars text-danger me-1"></i>
+          {{ activeGreeting.category || 'Announcement' | uppercase }}
+        </span>
+        <span class="greeting-timestamp">{{ activeGreeting.time }} • {{ activeGreeting.date }}</span>
+      </div>
+
+      <!-- Main Headline -->
+      <h2 class="greeting-title">{{ activeGreeting.title }}</h2>
+
+      <!-- Personal Salutation -->
+      <div class="greeting-salutation">
+        Hello <span class="text-white fw-bold">{{ usr?.fullname || 'Partner' }}</span>,
+      </div>
+
+      <!-- Message Text Card -->
+      <div class="greeting-message-card">
+        <p class="greeting-desc-text">{{ activeGreeting.description }}</p>
+      </div>
+
+      <!-- Sender Info Badge -->
+      <div class="greeting-sender-badge" *ngIf="activeGreeting.manager">
+        <div class="sender-avatar-circle">
+          <i class="bi bi-person-check-fill"></i>
+        </div>
+        <div class="sender-info-text">
+          <span class="sender-name">{{ activeGreeting.manager }}</span>
+          <span class="sender-role">Kansbe Operations & Platform Team</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Actions Footer -->
+    <div class="greeting-modal-footer">
+      <a [href]="activeGreeting.meetingLink" target="_blank" class="btn-greeting-link"
+        *ngIf="activeGreeting.meetingLink">
+        <i class="bi bi-box-arrow-up-right me-2"></i> Join Call / Open Link
+      </a>
+      <button class="btn-greeting-acknowledge" (click)="closeGreetingModal()">
+        <i class="bi bi-check2 me-1"></i>
+        <span>Understood</span>
+      </button>
+    </div>
+
+  </div>
+
+</div>
+
+<app-error-message *ngIf="!data"></app-error-message>

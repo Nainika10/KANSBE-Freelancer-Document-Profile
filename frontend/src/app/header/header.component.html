@@ -1,0 +1,51 @@
+<div class="modal-backdrop-blur" [class.show]="showRegisterModal" (click)="toggleRegisterModal()"></div>
+<header class="header">
+  <div class="container-fluid">
+    <div class="header-container">
+      <!-- Logo with smooth scroll to top - KANSBE Logo from assets -->
+      <div class="logo" (click)="navigateToHome()">
+        <img src="assets/pics.webp" alt="KANSBE Logo" class="logo-img" fetchpriority="high">
+      </div>
+
+      <!-- Hamburger Menu Icon (Mobile/Tablet) -->
+      <button class="hamburger-menu" (click)="toggleMenu()" [class.active]="menuOpen" aria-label="Toggle menu">
+        <span class="hamburger-line"></span>
+        <span class="hamburger-line"></span>
+        <span class="hamburger-line"></span>
+      </button>
+
+      <!-- Navigation Menu -->
+      <ul class="nav-menu" [class.mobile-menu-open]="menuOpen">
+        <!-- Home - Shown only on secondary pages -->
+        <li class="nav-item" *ngIf="!isHomePage()">
+          <button class="nav-link nav-link-button" (click)="navigateToHome()">Home</button>
+        </li>
+        <!-- About - Navigate to about-kansbe -->
+        <li class="nav-item">
+          <button class="nav-link nav-link-button" (click)="navigateToAbout()">About Us</button>
+        </li>
+        <!-- Contact Us - Now scrolls smoothly to footer -->
+        <li class="nav-item">
+          <button class="nav-link nav-link-button" (click)="scrollToSection('contact')">Contact Us</button>
+        </li>
+        <!-- Register / Login -->
+        <li class="nav-item login-nav-item">
+          <button class="nav-link nav-link-button" (click)="toggleRegisterModal()">Login</button>
+
+          <!-- Register Modal - Now nested inside for perfect positioning under the button -->
+          <div class="register-modal" [class.show]="showRegisterModal">
+            <div class="pill-container">
+              <button class="pill-button pill-left" (click)="registerAsFreelancer()">
+                Login as Freelancer
+              </button>
+              <div class="pill-divider"></div>
+              <button class="pill-button pill-right" (click)="registerAsClient()">
+                Login as Client
+              </button>
+            </div>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+</header>

@@ -1,0 +1,124 @@
+<div class="ccv-wrap">
+
+  <!-- Loading state -->
+  <div *ngIf="loading" class="ccv-state">
+    <span class="ccv-spinner"></span>
+    <span>Loading profile...</span>
+  </div>
+
+  <!-- Error / access state -->
+  <div *ngIf="!loading && errorMessage" class="ccv-state ccv-state-error">
+    <span class="material-icons ccv-state-icon">lock</span>
+    <span>{{ errorMessage }}</span>
+    <button type="button" class="ccv-btn-back" (click)="goBack()">Back</button>
+  </div>
+
+  <!-- Client View: clean, white resume layout -->
+  <div *ngIf="!loading && clientView" class="ccv-sheet">
+
+    <div class="ccv-toolbar">
+      <button type="button" class="ccv-btn-back" (click)="goBack()">
+        <span class="material-icons">arrow_back</span> Back
+      </button>
+    </div>
+
+    <!-- Keep the client-facing header generic; identity is not part of the whitelist. -->
+    <header class="ccv-header">
+      <h1 class="ccv-name">Professional Resume</h1>
+      <p class="ccv-title">Privacy-protected client view</p>
+      <span class="ccv-status"
+        [class.ccv-status-passed]="clientView.validationStatus === 'PASSED'"
+        [class.ccv-status-warnings]="clientView.validationStatus === 'PASSED_WITH_WARNINGS'"
+        [class.ccv-status-blocked]="clientView.validationStatus === 'BLOCKED_AND_CLEANED'">
+        <span class="material-icons">verified_user</span>
+        {{ clientView.validationStatus === 'PASSED' ? 'Profile validated'
+          : clientView.validationStatus === 'PASSED_WITH_WARNINGS' ? 'Profile validated — reviewed'
+          : 'Sensitive details removed' }}
+      </span>
+    </header>
+
+    <div class="ccv-divider"></div>
+
+    <!-- Skills -->
+    <section *ngIf="hasContent(clientView.clientView?.skills)" class="ccv-section">
+      <h2 class="ccv-section-title">Skills</h2>
+      <div class="ccv-pills">
+        <span *ngFor="let item of clientView.clientView.skills" class="ccv-pill">{{ item }}</span>
+      </div>
+    </section>
+
+    <!-- Technologies -->
+    <section *ngIf="hasContent(clientView.clientView?.technologies)" class="ccv-section">
+      <h2 class="ccv-section-title">Technologies</h2>
+      <div class="ccv-pills">
+        <span *ngFor="let item of clientView.clientView.technologies" class="ccv-pill ccv-pill-alt">{{ item }}</span>
+      </div>
+    </section>
+
+    <!-- Experience -->
+    <section *ngIf="hasContent(clientView.clientView?.experience)" class="ccv-section">
+      <h2 class="ccv-section-title">Experience</h2>
+      <ul class="ccv-list">
+        <li *ngFor="let item of clientView.clientView.experience" class="ccv-list-item">{{ item }}</li>
+      </ul>
+    </section>
+
+    <!-- Roles -->
+    <section *ngIf="hasContent(clientView.clientView?.roles)" class="ccv-section">
+      <h2 class="ccv-section-title">Roles</h2>
+      <ul class="ccv-list">
+        <li *ngFor="let item of clientView.clientView.roles" class="ccv-list-item">{{ item }}</li>
+      </ul>
+    </section>
+
+    <!-- Responsibilities -->
+    <section *ngIf="hasContent(clientView.clientView?.responsibilities)" class="ccv-section">
+      <h2 class="ccv-section-title">Responsibilities</h2>
+      <ul class="ccv-list">
+        <li *ngFor="let item of clientView.clientView.responsibilities" class="ccv-list-item">{{ item }}</li>
+      </ul>
+    </section>
+
+    <!-- Projects -->
+    <section *ngIf="hasContent(clientView.clientView?.projects)" class="ccv-section">
+      <h2 class="ccv-section-title">Projects</h2>
+      <ul class="ccv-list">
+        <li *ngFor="let item of clientView.clientView.projects" class="ccv-list-item">{{ item }}</li>
+      </ul>
+    </section>
+
+    <!-- Certifications -->
+    <section *ngIf="hasContent(clientView.clientView?.certifications)" class="ccv-section">
+      <h2 class="ccv-section-title">Certifications</h2>
+      <ul class="ccv-list">
+        <li *ngFor="let item of clientView.clientView.certifications" class="ccv-list-item">
+          <span class="material-icons ccv-item-icon">workspace_premium</span>{{ item }}
+        </li>
+      </ul>
+    </section>
+
+    <!-- Achievements -->
+    <section *ngIf="hasContent(clientView.clientView?.achievements)" class="ccv-section">
+      <h2 class="ccv-section-title">Achievements</h2>
+      <ul class="ccv-list">
+        <li *ngFor="let item of clientView.clientView.achievements" class="ccv-list-item">
+          <span class="material-icons ccv-item-icon">emoji_events</span>{{ item }}
+        </li>
+      </ul>
+    </section>
+
+    <!-- Portfolio -->
+    <section *ngIf="hasContent(clientView.clientView?.portfolio)" class="ccv-section">
+      <h2 class="ccv-section-title">Portfolio</h2>
+      <ul class="ccv-list">
+        <li *ngFor="let item of clientView.clientView.portfolio" class="ccv-list-item">{{ item }}</li>
+      </ul>
+    </section>
+
+    <footer class="ccv-footer" *ngIf="clientView.updatedAt">
+      <span class="material-icons">event</span>
+      Last updated: {{ clientView.updatedAt | date:'mediumDate' }}
+    </footer>
+
+  </div>
+</div>

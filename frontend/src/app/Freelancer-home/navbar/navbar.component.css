@@ -1,0 +1,992 @@
+/* ============================================================
+   POPPINS FONT STANDARDIZATION (400 REGULAR)
+   ============================================================ */
+:host {
+  font-family: 'Poppins', sans-serif !important;
+}
+
+:host *:not(i):not([class*="fa-"]):not([class*="bi-"]):not(.material-icons):not([class*="material-"]) {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 400;
+}
+
+h1, h2, h3, h4, h5, h6,
+input, textarea, select, button,
+.form-control, label, p,
+span:not(.material-icons):not([class*="material-"]):not([class*="fa-"]):not([class*="bi-"]),
+a, li, td, th {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 400;
+}
+
+.material-icons,
+.material-icons-outlined,
+.material-symbols-outlined,
+[class*="material-icons"],
+[class*="material-symbols"] {
+  font-family: 'Material Icons' !important;
+  font-weight: normal !important;
+  font-style: normal !important;
+  display: inline-block;
+  line-height: 1;
+  text-transform: none;
+  letter-spacing: normal;
+  word-wrap: normal;
+  white-space: nowrap;
+  direction: ltr;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+
+
+/* ═════════════════════════════════════════════════════════════════
+   FUTURISTIC LIQUID GLASS TOP NAVBAR (MATCHING PROFILE CONTAINERS)
+   ═════════════════════════════════════════════════════════════════ */
+:host {
+  display: block;
+  position: relative;
+  z-index: 1050;
+  font-family: 'Poppins', sans-serif !important;
+}
+
+:host * {
+  font-family: 'Poppins', sans-serif !important;
+}
+
+.futuristic-top-navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 84px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+  padding: 12px 24px;
+  background: transparent;
+  pointer-events: none;
+}
+
+/* Single Unified Wide Liquid Glass Capsule Pill */
+.header-pill-capsule {
+  max-width: 1240px;
+  width: 100%;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 28px;
+  border-radius: 999px;
+  background: linear-gradient(135deg,
+      rgba(255, 255, 255, 0.075) 0%,
+      rgba(255, 255, 255, 0.018) 40%,
+      rgba(255, 255, 255, 0.004) 70%,
+      rgba(255, 255, 255, 0.045) 100%);
+  backdrop-filter: blur(28px) saturate(180%) brightness(1.05);
+  -webkit-backdrop-filter: blur(28px) saturate(180%) brightness(1.05);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-top: 1.5px solid rgba(255, 255, 255, 0.45);
+  border-left: 1.5px solid rgba(255, 255, 255, 0.28);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  border-right: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow:
+    inset 0 1.5px 2px 0 rgba(255, 255, 255, 0.45),
+    inset 0 -1.5px 2px 0 rgba(0, 0, 0, 0.5),
+    inset 0 0 12px 0 rgba(255, 255, 255, 0.03),
+    0 20px 48px -10px rgba(0, 0, 0, 0.85),
+    0 6px 14px rgba(0, 0, 0, 0.5);
+  pointer-events: auto;
+  transition: all 0.3s ease;
+}
+
+.header-pill-capsule:hover {
+  border-color: rgba(255, 255, 255, 0.3);
+  box-shadow:
+    inset 0 2px 2.5px 0 rgba(255, 255, 255, 0.6),
+    inset 0 -1.5px 2px 0 rgba(0, 0, 0, 0.5),
+    0 24px 56px -10px rgba(0, 0, 0, 0.95),
+    0 8px 18px rgba(0, 0, 0, 0.6);
+}
+
+/* Brand Logo Image - Perfectly Centered on Left (Equal Top & Bottom Space) */
+.nav-brand-area {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  text-decoration: none;
+  cursor: pointer;
+  user-select: none;
+  padding: 0;
+  margin: 0;
+  line-height: 1;
+  transition: transform 0.2s ease;
+}
+
+.nav-brand-area:hover {
+  transform: scale(1.04);
+}
+
+.nav-brand-logo-img {
+  height: 26px;
+  max-height: 26px;
+  width: auto;
+  object-fit: contain;
+  display: block;
+  transform: translateY(1.5px);
+  margin: 0;
+}
+
+/* Nav items list - Aligned to Right with Professional Balanced Spacing */
+.nav-items-stream {
+  display: flex;
+  align-items: center;
+  margin-left: auto;
+  gap: 20px;
+}
+
+.nav-pill-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 8px;
+  border-radius: 999px;
+  color: #ffffff;
+  text-decoration: none;
+  font-size: 13.5px;
+  font-weight: 400;
+  letter-spacing: 0.2px;
+  cursor: pointer;
+  position: relative;
+  transition: all 0.2s ease;
+  user-select: none;
+  background: transparent;
+  border: 1px solid transparent;
+  white-space: nowrap;
+}
+
+.nav-pill-link i {
+  font-size: 15px;
+  line-height: 1;
+  color: #ffffff;
+  transition: transform 0.2s ease;
+}
+
+.nav-pill-link:hover {
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.nav-pill-link:hover i {
+  transform: translateY(-1px);
+}
+
+/* Active State: Translucent Liquid Glass Capsule */
+.nav-pill-link.active {
+  background: linear-gradient(135deg,
+      rgba(255, 20, 0, 0.4) 0%,
+      rgba(160, 0, 0, 0.22) 50%,
+      rgba(255, 1, 0, 0.35) 100%) !important;
+  border: 1px solid rgba(255, 60, 40, 0.55) !important;
+  border-top: 1.5px solid rgba(255, 150, 130, 0.85) !important;
+  border-left: 1px solid rgba(255, 110, 90, 0.6) !important;
+  box-shadow:
+    0 0 20px rgba(255, 1, 0, 0.35),
+    inset 0 1.5px 2px rgba(255, 255, 255, 0.45),
+    inset 0 -1px 2px rgba(0, 0, 0, 0.3) !important;
+  backdrop-filter: blur(16px) saturate(180%) !important;
+  -webkit-backdrop-filter: blur(16px) saturate(180%) !important;
+  color: #ffffff !important;
+  font-weight: 400;
+  text-shadow: 0 0 10px rgba(255, 50, 50, 0.6);
+  padding: 6px 16px;
+}
+
+.nav-pill-link.active i {
+  color: #ffffff;
+}
+
+/* Icon & Badge wrapper */
+.nav-badge-box {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.nav-count-badge {
+  position: absolute;
+  top: -6px;
+  right: -8px;
+  background: #FF0100;
+  color: #ffffff;
+  font-size: 10px;
+  font-weight: 400;
+  height: 16px;
+  min-width: 16px;
+  padding: 0 4px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1.5px solid #141414;
+  box-shadow: 0 0 8px rgba(255, 1, 0, 0.6);
+}
+
+.nav-avatar-circle {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 1.5px solid rgba(255, 255, 255, 0.6);
+}
+
+/* Profile Tab & Glass Dropdown */
+.profile-pill-tab {
+  position: relative;
+}
+
+.profile-pill-trigger {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+}
+
+/* ═════════════════════════════════════════════════════════════════
+   FUTURISTIC LIQUID GLASS PROFILE DROPDOWN (THEMED TO HEADER & PROFILE)
+   ═════════════════════════════════════════════════════════════════ */
+.profile-pill-tab {
+  position: relative;
+}
+
+.glass-profile-dropdown {
+  position: absolute;
+  top: calc(100% + 14px);
+  right: 0;
+  width: 290px;
+  background: linear-gradient(135deg,
+      rgba(22, 22, 22, 0.92) 0%,
+      rgba(14, 14, 14, 0.96) 50%,
+      rgba(8, 8, 8, 0.98) 100%);
+  backdrop-filter: blur(32px) saturate(180%) brightness(1.05);
+  -webkit-backdrop-filter: blur(32px) saturate(180%) brightness(1.05);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-top: 1.5px solid rgba(255, 255, 255, 0.45);
+  border-left: 1.5px solid rgba(255, 255, 255, 0.28);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  border-right: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 22px;
+  padding: 18px;
+  box-shadow:
+    inset 0 1.5px 2px 0 rgba(255, 255, 255, 0.4),
+    inset 0 -1.5px 2px 0 rgba(0, 0, 0, 0.5),
+    0 24px 60px rgba(0, 0, 0, 0.9),
+    0 0 24px rgba(255, 1, 0, 0.1);
+  display: none;
+  flex-direction: column;
+  z-index: 2200;
+  cursor: default;
+  animation: dropdownPopIn 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.glass-profile-dropdown.show {
+  display: flex;
+}
+
+@keyframes dropdownPopIn {
+  from {
+    opacity: 0;
+    transform: translateY(-8px) scale(0.96);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.dropdown-user-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.dropdown-avatar-wrapper {
+  position: relative;
+  flex-shrink: 0;
+}
+
+.dropdown-avatar-img {
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid rgba(255, 255, 255, 0.25);
+  box-shadow: 0 0 12px rgba(255, 1, 0, 0.3);
+}
+
+.dropdown-avatar-initials {
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #FF0100 0%, #b00000 100%);
+  color: #fff;
+  font-size: 19px;
+  font-weight: 400;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid rgba(255, 255, 255, 0.25);
+  box-shadow: 0 0 12px rgba(255, 1, 0, 0.4);
+}
+
+.user-online-badge {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 12px;
+  height: 12px;
+  background: #00d26a;
+  border: 2px solid #141414;
+  border-radius: 50%;
+  box-shadow: 0 0 8px #00d26a;
+}
+
+.dropdown-user-info {
+  overflow: hidden;
+  flex: 1;
+}
+
+.dropdown-user-name {
+  font-size: 14px;
+  font-weight: 400;
+  color: #ffffff;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.dropdown-user-sub {
+  font-size: 11.5px;
+  color: rgba(255, 255, 255, 0.5);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-top: 2px;
+}
+
+/* Liquid Glass Primary View Profile CTA */
+.dropdown-action-btn {
+  margin-top: 14px;
+  background: linear-gradient(135deg,
+      rgba(255, 20, 0, 0.45) 0%,
+      rgba(170, 0, 0, 0.3) 50%,
+      rgba(255, 1, 0, 0.4) 100%);
+  border: 1px solid rgba(255, 60, 40, 0.6);
+  border-top: 1.5px solid rgba(255, 150, 130, 0.85);
+  border-left: 1px solid rgba(255, 110, 90, 0.6);
+  box-shadow:
+    0 0 16px rgba(255, 1, 0, 0.3),
+    inset 0 1.5px 2px rgba(255, 255, 255, 0.45),
+    inset 0 -1px 2px rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  color: #ffffff;
+  font-size: 12.5px;
+  font-weight: 400;
+  padding: 8px 16px;
+  border-radius: 12px;
+  text-align: center;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.dropdown-action-btn:hover {
+  background: linear-gradient(135deg,
+      rgba(255, 40, 0, 0.65) 0%,
+      rgba(200, 0, 0, 0.45) 50%,
+      rgba(255, 1, 0, 0.6) 100%);
+  border-color: rgba(255, 90, 70, 0.8);
+  box-shadow:
+    0 0 24px rgba(255, 1, 0, 0.5),
+    inset 0 2px 2.5px rgba(255, 255, 255, 0.6);
+  color: #ffffff;
+  transform: translateY(-1px);
+}
+
+.dropdown-menu-list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 12px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.dropdown-menu-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 10px;
+  border-radius: 10px;
+  color: rgba(255, 255, 255, 0.75);
+  font-size: 13px;
+  text-decoration: none;
+  transition: all 0.15s ease;
+  cursor: pointer;
+}
+
+.menu-item-icon-box {
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.85);
+  transition: all 0.2s ease;
+}
+
+.dropdown-menu-item:hover {
+  background: rgba(255, 255, 255, 0.06);
+  color: #ffffff;
+}
+
+.dropdown-menu-item:hover .menu-item-icon-box {
+  background: rgba(255, 1, 0, 0.2);
+  border-color: rgba(255, 1, 0, 0.4);
+  color: #ff4d4d;
+  box-shadow: 0 0 10px rgba(255, 1, 0, 0.35);
+}
+
+.dropdown-logout-box {
+  padding-top: 10px;
+}
+
+.dropdown-logout-btn {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 10px;
+  border-radius: 10px;
+  color: #ff5252;
+  font-size: 13px;
+  font-weight: 400;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.logout-icon-box {
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  background: rgba(255, 1, 0, 0.1);
+  border: 1px solid rgba(255, 1, 0, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  color: #ff5252;
+  transition: all 0.2s ease;
+}
+
+.dropdown-logout-btn:hover {
+  background: rgba(255, 1, 0, 0.12);
+  color: #ff2a2a;
+}
+
+.dropdown-logout-btn:hover .logout-icon-box {
+  background: rgba(255, 1, 0, 0.25);
+  box-shadow: 0 0 12px rgba(255, 1, 0, 0.4);
+}
+
+/* Mobile Hamburger Button */
+.mobile-hamburger-btn {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-top: 1px solid rgba(255, 255, 255, 0.35);
+  border-radius: 12px;
+  width: 42px;
+  height: 42px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  cursor: pointer;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  padding: 0;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+  z-index: 2010;
+  transform: translateZ(0); /* Fix iOS WebKit hit-testing bug */
+}
+
+.hamburger-bar {
+  width: 20px;
+  height: 2.2px;
+  background: #ffffff;
+  border-radius: 2px;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  transform-origin: center;
+}
+
+.mobile-hamburger-btn.active {
+  background: rgba(255, 1, 0, 0.22);
+  border-color: rgba(255, 1, 0, 0.55);
+  box-shadow: 0 0 16px rgba(255, 1, 0, 0.45);
+  transform: rotate(90deg);
+}
+
+.mobile-hamburger-btn.active .hamburger-bar {
+  background: #ffffff;
+}
+
+.mobile-hamburger-btn.active .hamburger-bar:nth-child(1) {
+  transform: translateY(7.2px) rotate(45deg);
+}
+
+.mobile-hamburger-btn.active .hamburger-bar:nth-child(2) {
+  opacity: 0;
+  transform: scaleX(0);
+}
+
+.mobile-hamburger-btn.active .hamburger-bar:nth-child(3) {
+  transform: translateY(-7.2px) rotate(-45deg);
+}
+
+@media (max-width: 1024px) {
+  .futuristic-top-navbar {
+    height: 74px;
+    padding: 10px 16px;
+  }
+
+  .header-pill-capsule {
+    height: 54px;
+    padding: 6px 16px 6px 20px;
+    border-radius: 999px;
+    position: relative;
+    /* Containing block for absolutely positioned menu */
+  }
+
+  /* Dim Cinematic Backdrop Overlay */
+  .mobile-menu-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    width: 100dvw;
+    height: 100vh;
+    height: 100dvh;
+    background: rgba(0, 0, 0, 0.72);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    z-index: 1999;
+    opacity: 0;
+    transition: opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    pointer-events: auto;
+    cursor: pointer; /* iOS requires cursor pointer to fire click events on non-interactive elements */
+  }
+
+  .mobile-menu-overlay.show {
+    display: block;
+    opacity: 1;
+  }
+
+  /* Main Floating Liquid Glass Control Hub */
+  .mobile-glass-control-hub {
+    display: none;
+    position: absolute;
+    top: calc(100% + 12px);
+    left: 0;
+    right: 0;
+    width: 100%;
+    flex-direction: column;
+    padding: 16px;
+    background: linear-gradient(145deg,
+        rgba(20, 20, 24, 0.94) 0%,
+        rgba(14, 14, 18, 0.97) 50%,
+        rgba(6, 6, 8, 0.99) 100%);
+    backdrop-filter: blur(28px) saturate(190%) brightness(1.05);
+    -webkit-backdrop-filter: blur(28px) saturate(190%) brightness(1.05);
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    border-top: 1.5px solid rgba(255, 255, 255, 0.4);
+    border-left: 1.5px solid rgba(255, 255, 255, 0.25);
+    border-radius: 24px;
+    box-shadow:
+      0 24px 64px rgba(0, 0, 0, 0.92),
+      inset 0 1.5px 2px rgba(255, 255, 255, 0.35),
+      0 0 24px rgba(255, 1, 0, 0.12);
+    z-index: 2001;
+    max-height: calc(100vh - 96px);
+    max-height: calc(100dvh - 96px);
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    transform: translateY(-12px) scale(0.97);
+    opacity: 0;
+    transition: all 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .mobile-glass-control-hub::-webkit-scrollbar {
+    display: none;
+  }
+
+  .mobile-glass-control-hub.mobile-open {
+    display: flex;
+    transform: translateY(0) scale(1);
+    opacity: 1;
+  }
+
+  /* 1. User Identity Header Card */
+  .mobile-user-card {
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 18px;
+    padding: 12px 14px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 14px;
+    cursor: pointer;
+    text-decoration: none;
+    color: #ffffff;
+    transition: all 0.2s ease;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+  }
+
+  .mobile-user-card:hover,
+  .mobile-user-card:active {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(255, 255, 255, 0.2);
+    transform: translateY(-1px);
+  }
+
+  .mobile-avatar-wrap {
+    position: relative;
+    width: 44px;
+    height: 44px;
+    flex-shrink: 0;
+  }
+
+  .mobile-avatar-img {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid rgba(255, 255, 255, 0.25);
+    box-shadow: 0 0 10px rgba(255, 1, 0, 0.3);
+  }
+
+  .mobile-avatar-initials {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #FF0100 0%, #b00000 100%);
+    color: #ffffff;
+    font-size: 18px;
+    font-weight: 400;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid rgba(255, 255, 255, 0.25);
+    box-shadow: 0 0 10px rgba(255, 1, 0, 0.35);
+  }
+
+  .mobile-online-indicator {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 11px;
+    height: 11px;
+    background: #00d26a;
+    border: 2px solid #141418;
+    border-radius: 50%;
+    box-shadow: 0 0 8px #00d26a;
+  }
+
+  .mobile-user-details {
+    flex: 1;
+    overflow: hidden;
+    text-align: left;
+  }
+
+  .mobile-user-name-row {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    margin-bottom: 2px;
+  }
+
+  .mobile-user-name {
+    font-size: 14px;
+    font-weight: 400;
+    color: #ffffff;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .mobile-user-role {
+    font-size: 11.5px;
+    color: rgba(255, 255, 255, 0.5);
+    display: block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .mobile-view-profile-pill {
+    background: rgba(255, 1, 0, 0.14);
+    border: 1px solid rgba(255, 1, 0, 0.35);
+    border-radius: 50px;
+    padding: 5px 12px;
+    font-size: 11.5px;
+    font-weight: 400;
+    color: #ff3333;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  /* 2. Primary Navigation: 2x2 Liquid Glass Tiles */
+  .mobile-nav-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 14px;
+  }
+
+  .mobile-grid-tile {
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.09);
+    border-radius: 16px;
+    padding: 14px 12px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    text-decoration: none;
+    color: #ffffff;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    text-align: center;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .mobile-grid-tile:hover,
+  .mobile-grid-tile:active {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(255, 255, 255, 0.2);
+    transform: translateY(-1px);
+  }
+
+  .mobile-grid-tile.active {
+    background: linear-gradient(135deg,
+        rgba(255, 20, 0, 0.38) 0%,
+        rgba(170, 0, 0, 0.22) 50%,
+        rgba(255, 1, 0, 0.35) 100%) !important;
+    border: 1px solid rgba(255, 60, 40, 0.55) !important;
+    border-top: 1.5px solid rgba(255, 150, 130, 0.85) !important;
+    border-left: 1px solid rgba(255, 110, 90, 0.6) !important;
+    box-shadow:
+      0 0 16px rgba(255, 1, 0, 0.35),
+      inset 0 1.5px 2px rgba(255, 255, 255, 0.45) !important;
+    color: #ffffff !important;
+    font-weight: 400;
+  }
+
+  .tile-icon-box {
+    font-size: 20px;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #ffffff;
+  }
+
+  .tile-label {
+    font-size: 12.5px;
+    font-weight: 400;
+    letter-spacing: 0.2px;
+  }
+
+  .mobile-badge {
+    position: absolute;
+    top: -6px;
+    right: -10px;
+    background: #FF0100;
+    color: #ffffff;
+    font-size: 9.5px;
+    font-weight: 400;
+    height: 16px;
+    min-width: 16px;
+    padding: 0 4px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1.5px solid #141418;
+    box-shadow: 0 0 8px rgba(255, 1, 0, 0.6);
+  }
+
+  /* 3. Quick Utilities Links */
+  .mobile-utilities-list {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-bottom: 14px;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    padding-top: 12px;
+  }
+
+  .mobile-util-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 14px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    border-radius: 14px;
+    text-decoration: none;
+    color: rgba(255, 255, 255, 0.85);
+    font-size: 13px;
+    font-weight: 400;
+    transition: all 0.2s ease;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .mobile-util-item:hover,
+  .mobile-util-item:active {
+    background: rgba(255, 255, 255, 0.07);
+    color: #ffffff;
+    border-color: rgba(255, 255, 255, 0.16);
+  }
+
+  .util-icon-box {
+    width: 28px;
+    height: 28px;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    color: rgba(255, 255, 255, 0.75);
+    transition: all 0.2s ease;
+  }
+
+  .mobile-util-item:hover .util-icon-box {
+    background: rgba(255, 1, 0, 0.2);
+    border-color: rgba(255, 1, 0, 0.4);
+    color: #ff4d4d;
+    box-shadow: 0 0 10px rgba(255, 1, 0, 0.35);
+  }
+
+  .util-label {
+    flex: 1;
+    font-size: 13px;
+    font-weight: 400;
+  }
+
+  .util-arrow {
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.35);
+  }
+
+  /* 4. Direct One-Tap Logout Action Bar */
+  .mobile-logout-wrapper {
+    padding-top: 4px;
+  }
+
+  .mobile-direct-logout-btn {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 12px 18px;
+    background: linear-gradient(135deg,
+        rgba(255, 1, 0, 0.16) 0%,
+        rgba(180, 0, 0, 0.1) 100%);
+    border: 1px solid rgba(255, 1, 0, 0.4);
+    border-top: 1.5px solid rgba(255, 100, 80, 0.6);
+    border-radius: 14px;
+    color: #ff3333;
+    font-size: 13.5px;
+    font-weight: 400;
+    font-family: inherit;
+    cursor: pointer;
+    letter-spacing: 0.4px;
+    transition: all 0.2s ease;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    box-shadow:
+      0 4px 16px rgba(255, 1, 0, 0.18),
+      inset 0 1px 1px rgba(255, 255, 255, 0.2);
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .mobile-direct-logout-btn:hover,
+  .mobile-direct-logout-btn:active {
+    background: linear-gradient(135deg,
+        rgba(255, 1, 0, 0.32) 0%,
+        rgba(210, 0, 0, 0.2) 100%);
+    border-color: rgba(255, 1, 0, 0.7);
+    color: #ffffff;
+    box-shadow: 0 6px 20px rgba(255, 1, 0, 0.35);
+    transform: translateY(-1px);
+  }
+
+  .logout-icon-wrap {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    line-height: 1;
+  }
+}
+
+/* Extra Small Mobile (< 420px) */
+@media (max-width: 420px) {
+  .mobile-glass-control-hub {
+    padding: 14px 12px;
+    border-radius: 20px;
+  }
+
+  .mobile-grid-tile {
+    padding: 12px 10px;
+  }
+
+  .tile-icon-box {
+    font-size: 18px;
+  }
+
+  .tile-label {
+    font-size: 11.5px;
+  }
+}

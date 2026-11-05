@@ -1,0 +1,84 @@
+<div class="login-wrapper">
+  <div class="login-container">
+
+    <!-- Branding Panel (Hidden on Mobile) -->
+    <div class="login-brand-panel">
+      <div class="brand-overlay"></div>
+      <div class="brand-content">
+        <h2>Connecting <span>Talent</span> to Opportunities.</h2>
+        <p>Empowering the world's most creative and dedicated freelancers.</p>
+        <div class="brand-label">KANSBE ADMIN</div>
+      </div>
+    </div>
+
+    <!-- Login Form Panel -->
+    <div class="login-form-panel">
+      <div class="form-inner">
+        <h1 class="logo">KANS<span>BE</span></h1>
+        <p class="subtitle">Work Smarter, Not Harder.</p>
+
+        <form (ngSubmit)="loginAdmin()" #loginForm="ngForm">
+          <div class="input-group">
+            <label>Email Address</label>
+            <input type="email" placeholder="admin@kansbe.com" required [(ngModel)]="adminData.email" name="email">
+          </div>
+
+          <div class="input-group">
+            <label>Password</label>
+            <input type="password" placeholder="Enter password" required [(ngModel)]="adminData.password"
+              name="password">
+          </div>
+
+          <div class="options">
+            <label>
+              <input type="checkbox"> Remember me
+            </label>
+            <a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#forgotPasswordModal">Forgot password?</a>
+          </div>
+
+          <div *ngIf="errorMessage" class="error-text">
+            {{ errorMessage }}
+          </div>
+
+          <button type="submit" class="login-btn">Sign In to Dashboard</button>
+
+          <div class="divider">Or login with</div>
+
+          <div class="social-icons">
+            <i class="fa-brands fa-google"></i>
+            <i class="fa-brands fa-facebook-f"></i>
+            <i class="fa-brands fa-x-twitter"></i>
+          </div>
+        </form>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- Forgot Password Modal -->
+<div class="modal fade" id="forgotPasswordModal" tabindex="-1" aria-labelledby="forgotPasswordLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content custom-forgot-modal">
+            <div class="modal-header border-0">
+                <h5 class="modal-title fw-bold" id="forgotPasswordLabel">Reset Password</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                    aria-label="Close"></button>
+            </div>
+            <div class="modal-body pb-4">
+                <p class="text-secondary small mb-4">Enter your registered email to receive your new password.</p>
+                <div class="forgot-field-group">
+                    <label class="forgot-label" style="font-size: 11px; font-weight: 700; color: #64748b; margin-bottom: 8px; display: block;">EMAIL ADDRESS</label>
+                    <input type="email" class="forgot-input form-control p-3 bg-light border-0" placeholder="Enter your email"
+                        [(ngModel)]="forgotEmail" name="forgotEmail" required />
+                </div>
+                <div *ngIf="forgoterror" class="text-danger small mt-2">
+                    <i class="fas fa-exclamation-circle me-1"></i> {{ forgoterror }}
+                </div>
+                <button type="button" class="btn btn-danger w-100 mt-4 py-3 fw-bold rounded-3"
+                    (click)="forgotpassword()">SEND RESET LINK</button>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,999 @@
+<div class="settings-page-wrapper" *ngIf="data">
+  <!-- Fixed Top Navbar -->
+  <app-navbar></app-navbar>
+
+  <!-- Ambient Photo Glow Mesh on Right -->
+  <div class="ambient-glow-mesh"></div>
+
+  <!-- Main Container -->
+  <main class="settings-main-container">
+    <!-- Large Rounded Glass Outer Shell -->
+    <div class="settings-outer-shell">
+
+      <!-- ═════════════════════════════════════════════════════════
+           LEFT SIDEBAR: IDENTITY, PROGRESS & NAVIGATION TABS
+           ═════════════════════════════════════════════════════════ -->
+      <aside class="settings-sidebar-panel">
+        <div class="sidebar-glass-card">
+
+          <!-- Centered Identity Block -->
+          <div class="sidebar-identity-block">
+            <div class="sidebar-avatar-circle">
+              {{ (usr?.fullname?.charAt(0) || 'A').toUpperCase() }}
+            </div>
+            <h3 class="sidebar-user-name">{{ usr?.fullname || 'Ankenapally Sathish Kumar' }}</h3>
+            <p class="sidebar-user-meta">
+              <span class="meta-role">{{ usr?.skillTitle || usr?.profession || 'UI/UX Designer' }}</span>
+              <span class="meta-separator">•</span>
+              <span class="meta-location">
+                <i class="bi bi-geo-alt-fill text-white-50"></i> {{ usr?.country || 'India' }}
+              </span>
+            </p>
+          </div>
+
+          <!-- Account Strength High-Tech Glass Widget -->
+          <div class="sidebar-strength-widget">
+            <div class="strength-header-row">
+              <div class="strength-title-group">
+                <i class="bi bi-shield-check text-white-50 me-1"></i>
+                <h4 class="sidebar-block-title">Account Strength</h4>
+              </div>
+              <div class="strength-badge-pill">
+                <span>Strong Profile</span>
+              </div>
+            </div>
+            <div class="strength-metric-row">
+              <div class="strength-number-wrap">
+                <div class="strength-val-line">
+                  <span class="strength-number">{{ getProfileCompletion() }}</span>
+                  <span class="strength-percent-sign">%</span>
+                </div>
+                <span class="strength-subtext">Profile Verified</span>
+              </div>
+              <div class="strength-ring-wrap">
+                <svg class="strength-svg-ring" viewBox="0 0 54 54">
+                  <circle class="ring-bg-track" cx="27" cy="27" r="22" />
+                  <circle class="ring-progress-arc" cx="27" cy="27" r="22" stroke-dasharray="138.2"
+                    [style.stroke-dashoffset]="138.2 - (138.2 * getProfileCompletion()) / 100" />
+                </svg>
+              </div>
+            </div>
+          </div>
+
+          <!-- Verification Progress Block -->
+          <div class="sidebar-verification-block">
+            <h4 class="sidebar-block-title">Verification Progress</h4>
+            <ul class="verification-list">
+              <!-- Basic Identity -->
+              <li class="verification-item">
+                <span class="verification-label">Basic Identity</span>
+                <div class="verification-badge" [class.badge-completed]="profile.fullname && profile.contact"
+                  [class.badge-pending]="!profile.fullname || !profile.contact">
+                  <i class="bi bi-check-lg" *ngIf="profile.fullname && profile.contact"></i>
+                </div>
+              </li>
+              <!-- Professional Info -->
+              <li class="verification-item">
+                <span class="verification-label">Professional Info</span>
+                <div class="verification-badge"
+                  [class.badge-completed]="profile.experience && (profile.skillTitle || profile.profession)"
+                  [class.badge-pending]="!profile.experience || (!profile.skillTitle && !profile.profession)">
+                  <i class="bi bi-check-lg"
+                    *ngIf="profile.experience && (profile.skillTitle || profile.profession)"></i>
+                </div>
+              </li>
+              <!-- Detailed Biography -->
+              <li class="verification-item">
+                <span class="verification-label">Detailed Biography</span>
+                <div class="verification-badge"
+                  [class.badge-completed]="(profile.description || '').trim().length >= 20"
+                  [class.badge-pending]="(profile.description || '').trim().length < 20">
+                  <i class="bi bi-check-lg" *ngIf="(profile.description || '').trim().length >= 20"></i>
+                </div>
+              </li>
+              <!-- Language Spoken -->
+              <li class="verification-item">
+                <span class="verification-label">Language Spoken</span>
+                <div class="verification-badge"
+                  [class.badge-completed]="profile.languagesArray && profile.languagesArray.length > 0"
+                  [class.badge-pending]="!profile.languagesArray || profile.languagesArray.length === 0">
+                  <i class="bi bi-check-lg" *ngIf="profile.languagesArray && profile.languagesArray.length > 0"></i>
+                </div>
+              </li>
+              <!-- Social Presence -->
+              <li class="verification-item">
+                <span class="verification-label">Social Presence</span>
+                <div class="verification-badge"
+                  [class.badge-completed]="profile.linkedin || profile.github || profile.portfolio || profile.twitter || profile.instagram"
+                  [class.badge-pending]="!profile.linkedin && !profile.github && !profile.portfolio && !profile.twitter && !profile.instagram">
+                  <i class="bi bi-check-lg"
+                    *ngIf="profile.linkedin || profile.github || profile.portfolio || profile.twitter || profile.instagram"></i>
+                </div>
+              </li>
+              <!-- Financial Accounts -->
+              <li class="verification-item">
+                <span class="verification-label">Financial Accounts</span>
+                <div class="verification-badge" [class.badge-completed]="!enabled" [class.badge-pending]="enabled">
+                  <i class="bi bi-check-lg" *ngIf="!enabled"></i>
+                </div>
+              </li>
+              <!-- Technical Skills -->
+              <li class="verification-item">
+                <span class="verification-label">Technical Skills</span>
+                <div class="verification-badge" [class.badge-completed]="getSkillsArray().length > 0"
+                  [class.badge-pending]="getSkillsArray().length === 0">
+                  <i class="bi bi-check-lg" *ngIf="getSkillsArray().length > 0"></i>
+                </div>
+              </li>
+            </ul>
+          </div>
+
+          <!-- Bottom Navigation Tabs -->
+          <nav class="sidebar-nav-stack">
+            <button type="button" class="sidebar-tab-btn" [class.tab-active]="activeSection === 'profile'"
+              (click)="setActiveSection('profile')">
+              <i class="bi bi-person sidebar-tab-icon"></i>
+              <span class="sidebar-tab-text">Profile Settings</span>
+            </button>
+            <button type="button" class="sidebar-tab-btn" [class.tab-active]="activeSection === 'password'"
+              (click)="setActiveSection('password')">
+              <i class="bi bi-shield sidebar-tab-icon"></i>
+              <span class="sidebar-tab-text">Security Settings</span>
+            </button>
+            <button type="button" class="sidebar-tab-btn" [class.tab-active]="activeSection === 'billing'"
+              (click)="setActiveSection('billing')">
+              <i class="bi bi-bank sidebar-tab-icon"></i>
+              <span class="sidebar-tab-text">Banking Details</span>
+            </button>
+          </nav>
+
+        </div>
+      </aside>
+
+      <!-- ═════════════════════════════════════════════════════════
+           RIGHT CONTENT AREA: HEADER CARD & SECTION FORM CARDS
+           ═════════════════════════════════════════════════════════ -->
+      <section class="settings-content-panel">
+
+        <!-- HEADER CARD (SHARED ACROSS TABS) -->
+        <header class="settings-header-card">
+          <div class="header-titles-col">
+            <h1 class="header-main-title">
+              {{ activeSection === 'profile' ? 'Profile Settings' : (activeSection === 'password' ? 'Security Settings'
+              : 'Banking Details') }}
+            </h1>
+            <p class="header-subtitle">
+              {{ activeSection === 'profile' ? 'Manage your personal information and public profile.' : (activeSection
+              === 'password' ? 'Update your password and manage your account security settings.' : 'Update your
+              disbursement accounts and financial preferences for the Kansbe network.') }}
+            </p>
+          </div>
+
+          <div class="header-actions-col">
+            <!-- Profile Action Buttons -->
+            <ng-container *ngIf="activeSection === 'profile'">
+              <button type="button" class="btn-glass-secondary" *ngIf="!isEdit" (click)="enable()">
+                <i class="bi bi-pencil-square"></i>
+                <span>Edit Details</span>
+              </button>
+              <button type="button" class="btn-glass-secondary" *ngIf="isEdit" (click)="cancelEdit()">
+                <i class="bi bi-x-lg"></i>
+                <span>Cancel</span>
+              </button>
+              <button type="button" class="btn-solid-red" (click)="updateDetails()"
+                [disabled]="!isEdit">
+                <i class="bi bi-floppy-fill"></i>
+                <span>Save Changes</span>
+              </button>
+            </ng-container>
+
+            <!-- Security Action Buttons -->
+            <ng-container *ngIf="activeSection === 'password'">
+              <button type="button" class="btn-solid-red" (click)="onChangePassword()"
+                [disabled]="changePasswordForm.invalid || isChangingPassword">
+                <span>{{ isChangingPassword ? 'Updating...' : 'Update Password' }}</span>
+              </button>
+            </ng-container>
+
+            <!-- Banking Action Buttons -->
+            <ng-container *ngIf="activeSection === 'billing'">
+              <button type="button" class="btn-glass-secondary" *ngIf="!isBank" (click)="enableBank()">
+                <i class="bi bi-pencil-square"></i>
+                <span>Edit Details</span>
+              </button>
+              <button type="button" class="btn-glass-secondary" *ngIf="isBank" (click)="cancelBankEdit()">
+                <i class="bi bi-x-lg"></i>
+                <span>Cancel</span>
+              </button>
+              <button type="button" class="btn-solid-red" (click)="handleBankSubmit()"
+                [disabled]="!isBank || !isBankFormValid()">
+                <i class="bi bi-lock-fill"></i>
+                <span>Save Changes</span>
+              </button>
+            </ng-container>
+          </div>
+        </header>
+
+        <!-- ═══ TAB 1: PROFILE SETTINGS ═══ -->
+        <div class="tab-content-wrapper" *ngIf="activeSection === 'profile'">
+          <!-- Main Form Card: Personal Information -->
+          <div class="form-glass-card personal-info-glass-card">
+            <div class="card-section-heading">
+              <i class="bi bi-person card-heading-icon"></i>
+              <h2 class="card-heading-title">Personal Information</h2>
+            </div>
+            <div class="card-heading-divider"></div>
+
+            <div class="form-grid-2col">
+              <!-- Full Name -->
+              <div class="form-field-group">
+                <label class="form-field-label">Full Name <span class="required-asterisk">*</span></label>
+                <div class="glass-input-wrapper" [class.has-error]="errorMessages.fullname && isEdit">
+                  <i class="bi bi-person glass-input-icon"></i>
+                  <input type="text" class="glass-input-control" [(ngModel)]="profile.fullname"
+                    placeholder="Enter your full name" (ngModelChange)="validateField('fullname', $event)"
+                    (blur)="validateField('fullname', profile.fullname)"
+                    [disabled]="!isEdit">
+                </div>
+                <small class="error-msg-text" *ngIf="errorMessages.fullname && isEdit">
+                  <i class="bi bi-exclamation-circle-fill"></i> {{ errorMessages.fullname }}
+                </small>
+              </div>
+
+              <!-- Username -->
+              <div class="form-field-group">
+                <label class="form-field-label">Username</label>
+                <div class="glass-input-wrapper" [class.has-error]="errorMessages.username && isEdit">
+                  <i class="bi bi-person-badge glass-input-icon"></i>
+                  <input type="text" class="glass-input-control" [(ngModel)]="profile.username"
+                    placeholder="Enter your username" (ngModelChange)="validateField('username', $event)"
+                    (blur)="validateField('username', profile.username)"
+                    [disabled]="!isEdit">
+                </div>
+                <small class="error-msg-text" *ngIf="errorMessages.username && isEdit">
+                  <i class="bi bi-exclamation-circle-fill"></i> {{ errorMessages.username }}
+                </small>
+              </div>
+
+              <!-- Email -->
+              <div class="form-field-group">
+                <label class="form-field-label">Email</label>
+                <div class="glass-input-wrapper readonly-input">
+                  <i class="bi bi-envelope glass-input-icon"></i>
+                  <input type="email" class="glass-input-control" [(ngModel)]="profile.email" readonly>
+                </div>
+                <small class="email-note-text">
+                  <i class="bi bi-info-circle-fill me-1"></i> Note: No changes can be made to the registered email address.
+                </small>
+              </div>
+
+              <!-- Contact Number -->
+              <div class="form-field-group">
+                <label class="form-field-label">Contact Number <span class="required-asterisk">*</span></label>
+                <div class="glass-input-wrapper" [class.has-error]="errorMessages.contact && isEdit">
+                  <i class="bi bi-telephone glass-input-icon"></i>
+                  <input type="tel" class="glass-input-control" [(ngModel)]="profile.contact"
+                    placeholder="Enter contact number" maxlength="10" (ngModelChange)="validateField('contact', $event)"
+                    (blur)="validateField('contact', profile.contact)"
+                    [disabled]="!isEdit">
+                </div>
+                <small class="error-msg-text" *ngIf="errorMessages.contact && isEdit">
+                  <i class="bi bi-exclamation-circle-fill"></i> {{ errorMessages.contact }}
+                </small>
+              </div>
+
+              <!-- Gender -->
+              <div class="form-field-group gender-container" [class.dropdown-active]="showGenderDropdown">
+                <label class="form-field-label">Gender <span class="required-asterisk">*</span></label>
+                <div class="glass-input-wrapper cursor-pointer" [class.has-error]="errorMessages.gender && isEdit"
+                  (click)="isEdit ? (showGenderDropdown = !showGenderDropdown) : null">
+                  <i class="bi bi-gender-ambiguous glass-input-icon"></i>
+                  <input type="text" class="glass-input-control cursor-pointer" [(ngModel)]="profile.gender"
+                    placeholder="Select Gender" readonly (blur)="validateField('gender', profile.gender)" [disabled]="!isEdit">
+                  <i class="bi bi-chevron-down glass-select-arrow"></i>
+                </div>
+                <!-- Gender Dropdown -->
+                <div class="glass-dropdown-menu" *ngIf="showGenderDropdown && filteredGenders.length > 0">
+                  <div class="glass-dropdown-option" *ngFor="let g of filteredGenders" (mousedown)="selectGender(g)">
+                    {{ g }}
+                  </div>
+                </div>
+                <small class="error-msg-text" *ngIf="errorMessages.gender && isEdit">
+                  <i class="bi bi-exclamation-circle-fill"></i> {{ errorMessages.gender }}
+                </small>
+              </div>
+
+              <!-- Date of Birth -->
+              <div class="form-field-group dob-picker-container" [class.dropdown-active]="showDatePicker">
+                <label class="form-field-label">Date of Birth <span class="required-asterisk">*</span></label>
+                <div class="glass-input-wrapper cursor-pointer" [class.has-error]="errorMessages.dob && isEdit" (click)="isEdit ? toggleDatePicker() : null">
+                  <i class="bi bi-calendar4 glass-input-icon"></i>
+                  <input type="text" class="glass-input-control cursor-pointer" [value]="profile.dob"
+                    placeholder="YYYY-MM-DD" readonly (blur)="validateDob()" [disabled]="!isEdit">
+                  <i class="bi bi-chevron-down glass-select-arrow"></i>
+                </div>
+                <!-- DOB Picker Dropdown -->
+                <div class="glass-datepicker-menu" *ngIf="showDatePicker" (click)="$event.stopPropagation()">
+                  <div class="datepicker-selectors-row">
+                    <select class="glass-date-select" [(ngModel)]="selectedMonth" (change)="generateCalendar()">
+                      <option *ngFor="let m of months; let i = index" [ngValue]="i">{{ m }}</option>
+                    </select>
+                    <select class="glass-date-select" [(ngModel)]="selectedYear" (change)="generateCalendar()">
+                      <option *ngFor="let y of years" [ngValue]="y">{{ y }}</option>
+                    </select>
+                  </div>
+                  <div class="datepicker-grid-days">
+                    <div *ngFor="let day of calendarDays" class="datepicker-day-cell" (click)="selectDate(day)"
+                      [class.active-day]="isDateActive(day)" [class.disabled-day]="!isDateSelectable(day)">
+                      {{ day }}
+                    </div>
+                  </div>
+                </div>
+                <small class="error-msg-text" *ngIf="errorMessages.dob && isEdit">
+                  <i class="bi bi-exclamation-circle-fill"></i> {{ errorMessages.dob }}
+                </small>
+              </div>
+
+              <!-- Nationality -->
+              <div class="form-field-group nationality-container" [class.dropdown-active]="showNationalityDropdown">
+                <label class="form-field-label">Nationality <span class="required-asterisk">*</span></label>
+                <div class="glass-input-wrapper" [class.has-error]="errorMessages.nationality && isEdit">
+                  <i class="bi bi-globe glass-input-icon"></i>
+                  <input type="text" class="glass-input-control" [(ngModel)]="profile.nationality"
+                    placeholder="Nationality" (input)="onNationalityInput($event)" (focus)="onNationalityInput($event)"
+                    (ngModelChange)="validateField('nationality', $event)" (blur)="validateField('nationality', profile.nationality)"
+                    [disabled]="!isEdit">
+                </div>
+                <!-- Nationality Dropdown -->
+                <div class="glass-dropdown-menu" *ngIf="showNationalityDropdown && filteredNationalities.length > 0">
+                  <div class="glass-dropdown-option" *ngFor="let nat of filteredNationalities"
+                    (mousedown)="selectNationality(nat)">
+                    {{ nat }}
+                  </div>
+                </div>
+                <small class="error-msg-text" *ngIf="errorMessages.nationality && isEdit">
+                  <i class="bi bi-exclamation-circle-fill"></i> {{ errorMessages.nationality }}
+                </small>
+              </div>
+
+              <!-- Country -->
+              <div class="form-field-group country-container" [class.dropdown-active]="showCountryDropdown">
+                <label class="form-field-label">Country <span class="required-asterisk">*</span></label>
+                <div class="glass-input-wrapper" [class.has-error]="errorMessages.country && isEdit">
+                  <i class="bi bi-flag glass-input-icon"></i>
+                  <input type="text" class="glass-input-control" [(ngModel)]="profile.country" placeholder="Country"
+                    (input)="onCountryInput($event)" (focus)="onCountryInput($event)"
+                    (ngModelChange)="validateField('country', $event)" (blur)="validateField('country', profile.country)"
+                    [disabled]="!isEdit">
+                  <i class="bi bi-chevron-down glass-select-arrow"></i>
+                </div>
+                <!-- Country Dropdown -->
+                <div class="glass-dropdown-menu" *ngIf="showCountryDropdown && filteredCountries.length > 0">
+                  <div class="glass-dropdown-option" *ngFor="let country of filteredCountries"
+                    (mousedown)="selectCountry(country)">
+                    {{ country }}
+                  </div>
+                </div>
+                <small class="error-msg-text" *ngIf="errorMessages.country && isEdit">
+                  <i class="bi bi-exclamation-circle-fill"></i> {{ errorMessages.country }}
+                </small>
+              </div>
+
+              <!-- Profession -->
+              <div class="form-field-group">
+                <label class="form-field-label">Profession <span class="required-asterisk">*</span></label>
+                <div class="glass-input-wrapper" [class.has-error]="errorMessages.profession && isEdit">
+                  <i class="bi bi-briefcase glass-input-icon"></i>
+                  <input type="text" class="glass-input-control" [(ngModel)]="profile.profession"
+                    placeholder="e.g. UI/UX Designer" (ngModelChange)="validateField('profession', $event)"
+                    (blur)="validateField('profession', profile.profession)"
+                    [disabled]="!isEdit">
+                  <i class="bi bi-chevron-down glass-select-arrow"></i>
+                </div>
+                <small class="error-msg-text" *ngIf="errorMessages.profession && isEdit">
+                  <i class="bi bi-exclamation-circle-fill"></i> {{ errorMessages.profession }}
+                </small>
+              </div>
+
+              <!-- Experience (Years) -->
+              <div class="form-field-group">
+                <label class="form-field-label">Experience (Years) <span class="required-asterisk">*</span></label>
+                <div class="glass-input-wrapper" [class.has-error]="errorMessages.experience && isEdit">
+                  <i class="bi bi-lightning-charge glass-input-icon"></i>
+                  <input type="text" class="glass-input-control" [(ngModel)]="profile.experience"
+                    placeholder="e.g. 1 year" (ngModelChange)="validateField('experience', $event)"
+                    (blur)="validateField('experience', profile.experience)"
+                    [disabled]="!isEdit">
+                  <i class="bi bi-chevron-down glass-select-arrow"></i>
+                </div>
+                <small class="error-msg-text" *ngIf="errorMessages.experience && isEdit">
+                  <i class="bi bi-exclamation-circle-fill"></i> {{ errorMessages.experience }}
+                </small>
+              </div>
+
+              <!-- Are you a student? -->
+              <div class="form-field-group">
+                <label class="form-field-label">&nbsp;</label>
+                <div class="student-radio-card-row">
+                  <span class="student-question-label">Are You a Student? <span class="required-asterisk">*</span></span>
+                  <div class="student-options-group">
+                    <label class="student-radio-pill" [class.selected]="profile.isStudent === 'yes'"
+                      [class.disabled]="!isEdit">
+                      <input type="radio" name="isStudent" [(ngModel)]="profile.isStudent" value="yes"
+                        [disabled]="!isEdit" (ngModelChange)="validateField('isStudent', $event)" class="d-none">
+                      <span class="custom-radio-dot"></span>
+                      <span>Yes</span>
+                    </label>
+                    <label class="student-radio-pill" [class.selected]="profile.isStudent === 'no'"
+                      [class.disabled]="!isEdit">
+                      <input type="radio" name="isStudent" [(ngModel)]="profile.isStudent" value="no"
+                        [disabled]="!isEdit" (ngModelChange)="validateField('isStudent', $event)" class="d-none">
+                      <span class="custom-radio-dot"></span>
+                      <span>No</span>
+                    </label>
+                  </div>
+                </div>
+                <small class="error-msg-text" *ngIf="errorMessages.isStudent && isEdit">
+                  <i class="bi bi-exclamation-circle-fill"></i> {{ errorMessages.isStudent }}
+                </small>
+              </div>
+
+              <!-- Languages Known -->
+              <div class="form-field-group position-relative language-container">
+                <label class="form-field-label">Languages Known <span class="required-asterisk">*</span></label>
+                <div class="glass-languages-box" [class.has-error]="errorMessages.languages && isEdit">
+                  <div class="language-chips-wrap" *ngIf="profile.languagesArray.length > 0">
+                    <span class="glass-lang-chip" *ngFor="let lang of profile.languagesArray; let i = index">
+                      <span>{{ lang }}</span>
+                      <i class="bi bi-x lang-remove-icon" *ngIf="isEdit" (click)="removeLanguage(i)"></i>
+                    </span>
+                  </div>
+                  <input type="text" class="glass-lang-input" [(ngModel)]="languageInput"
+                    placeholder="Add more languages" (input)="onLanguageInput($event)"
+                    (ngModelChange)="validateField('languages', $event)" (blur)="validateField('languages', languageInput)"
+                    (keyup.enter)="addLanguage()"
+                    [disabled]="!isEdit">
+                </div>
+                <!-- Language Dropdown -->
+                <div class="glass-dropdown-menu" *ngIf="showLanguageDropdown && filteredLanguages.length > 0">
+                  <div class="glass-dropdown-option" *ngFor="let lang of filteredLanguages"
+                    (mousedown)="selectLanguage(lang)">
+                    {{ lang }}
+                  </div>
+                </div>
+                <small class="error-msg-text" *ngIf="errorMessages.languages && isEdit">
+                  <i class="bi bi-exclamation-circle-fill"></i> {{ errorMessages.languages }}
+                </small>
+              </div>
+
+            </div>
+          </div>
+
+          <!-- Skills Card -->
+          <div class="form-glass-card mt-4 skills-management-card" id="skills-section">
+            <div class="card-section-heading">
+              <i class="bi bi-lightning card-heading-icon"></i>
+              <h2 class="card-heading-title">Skills</h2>
+            </div>
+            <div class="card-heading-divider"></div>
+
+            <!-- Existing Skills Chips -->
+            <div class="settings-skills-chips-flow" *ngIf="getSkillsArray().length > 0">
+              <div class="settings-skill-pill" *ngFor="let s of getSkillsArray()">
+                <span class="skill-name">{{ s.skill || s.name || s }}</span>
+                <span class="skill-level-badge" *ngIf="s.status || s.level"
+                  [class.level-expert]="(s.status || s.level) === 'Expert' || (s.status || s.level) === 'EXPERIENCED'"
+                  [class.level-intermediate]="(s.status || s.level) === 'Intermediate' || (s.status || s.level) === 'INTERMEDIATE'"
+                  [class.level-beginner]="(s.status || s.level) === 'Beginner' || (s.status || s.level) === 'BEGINNER'">
+                  {{ s.status || s.level }}
+                </span>
+                <i class="bi bi-x btn-delete-skill-chip" *ngIf="isEdit" (click)="confirmDeleteSkill(s)" title="Remove skill"></i>
+              </div>
+            </div>
+
+            <div class="empty-skills-notice" *ngIf="getSkillsArray().length === 0 && !isEdit">
+              <span>No skills added yet.</span>
+            </div>
+
+            <!-- Simple Clean Add Skill Row -->
+            <div class="settings-add-skill-row mt-3" *ngIf="isEdit">
+              <div class="glass-input-wrapper skill-input-field" [class.has-error]="skillErrorMessage">
+                <input type="text" class="glass-input-control" [(ngModel)]="skilldetails.skill"
+                  placeholder="Enter skill name"
+                  (keyup.enter)="addNewSkill()">
+              </div>
+
+              <div class="skill-levels-pill-group">
+                <button type="button" class="btn-level-selector"
+                  [class.active]="skilldetails.status === 'Beginner'"
+                  (click)="setSkillLevel('Beginner')">
+                  Beginner
+                </button>
+                <button type="button" class="btn-level-selector"
+                  [class.active]="skilldetails.status === 'Intermediate'"
+                  (click)="setSkillLevel('Intermediate')">
+                  Intermediate
+                </button>
+                <button type="button" class="btn-level-selector"
+                  [class.active]="skilldetails.status === 'Expert'"
+                  (click)="setSkillLevel('Expert')">
+                  Expert
+                </button>
+              </div>
+
+              <button type="button" class="btn-add-skill-primary"
+                [disabled]="!skilldetails.skill?.trim() || isAddingSkill"
+                (click)="addNewSkill()">
+                <span>{{ isAddingSkill ? 'Adding...' : 'Add' }}</span>
+              </button>
+            </div>
+
+            <!-- Feedback Messages -->
+            <small class="error-msg-text mt-2 d-block" *ngIf="skillErrorMessage && isEdit">
+              <i class="bi bi-exclamation-circle-fill"></i> {{ skillErrorMessage }}
+            </small>
+            <small class="success-msg-text mt-2 d-block" *ngIf="skillSuccessMessage && isEdit">
+              <i class="bi bi-check-circle-fill"></i> {{ skillSuccessMessage }}
+            </small>
+          </div>
+
+          <!-- Second Card: About You -->
+          <div class="form-glass-card mt-4 about-you-glass-card">
+            <div class="card-section-heading">
+              <i class="bi bi-person card-heading-icon"></i>
+              <h2 class="card-heading-title">About You <span class="required-asterisk">*</span></h2>
+            </div>
+            <div class="card-heading-divider"></div>
+            <div class="about-you-content">
+              <div class="glass-input-wrapper textarea-wrapper" [class.has-error]="errorMessages.description && isEdit">
+                <textarea class="glass-textarea-control" [(ngModel)]="profile.description" rows="4"
+                  placeholder="Tell clients about your experience, expertise, and what makes you unique (minimum 20 characters)..."
+                  (ngModelChange)="validateField('description', $event)" (blur)="validateField('description', profile.description)"
+                  [disabled]="!isEdit"></textarea>
+              </div>
+              <small class="error-msg-text" *ngIf="errorMessages.description && isEdit">
+                <i class="bi bi-exclamation-circle-fill"></i> {{ errorMessages.description }}
+              </small>
+            </div>
+          </div>
+
+          <!-- Third Card: Social Presence -->
+          <div class="form-glass-card mt-4 social-glass-card">
+            <div class="card-section-heading">
+              <i class="bi bi-share card-heading-icon"></i>
+              <h2 class="card-heading-title">Social Presence</h2>
+            </div>
+            <div class="card-heading-divider"></div>
+
+            <div class="form-grid-2col">
+              <!-- LinkedIn -->
+              <div class="form-field-group">
+                <label class="form-field-label">LinkedIn URL</label>
+                <div class="glass-input-wrapper">
+                  <i class="bi bi-linkedin glass-input-icon"></i>
+                  <input type="text" class="glass-input-control" [(ngModel)]="profile.linkedin"
+                    placeholder="linkedin.com/in/username" [disabled]="!isEdit">
+                </div>
+              </div>
+
+              <!-- Instagram -->
+              <div class="form-field-group">
+                <label class="form-field-label">Instagram URL</label>
+                <div class="glass-input-wrapper">
+                  <i class="bi bi-instagram glass-input-icon"></i>
+                  <input type="text" class="glass-input-control" [(ngModel)]="profile.instagram"
+                    placeholder="instagram.com/username" [disabled]="!isEdit">
+                </div>
+              </div>
+
+              <!-- Twitter / X -->
+              <div class="form-field-group">
+                <label class="form-field-label">Twitter (X) URL</label>
+                <div class="glass-input-wrapper">
+                  <i class="bi bi-twitter-x glass-input-icon"></i>
+                  <input type="text" class="glass-input-control" [(ngModel)]="profile.twitter"
+                    placeholder="twitter.com/username" [disabled]="!isEdit">
+                </div>
+              </div>
+
+              <!-- GitHub -->
+              <div class="form-field-group">
+                <label class="form-field-label">GitHub URL</label>
+                <div class="glass-input-wrapper">
+                  <i class="bi bi-github glass-input-icon"></i>
+                  <input type="text" class="glass-input-control" [(ngModel)]="profile.github"
+                    placeholder="github.com/username" [disabled]="!isEdit">
+                </div>
+              </div>
+
+              <!-- Portfolio (Full Width) -->
+              <div class="form-field-group full-width-col">
+                <label class="form-field-label">Portfolio URL</label>
+                <div class="glass-input-wrapper">
+                  <i class="bi bi-link-45deg glass-input-icon"></i>
+                  <input type="text" class="glass-input-control" [(ngModel)]="profile.portfolio"
+                    placeholder="yourportfolio.com" [disabled]="!isEdit">
+                </div>
+              </div>
+            </div>
+          </div>
+
+
+          <!-- Portfolio / External Experience Card -->
+          <div class="form-glass-card mt-4 external-projects-card" id="external-projects-section">
+            <div class="card-section-heading">
+              <i class="bi bi-briefcase card-heading-icon"></i>
+              <h2 class="card-heading-title">Portfolio & External Experience</h2>
+            </div>
+            <div class="card-heading-divider"></div>
+
+            <div class="settings-skills-chips-flow" *ngIf="(profile?.external_projects | keyvalue)?.length">
+              <div class="settings-skill-pill" *ngFor="let project of profile.external_projects | keyvalue">
+                <span class="skill-name">{{ $any(project.value).title }} ({{ project.key }})</span>
+                <span class="skill-level-badge level-expert">
+                  {{ $any(project.value).experience }} Exp
+                </span>
+                <i class="bi bi-x btn-delete-skill-chip" *ngIf="isEdit" (click)="confirmDeleteExternalProject(project.key)" title="Remove project"></i>
+              </div>
+            </div>
+
+            <div class="empty-skills-notice" *ngIf="!(profile?.external_projects | keyvalue)?.length && !isEdit">
+              <span>No portfolio projects added yet.</span>
+            </div>
+
+            <div class="settings-add-skill-row mt-3" *ngIf="isEdit">
+              <button type="button" class="btn-add-skill-primary w-100" (click)="openExternalProjectModal()">
+                <span>Add Portfolio Project</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- ═══ TAB 2: SECURITY SETTINGS ═══ -->
+        <div class="tab-content-wrapper" *ngIf="activeSection === 'password'">
+          <div class="form-glass-card">
+            <div class="card-section-heading">
+              <i class="bi bi-lock card-heading-icon"></i>
+              <div>
+                <h2 class="card-heading-title">Change password</h2>
+                <p class="card-heading-subtext">Use at least eight characters with a number and a symbol.</p>
+              </div>
+            </div>
+            <div class="card-heading-divider"></div>
+
+            <form [formGroup]="changePasswordForm" class="stacked-password-form">
+              <!-- Current Password -->
+              <div class="form-field-group">
+                <label class="form-field-label">Current Password</label>
+                <div class="glass-input-wrapper">
+                  <input [type]="showCurrentPwd ? 'text' : 'password'" class="glass-input-control"
+                    formControlName="currentPassword" placeholder="Enter Current Password"
+                    autocomplete="current-password">
+                  <i class="bi glass-pwd-toggle cursor-pointer" [ngClass]="showCurrentPwd ? 'bi-eye' : 'bi-eye-slash'"
+                    (click)="showCurrentPwd = !showCurrentPwd"></i>
+                </div>
+                <small class="error-msg-text"
+                  *ngIf="changePasswordForm.get('currentPassword')?.touched && changePasswordForm.get('currentPassword')?.invalid">
+                  Current password is required
+                </small>
+              </div>
+
+              <!-- New Password -->
+              <div class="form-field-group">
+                <label class="form-field-label">New Password</label>
+                <div class="glass-input-wrapper">
+                  <input [type]="showNewPwd ? 'text' : 'password'" class="glass-input-control"
+                    formControlName="newPassword" placeholder="Create New Password" autocomplete="new-password">
+                  <i class="bi glass-pwd-toggle cursor-pointer" [ngClass]="showNewPwd ? 'bi-eye' : 'bi-eye-slash'"
+                    (click)="showNewPwd = !showNewPwd"></i>
+                </div>
+                <!-- Rules checklist -->
+                <div class="password-rules-inline mt-2" *ngIf="changePasswordForm.get('newPassword')?.value">
+                  <span [class.valid]="hasMinLength()">{{ hasMinLength() ? '✔' : '✖' }} 8+ chars</span>
+                  <span class="dot">•</span>
+                  <span [class.valid]="hasUppercase()">{{ hasUppercase() ? '✔' : '✖' }} Uppercase</span>
+                  <span class="dot">•</span>
+                  <span [class.valid]="hasLowercase()">{{ hasLowercase() ? '✔' : '✖' }} Lowercase</span>
+                  <span class="dot">•</span>
+                  <span [class.valid]="hasNumber()">{{ hasNumber() ? '✔' : '✖' }} Number</span>
+                  <span class="dot">•</span>
+                  <span [class.valid]="hasSpecialChar()">{{ hasSpecialChar() ? '✔' : '✖' }} Special</span>
+                </div>
+                <small class="error-msg-text"
+                  *ngIf="changePasswordForm.get('newPassword')?.touched && changePasswordForm.get('newPassword')?.invalid">
+                  Please satisfy all password requirements
+                </small>
+              </div>
+
+              <!-- Confirm New Password -->
+              <div class="form-field-group">
+                <label class="form-field-label">Confirm New Password</label>
+                <div class="glass-input-wrapper">
+                  <input type="password" class="glass-input-control" formControlName="confirmPassword"
+                    placeholder="Confirm New Password" autocomplete="new-password">
+                </div>
+                <small class="error-msg-text"
+                  *ngIf="changePasswordForm.get('confirmPassword')?.touched && changePasswordForm.hasError('mismatch')">
+                  Passwords do not match
+                </small>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <!-- ═══ TAB 3: BANKING DETAILS ═══ -->
+        <div class="tab-content-wrapper" *ngIf="activeSection === 'billing'">
+          <div class="form-glass-card">
+            <div class="card-section-heading">
+              <i class="bi bi-lock card-heading-icon"></i>
+              <div>
+                <h2 class="card-heading-title">Manage Your Banking Details</h2>
+                <p class="card-heading-subtext">Your information is encrypted and used only for secure freelancer
+                  payouts.</p>
+              </div>
+            </div>
+            <div class="card-heading-divider"></div>
+
+            <form #bankForm="ngForm" class="form-grid-2col">
+              <!-- Bank Name -->
+              <div class="form-field-group">
+                <label class="form-field-label">Bank Name</label>
+                <div class="glass-input-wrapper">
+                  <input type="text" class="glass-input-control" [(ngModel)]="bankingInfo.bankname" name="bankname"
+                    placeholder="Enter bank name" [disabled]="!isBank"
+                    (ngModelChange)="validateBankField('bankname', $event)">
+                </div>
+                <small class="error-msg-text" *ngIf="bankErrorMessages.bankname">{{ bankErrorMessages.bankname
+                  }}</small>
+              </div>
+
+              <!-- Account Holder Name -->
+              <div class="form-field-group">
+                <label class="form-field-label">Account Holder Name</label>
+                <div class="glass-input-wrapper">
+                  <input type="text" class="glass-input-control" [(ngModel)]="bankingInfo.acholdername"
+                    name="acholdername" placeholder="Ankenapally Sathish Kumar" [disabled]="!isBank"
+                    (ngModelChange)="validateBankField('acholdername', $event)">
+                </div>
+                <small class="error-msg-text" *ngIf="bankErrorMessages.acholdername">{{ bankErrorMessages.acholdername
+                  }}</small>
+              </div>
+
+              <!-- Account Number -->
+              <div class="form-field-group">
+                <label class="form-field-label">Account Number</label>
+                <div class="glass-input-wrapper">
+                  <input type="text" class="glass-input-control" [(ngModel)]="bankingInfo.acnumber" name="acnumber"
+                    placeholder="Enter account number" [disabled]="!isBank"
+                    (ngModelChange)="validateBankField('acnumber', $event)">
+                </div>
+                <small class="error-msg-text" *ngIf="bankErrorMessages.acnumber">{{ bankErrorMessages.acnumber
+                  }}</small>
+              </div>
+
+              <!-- IFSC Code -->
+              <div class="form-field-group">
+                <label class="form-field-label">IFSC Code <span class="required-asterisk">*</span></label>
+                <div class="glass-input-wrapper">
+                  <input type="text" class="glass-input-control" [(ngModel)]="bankingInfo.ifsc" name="ifsc"
+                    placeholder="e.g. HDFC0001234" [disabled]="!isBank"
+                    (ngModelChange)="validateBankField('ifsc', $event)">
+                </div>
+                <small class="error-msg-text" *ngIf="bankErrorMessages.ifsc">{{ bankErrorMessages.ifsc }}</small>
+              </div>
+
+              <!-- Branch Name (Full Width) -->
+              <div class="form-field-group full-width-col">
+                <label class="form-field-label">Branch Name</label>
+                <div class="glass-input-wrapper">
+                  <input type="text" class="glass-input-control" [(ngModel)]="bankingInfo.branchname" name="branchname"
+                    placeholder="Enter Branch Name" [disabled]="!isBank"
+                    (ngModelChange)="validateBankField('branchname', $event)">
+                </div>
+                <small class="error-msg-text" *ngIf="bankErrorMessages.branchname">{{ bankErrorMessages.branchname
+                  }}</small>
+              </div>
+            </form>
+          </div>
+        </div>
+
+      </section>
+    </div>
+  </main>
+
+  <!-- ═════════════════════════════════════════════════════════
+       MODALS: SKILL MANAGEMENT & CONFIRM DELETE
+       ═════════════════════════════════════════════════════════ -->
+
+  <!-- Skill Modal -->
+  <div class="modal-overlay-custom" [class.show]="showSkillModal" (click)="closeSkillModal()" *ngIf="showSkillModal">
+    <div class="modal-card-glass" (click)="$event.stopPropagation()">
+      <div class="modal-header-glass">
+        <div class="d-flex align-items-center gap-3">
+          <div class="modal-icon-badge">
+            <i class="bi bi-stars"></i>
+          </div>
+          <div>
+            <h5 class="modal-title-glass">Manage Skills</h5>
+            <p class="modal-subtitle-glass">Add or remove your professional skills</p>
+          </div>
+        </div>
+        <button type="button" class="btn-modal-close" (click)="closeSkillModal()">
+          <i class="bi bi-x-lg"></i>
+        </button>
+      </div>
+
+      <div class="modal-body-glass">
+        <!-- Current Skills Chips -->
+        <div *ngIf="getSkillsArray().length > 0" class="mb-3">
+          <label class="modal-section-label">My Skills ({{ getSkillsArray().length }})</label>
+          <div class="skills-chips-flow">
+            <div class="modal-skill-pill" *ngFor="let skill of getSkillsArray()">
+              <span class="skill-name">{{ skill.skill }}</span>
+              <span class="skill-level-tag" *ngIf="skill.status">{{ skill.status }}</span>
+              <button type="button" class="btn-delete-skill"
+                (click)="skillToDelete = (skill._id || skill.id); showConfirmModal = true;">
+                <i class="bi bi-x"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div *ngIf="skillErrorMessage" class="modal-error-banner">
+          <i class="bi bi-exclamation-triangle-fill"></i>
+          <span>{{ skillErrorMessage }}</span>
+        </div>
+
+        <!-- Add Skill Form -->
+        <div class="modal-input-group">
+          <label class="modal-label">Skill Name</label>
+          <input type="text" class="modal-input-field" [(ngModel)]="skilldetails.skill"
+            placeholder="e.g. Angular, Figma, Python..." (keyup.enter)="addNewSkill()">
+        </div>
+
+        <div class="modal-input-group">
+          <label class="modal-label">Proficiency Level</label>
+          <div class="skill-levels-row">
+            <button type="button" class="btn-skill-level-pill" [class.active]="skilldetails.status === 'Beginner'"
+              (click)="setSkillLevel('Beginner')">Beginner</button>
+            <button type="button" class="btn-skill-level-pill" [class.active]="skilldetails.status === 'Intermediate'"
+              (click)="setSkillLevel('Intermediate')">Intermediate</button>
+            <button type="button" class="btn-skill-level-pill" [class.active]="skilldetails.status === 'Experienced'"
+              (click)="setSkillLevel('Experienced')">Experienced</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-footer-glass">
+        <button type="button" class="btn-modal-cancel" (click)="closeSkillModal()">Close</button>
+        <button type="button" class="btn-modal-primary" (click)="addNewSkill()"
+          [disabled]="!skilldetails.skill || !skilldetails.status">Add Skill</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Delete Confirm Modal -->
+  <div class="modal-overlay-custom" *ngIf="showConfirmModal" (click)="cancelDelete()">
+    <div class="modal-card-glass confirm-box" (click)="$event.stopPropagation()">
+      <div class="modal-body-glass text-center p-4">
+        <div class="delete-icon-wrap mb-3">
+          <i class="bi bi-trash3-fill text-danger fs-2"></i>
+        </div>
+        <h5 class="fw-semibold text-white mb-1">Remove Skill?</h5>
+        <p class="text-secondary small mb-4">This skill will be permanently removed from your profile.</p>
+        <div class="d-flex gap-3 justify-content-center">
+          <button type="button" class="btn-modal-cancel flex-grow-1" (click)="cancelDelete()">Cancel</button>
+          <button type="button" class="btn-modal-primary flex-grow-1" (click)="confirmDelete()">Remove</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Portfolio / External Project Modal -->
+  <div class="modal-overlay-custom" [class.show]="showExternalProjectModal" (click)="closeExternalProjectModal()" *ngIf="showExternalProjectModal">
+    <div class="modal-card-glass" (click)="$event.stopPropagation()">
+      <div class="modal-header-glass">
+        <div class="header-left">
+          <div class="modal-icon-badge">
+            <i class="bi bi-briefcase text-white"></i>
+          </div>
+          <div>
+            <h5 class="modal-title-glass">Add Portfolio Project</h5>
+            <p class="modal-subtitle-glass">Showcase your external work experience</p>
+          </div>
+        </div>
+        <button type="button" class="btn-modal-close" (click)="closeExternalProjectModal()">
+          <i class="bi bi-x"></i>
+        </button>
+      </div>
+
+      <div class="modal-body-glass">
+        <!-- Project Domain -->
+        <div class="modal-input-group">
+          <label class="modal-label">Project Domain <span class="text-danger">*</span></label>
+          <input type="text" class="modal-input-field" [(ngModel)]="newExternalProject.domain"
+            placeholder="e.g. Web Development"
+            (input)="validateExternalProjectField('domain')" (blur)="validateExternalProjectField('domain')">
+          <small class="error-msg-text" *ngIf="externalProjectErrorMessages.domain">
+            <i class="bi bi-exclamation-circle-fill"></i> {{ externalProjectErrorMessages.domain }}
+          </small>
+        </div>
+
+        <!-- Project Title -->
+        <div class="modal-input-group mt-3">
+          <label class="modal-label">Project Title <span class="text-danger">*</span></label>
+          <input type="text" class="modal-input-field" [(ngModel)]="newExternalProject.title"
+            placeholder="e.g. Frontend Redesign for Retail App"
+            (input)="validateExternalProjectField('title')" (blur)="validateExternalProjectField('title')">
+          <small class="error-msg-text" *ngIf="externalProjectErrorMessages.title">
+            <i class="bi bi-exclamation-circle-fill"></i> {{ externalProjectErrorMessages.title }}
+          </small>
+        </div>
+
+        <!-- Project Experience -->
+        <div class="modal-input-group mt-3">
+          <label class="modal-label">Project Experience <span class="text-danger">*</span></label>
+          <div class="custom-dropdown" style="position: relative;">
+            <div class="dropdown-header modal-input-field d-flex justify-content-between align-items-center" (click)="toggleProjectExperienceDropdown()">
+              <span [class.text-muted]="!newExternalProject.experience">{{ newExternalProject.experience || 'Select experience' }}</span>
+              <i class="bi bi-chevron-down"></i>
+            </div>
+            <div class="dropdown-options w-100" *ngIf="showProjectExperienceDropdown" style="position: absolute; top: 100%; left: 0; z-index: 1000; background: rgba(30,30,30,0.95); border: 1px solid rgba(255,255,255,0.1); max-height: 200px; overflow-y: auto;">
+              <div class="dropdown-option p-2 border-bottom border-secondary" *ngFor="let option of yearsOptions"
+                (click)="selectProjectExperience(option)" style="cursor: pointer; color: white;">
+                {{ option }}
+              </div>
+            </div>
+          </div>
+          <small class="error-msg-text" *ngIf="externalProjectErrorMessages.experience">
+            <i class="bi bi-exclamation-circle-fill"></i> {{ externalProjectErrorMessages.experience }}
+          </small>
+        </div>
+
+        <!-- Project Description -->
+        <div class="modal-input-group mt-3">
+          <label class="modal-label">Project Description <span class="text-muted">(Optional)</span></label>
+          <textarea class="modal-input-field" rows="3"
+            placeholder="Describe your responsibilities and outcomes..."
+            [(ngModel)]="newExternalProject.description"
+            (input)="validateExternalProjectField('description')" (blur)="validateExternalProjectField('description')"></textarea>
+          <small class="error-msg-text" *ngIf="externalProjectErrorMessages.description">
+            <i class="bi bi-exclamation-circle-fill"></i> {{ externalProjectErrorMessages.description }}
+          </small>
+        </div>
+      </div>
+
+      <div class="modal-footer-glass">
+        <button type="button" class="btn-modal-cancel" (click)="closeExternalProjectModal()">Cancel</button>
+        <button type="button" class="btn-modal-primary" [disabled]="!isExternalProjectValid()"
+          (click)="addExternalProject()">Add Project</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Delete Confirm External Project Modal -->
+  <div class="modal-overlay-custom" *ngIf="showConfirmProjectModal" (click)="cancelDeleteExternalProject()">
+    <div class="modal-card-glass confirm-box" (click)="$event.stopPropagation()">
+      <div class="modal-body-glass text-center p-4">
+        <div class="delete-icon-wrap mb-3">
+          <i class="bi bi-trash3-fill text-danger fs-2"></i>
+        </div>
+        <h5 class="fw-bold text-white mb-1">Remove Project?</h5>
+        <p class="text-secondary small mb-4">This project will be permanently removed from your portfolio.</p>
+        <div class="d-flex gap-3 justify-content-center">
+          <button type="button" class="btn-modal-cancel flex-grow-1" (click)="cancelDeleteExternalProject()">Cancel</button>
+          <button type="button" class="btn-modal-primary flex-grow-1" (click)="executeDeleteExternalProject()">Remove</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- Profile Complete Popup Component -->
+<app-profile-complete-popup [visible]="showProfilePopup" [userType]="'freelancer'"
+  [missingFields]="profileMissingFields" [actionBlocked]="'adding skills'"
+  (navigateToSettings)="onProfilePopupNavigate()" (closePopup)="onProfilePopupClose()">
+</app-profile-complete-popup>
+
+<app-error-message *ngIf="!data"></app-error-message>

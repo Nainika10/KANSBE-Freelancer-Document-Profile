@@ -1,0 +1,90 @@
+<div class="guided-tour-overlay" *ngIf="tourService.isActive && isVisible && position && tourService.currentStep">
+    <!-- Solid Dark Backdrop, no blur, catches clicks -->
+    <div class="tour-backdrop"></div>
+
+    <!-- Spotlight Cutout -->
+    <div class="tour-spotlight" [ngStyle]="{
+    'top.px': position.spotlight.top,
+    'left.px': position.spotlight.left,
+    'width.px': position.spotlight.width,
+    'height.px': position.spotlight.height
+  }"></div>
+
+    <!-- Tooltip Card -->
+    <div class="tour-tooltip animate-scale-in" #tooltipEl [ngClass]="'arrow-' + position.arrowDir" [ngStyle]="{
+         'top.px': position.top,
+         'left.px': position.left,
+         'visibility': isVisible ? 'visible' : 'hidden',
+         'opacity': isVisible ? 1 : 0
+       }">
+
+        <div class="tour-tooltip-header">
+            <div class="tour-icon-box" *ngIf="tourService.currentStep.icon">
+                <i [class]="tourService.currentStep.icon"></i>
+            </div>
+            <div class="tour-header-text">
+                <span class="tour-step-counter">Step {{ tourService.currentStepIndex + 1 }} of {{ tourService.totalSteps
+                    }}</span>
+                <h6 class="tour-title">{{ tourService.currentStep.title }}</h6>
+            </div>
+        </div>
+
+        <div class="tour-tooltip-body">
+            <p class="tour-description">{{ tourService.currentStep.description }}</p>
+        </div>
+
+        <div class="tour-tooltip-footer">
+            <button class="btn-tour-skip" (click)="onComplete()">
+                Skip
+            </button>
+            <div class="ms-auto d-flex gap-2">
+                <button class="btn-tour-prev" *ngIf="!tourService.isFirstStep" (click)="onPrev()">
+                    Back
+                </button>
+
+                <button class="btn-tour-next" *ngIf="!tourService.isLastStep" (click)="onNext()">
+                    Next <i class="bi bi-chevron-right ms-1" style="font-size: 12px; margin-top: 1px;"></i>
+                </button>
+
+                <button class="btn-tour-finish" *ngIf="tourService.isLastStep" (click)="onComplete()">
+                    Got it!
+                </button>
+            </div>
+        </div>
+
+        <!-- Arrow element positioned accurately inside the tooltip -->
+        <div class="tour-arrow" [ngClass]="'arrow-' + position.arrowDir" [ngStyle]="{
+           'left.px': (position.arrowDir === 'top' || position.arrowDir === 'bottom') ? position.arrowOffset : null,
+           'top.px': (position.arrowDir === 'left' || position.arrowDir === 'right') ? position.arrowOffset : null
+         }"></div>
+    </div>
+</div>
+
+<!-- Invisible tracker to grab sizes before fading in -->
+<div class="guided-tour-overlay invisible-tracker"
+    *ngIf="tourService.isActive && !isVisible && tourService.currentStep">
+    <div class="tour-tooltip" #tooltipEl>
+        <div class="tour-tooltip-header">
+            <div class="tour-icon-box" *ngIf="tourService.currentStep.icon">
+                <i [class]="tourService.currentStep.icon"></i>
+            </div>
+            <div class="tour-header-text">
+                <span class="tour-step-counter">Step {{ tourService.currentStepIndex + 1 }} of {{ tourService.totalSteps
+                    }}</span>
+                <h6 class="tour-title">{{ tourService.currentStep.title }}</h6>
+            </div>
+        </div>
+        <div class="tour-tooltip-body">
+            <p class="tour-description">{{ tourService.currentStep.description }}</p>
+        </div>
+        <div class="tour-tooltip-footer">
+            <button class="btn-tour-skip">Skip</button>
+            <div class="ms-auto d-flex gap-2">
+                <button class="btn-tour-prev" *ngIf="!tourService.isFirstStep">Back</button>
+                <button class="btn-tour-next" *ngIf="!tourService.isLastStep">Next <i
+                        class="bi bi-chevron-right ms-1"></i></button>
+                <button class="btn-tour-finish" *ngIf="tourService.isLastStep">Got it!</button>
+            </div>
+        </div>
+    </div>
+</div>

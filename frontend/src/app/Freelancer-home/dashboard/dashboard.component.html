@@ -1,0 +1,230 @@
+<div class="futuristic-home-page" *ngIf="data">
+  <!-- Cinematic Ambient Background with Glow & Character Art -->
+  <div class="page-ambient-backdrop">
+    <div class="ambient-glow-mesh"></div>
+    <div class="ambient-character-art"></div>
+    <div class="ambient-vignette-overlay"></div>
+  </div>
+
+  <!-- Main Large Glass Container -->
+  <div class="dashboard-glass-container">
+    
+    <!-- User Greeting Section -->
+    <header class="user-greeting-section">
+      <h1 class="greeting-heading">Hi, {{ getUserGreetingName() }}.!!</h1>
+      <p class="greeting-subtext">Manage your active work and deadlines</p>
+    </header>
+
+    <!-- Main Feed Section (Internal Scroll Only) -->
+    <main class="feed-stream-container custom-scrollbar">
+      <ng-container *ngIf="feedPosts && feedPosts.length > 0; else emptyFeed">
+        <article class="feed-post-card" *ngFor="let post of feedPosts">
+          <ng-container *ngFor="let p of post.project_details">
+            
+            <!-- Post Header / Author Row -->
+            <div class="post-author-row">
+              <div class="author-badge-icon">
+                <span class="badge-text">KANSBE</span>
+              </div>
+              <div class="author-info">
+                <h2 class="author-name">{{ p.author || 'Kansbe Technology Team' }}</h2>
+                <p class="author-meta">{{ p.title || 'The evolution of web development' }} - Today</p>
+              </div>
+            </div>
+
+            <!-- Post Content Text -->
+            <p class="post-description-body">
+              {{ p.description || 'Building for the web is turning ideas into working systems. Every step matters, from structure to launch.' }}
+            </p>
+
+            <!-- Featured Post Media (Clean Portrait & Landscape Fit) -->
+            <div class="post-featured-media-box" *ngIf="p.thumbnail">
+              <img [src]="p.thumbnail" [alt]="p.title" class="featured-media-img" loading="lazy">
+              <!-- Overlay Tag -->
+              <div class="media-tag-pill">
+                <span>ANNOUNCEMENT</span>
+              </div>
+            </div>
+
+          </ng-container>
+        </article>
+      </ng-container>
+
+      <ng-template #emptyFeed>
+        <div class="empty-feed-card">
+          <i class="bi bi-megaphone empty-icon"></i>
+          <h3 class="empty-title">Stay updated with KANSBE Community</h3>
+          <p class="empty-subtext">Technology updates and admin announcements will appear here once available.</p>
+          <button class="glass-refresh-btn" (click)="getdata()">Refresh Feed</button>
+        </div>
+      </ng-template>
+    </main>
+
+  </div>
+
+  <!-- ═════════════════════════════════════════════════════════════════
+       MODALS SECTION (Intact Functional Modals)
+       ═════════════════════════════════════════════════════════════════ -->
+
+  <!-- Skill Modal -->
+  <div class="modal-overlay" [class.show]="showSkillModal" (click)="closeSkillModal()"></div>
+  <div class="skill-modal" [class.show]="showSkillModal">
+    <div class="skill-modal-header">
+      <div class="d-flex align-items-center gap-3">
+        <div class="skill-modal-icon">
+          <i class="bi bi-stars"></i>
+        </div>
+        <div>
+          <h5 class="fw-bold mb-0 text-white" style="font-size: 17px;">Manage Skills</h5>
+          <p class="mb-0 text-secondary" style="font-size: 11px;">Add or remove your professional skills</p>
+        </div>
+      </div>
+      <button class="skill-modal-close" (click)="closeSkillModal()">
+        <i class="bi bi-x-lg"></i>
+      </button>
+    </div>
+
+    <div class="skill-modal-body">
+      <div class="current-skills-section" *ngIf="getSkillsArray().length > 0">
+        <label class="section-label">
+          <i class="bi bi-check2-circle text-danger me-2"></i>My Skills
+          <span class="badge bg-danger bg-opacity-20 text-danger ms-2 rounded-pill" style="font-size: 10px;">
+            {{ getSkillsArray().length }}
+          </span>
+        </label>
+        <div class="skills-chips-grid">
+          <div class="skill-chip" *ngFor="let skill of getSkillsArray()">
+            <div class="skill-chip-info">
+              <span class="skill-chip-name">{{ skill.skill }}</span>
+              <span class="skill-chip-level" *ngIf="skill.status">{{ skill.status }}</span>
+            </div>
+            <button class="skill-chip-delete"
+              (click)="$event.stopPropagation(); skillToDelete = (skill._id || skill.id); showConfirmModal = true;"
+              title="Remove skill">
+              <i class="bi bi-x"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="no-skills-empty" *ngIf="getSkillsArray().length === 0">
+        <i class="bi bi-lightning-charge text-danger opacity-50" style="font-size: 2rem;"></i>
+        <p class="text-secondary mb-0 mt-2" style="font-size: 13px;">No skills added yet. Start building your profile!</p>
+      </div>
+
+      <div class="skill-modal-divider" *ngIf="getSkillsArray().length > 0"></div>
+
+      <div class="skill-error-banner" *ngIf="skillErrorMessage"
+        style="background: rgba(229, 62, 62, 0.15); border: 1px solid #fc8181; border-radius: 10px; padding: 12px 16px; margin-bottom: 16px; display: flex; align-items: center; gap: 10px;">
+        <i class="bi bi-exclamation-triangle-fill" style="color: #ff4d4d; font-size: 18px;"></i>
+        <span style="color: #ff8080; font-size: 13px; font-weight: 600;">{{ skillErrorMessage }}</span>
+      </div>
+
+      <div class="add-skill-section">
+        <label class="section-label">
+          <i class="bi bi-plus-circle text-danger me-2"></i>Add New Skill
+        </label>
+
+        <div class="skill-input-group">
+          <div class="skill-input-wrapper">
+            <i class="bi bi-code-slash skill-input-icon"></i>
+            <input type="text" class="skill-text-input" [(ngModel)]="skilldetails.skill"
+              placeholder="e.g. Angular, Figma, Python..." (keyup.enter)="addNewSkill()">
+          </div>
+        </div>
+
+        <div class="proficiency-section">
+          <label class="section-sublabel">Proficiency Level</label>
+          <div class="proficiency-pills">
+            <button class="proficiency-pill" [class.active]="skilldetails.status === 'Beginner'"
+              (click)="setSkillLevel('Beginner')">
+              <i class="bi bi-circle me-1" style="font-size: 10px;"></i>Beginner
+            </button>
+            <button class="proficiency-pill" [class.active]="skilldetails.status === 'Intermediate'"
+              (click)="setSkillLevel('Intermediate')">
+              <i class="bi bi-circle-half me-1" style="font-size: 10px;"></i>Intermediate
+            </button>
+            <button class="proficiency-pill" [class.active]="skilldetails.status === 'Experienced'"
+              (click)="setSkillLevel('Experienced')">
+              <i class="bi bi-circle-fill me-1" style="font-size: 10px;"></i>Experienced
+            </button>
+          </div>
+        </div>
+
+        <button class="skill-add-btn" (click)="addNewSkill()" [disabled]="!skilldetails.skill || !skilldetails.status">
+          <i class="bi bi-plus-lg me-2"></i>Add to Profile
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Delete Confirmation Modal -->
+  <div class="modal-overlay" *ngIf="showConfirmModal" (click)="cancelDelete()" style="z-index: 9998;"></div>
+  <div class="confirm-delete-modal" *ngIf="showConfirmModal">
+    <div class="confirm-delete-icon">
+      <i class="bi bi-trash3-fill text-danger"></i>
+    </div>
+    <h6 class="fw-bold text-white mb-1" style="font-size: 16px;">Remove Skill?</h6>
+    <p class="text-secondary mb-4" style="font-size: 13px;">This skill will be permanently removed from your profile.</p>
+    <div class="d-flex gap-3">
+      <button class="btn-confirm-cancel flex-grow-1" (click)="cancelDelete()">Cancel</button>
+      <button class="btn-confirm-delete flex-grow-1" (click)="confirmDelete()">
+        <i class="bi bi-trash3 me-1"></i>Remove
+      </button>
+    </div>
+  </div>
+
+  <!-- Legal Modals -->
+  <div class="modal-overlay" *ngIf="isModalOpen" [class.show]="isModalOpen" (click)="closeModal()">
+    <div class="legal-modal-box" (click)="$event.stopPropagation()">
+      <div class="modal-content-wrapper">
+        <!-- Privacy Policy -->
+        <div *ngIf="modalType === 'privacy'" class="modal-legal-content text-white">
+          <h2 class="fw-bold mb-4">Privacy Policy</h2>
+          <div class="modal-body-scroll pe-2" style="max-height: 450px; overflow-y: auto;">
+            <p><strong>Kansbe privacy policy last updated on 2026</strong></p>
+            <h5 class="fw-bold mt-4">Data Sharing & Confidentiality</h5>
+            <p>
+              Kansbe does not sell or share your personal data with third parties. Only profile details necessary for
+              matching and collaboration are used within the platform.
+            </p>
+            <h5 class="fw-bold mt-4">Data Encryption</h5>
+            <p>
+              All critical information transmitted across the Kansbe platform is protected using modern
+              encryption protocols.
+            </p>
+          </div>
+        </div>
+
+        <!-- Terms & Conditions -->
+        <div *ngIf="modalType === 'terms'" class="modal-legal-content text-white">
+          <h2 class="fw-bold mb-4">Terms & Conditions</h2>
+          <div class="modal-body-scroll pe-2" style="max-height: 450px; overflow-y: auto;">
+            <p>These Terms apply to all users of the KANSBE Platform: Freelancers, Clients, and Visitors.</p>
+            <h5 class="fw-bold mt-4">Platform Usage</h5>
+            <ul>
+              <li>KANSBE connects clients and freelancers.</li>
+              <li>All communication and deals must stay within the platform.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer border-0 pt-4 d-flex justify-content-center">
+        <button class="btn btn-danger rounded-pill px-5 fw-bold py-2 text-uppercase tracking-widest"
+          style="font-size: 11px;" (click)="closeModal()">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Profile Complete Popup -->
+<app-profile-complete-popup
+  [visible]="showProfilePopup"
+  [userType]="'freelancer'"
+  [missingFields]="profileMissingFields"
+  [actionBlocked]="'adding skills'"
+  (navigateToSettings)="onProfilePopupNavigate()"
+  (closePopup)="onProfilePopupClose()">
+</app-profile-complete-popup>
+
+<app-error-message *ngIf="!data"></app-error-message>

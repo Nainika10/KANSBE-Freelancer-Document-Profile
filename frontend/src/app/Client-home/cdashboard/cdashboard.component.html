@@ -1,0 +1,173 @@
+<div class="futuristic-home-page" *ngIf="data">
+  <!-- Cinematic Ambient Background with Glow & Character Art -->
+  <div class="page-ambient-backdrop">
+    <div class="ambient-glow-mesh"></div>
+    <div class="ambient-character-art"></div>
+    <div class="ambient-vignette-overlay"></div>
+  </div>
+
+  <!-- Main Large Glass Container -->
+  <div class="dashboard-glass-container">
+
+    <!-- User Greeting Section (Fixed at Top) -->
+    <header class="user-greeting-section">
+      <h1 class="greeting-heading">Hi, {{ getClientGreetingName() }}.!!</h1>
+      <p class="greeting-subtext">Manage your active work and deadlines</p>
+    </header>
+
+    <!-- Main Feed Section (Internal Scroll Only - Hidden Scrollbar) -->
+    <main class="feed-stream-container custom-scrollbar">
+
+      <!-- ─── SECTION 2: ACTIVE PROGRESS TRACKER ─── -->
+      <section class="feed-section-block" *ngIf="approvedproject && approvedproject.length > 0">
+        <div class="section-card-header">
+          <div class="header-title-group">
+            <div class="section-badge-icon">
+              <i class="bi bi-activity"></i>
+            </div>
+            <div>
+              <h2 class="section-title">Active Progress Tracker</h2>
+              <p class="section-subtext">Live completion rate across all running projects</p>
+            </div>
+          </div>
+
+          <button class="btn-toggle-collapse" *ngIf="approvedproject.length > 4" (click)="toggleTableCollapse()">
+            {{ isTableCollapsed ? 'View All (' + approvedproject.length + ')' : 'Compact View' }}
+          </button>
+        </div>
+
+        <div class="client-glass-card progress-tracker-card">
+          <div class="tracker-list-grid">
+            <div class="tracker-item-row"
+              *ngFor="let rp of (isTableCollapsed ? (approvedproject | slice:0:4) : approvedproject)"
+              (click)="selectProject(rp)">
+              <div class="tracker-item-info">
+                <span class="tracker-item-title">{{ $any(rp).title }}</span>
+                <span class="tracker-item-status">{{ rp.status || 'Active' }}</span>
+              </div>
+              <div class="tracker-item-metric">
+                <span class="tracker-item-pct">{{ getProjectProgress(rp) }}%</span>
+                <div class="tracker-item-bar">
+                  <div class="tracker-bar-fill" [style.width.%]="getProjectProgress(rp)"></div>
+                </div>
+              </div>
+              <i class="bi bi-chevron-right tracker-arrow"></i>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ─── SECTION 3: FREELANCER MATCHMAKING ─── -->
+      <section class="feed-section-block" *ngIf="bestFreelancers && bestFreelancers.length > 0">
+        <div class="section-card-header">
+          <div class="header-title-group">
+            <div class="section-badge-icon">
+              <i class="bi bi-people-fill"></i>
+            </div>
+            <div>
+              <h2 class="section-title">Freelancer Matchmaking</h2>
+              <p class="section-subtext">Vetted candidates aligned with your project requirements</p>
+            </div>
+          </div>
+
+          <div class="header-meta-group">
+            <span class="badge-running-pill">{{ bestFreelancers.length }} CANDIDATES</span>
+            <div class="milestone-nav-arrows" *ngIf="bestFreelancers.length > itemsPerSlide">
+              <button class="glass-icon-btn" (click)="prevSlide()" [disabled]="currentSlideIndex === 0">
+                <i class="bi bi-chevron-left"></i>
+              </button>
+              <button class="glass-icon-btn" (click)="nextSlide()"
+                [disabled]="currentSlideIndex + itemsPerSlide >= bestFreelancers.length">
+                <i class="bi bi-chevron-right"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="fl-cards-section">
+          <div *ngFor="let freelancer of visibleFreelancers; trackBy: trackByFreelancerId" class="fl-freelancer-card">
+
+            <!-- Left Column: Avatar, ID, Name, Role, Match Info -->
+            <div class="fl-card-left">
+              <div class="fl-avatar-circle">
+                <img *ngIf="freelancer.avatar && !freelancer.avatar.includes('placeholder')" [src]="freelancer.avatar"
+                  [alt]="freelancer.name">
+                <div *ngIf="!freelancer.avatar || freelancer.avatar.includes('placeholder')" class="fl-avatar-initials">
+                  {{ getInitials(freelancer.name) }}
+                </div>
+              </div>
+
+              <div class="fl-info-col">
+                <span class="fl-freelancer-id">ID: {{ freelancer.id }}</span>
+                <h3 class="fl-freelancer-name">{{ freelancer.name }}</h3>
+                <span class="fl-freelancer-role">{{ freelancer.title || 'VERIFIED FREELANCER' }}</span>
+                <p class="fl-match-line">
+                  <i class="bi bi-bag-check-fill"></i> Matching your project needs
+                </p>
+                <span class="fl-match-badge">{{ freelancer.matchPercentage || 95 }}% Match</span>
+              </div>
+            </div>
+
+            <!-- Center Column: Key Skills Pills -->
+            <div class="fl-card-center">
+              <h4 class="fl-skills-label">KEY SKILLS</h4>
+              <div class="fl-skills-badges" *ngIf="freelancer.skills && freelancer.skills.length > 0; else noSkillsTpl">
+                <span *ngFor="let skill of freelancer.skills" class="fl-skill-pill">{{ skill }}</span>
+              </div>
+              <ng-template #noSkillsTpl>
+                <p class="fl-no-skills-text">No specific skills listed</p>
+              </ng-template>
+            </div>
+
+            <!-- Right Column: Decision Action Buttons -->
+            <div class="fl-card-right">
+              <button type="button" class="fl-btn-accept"
+                (click)="handleFreelancerAction(freelancer.grp_id, freelancer.id, 'accept')">
+                <i class="bi bi-check2"></i> Accept
+              </button>
+              <!-- <button type="button" class="fl-btn-reject"
+                (click)="handleFreelancerAction(freelancer.grp_id, freelancer.id, 'reject')">
+                <i class="bi bi-x-lg"></i> Reject
+              </button> -->
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+      <!-- ─── SECTION 4: COMMUNITY & ANNOUNCEMENTS STREAM ─── -->
+      <section class="feed-section-block" *ngIf="feedPosts && feedPosts.length > 0">
+        <article class="feed-post-card" *ngFor="let post of feedPosts">
+          <ng-container *ngFor="let p of post.project_details">
+            <!-- Post Header / Author Row -->
+            <div class="post-author-row">
+              <div class="author-badge-icon">
+                <span class="badge-text">KANSBE</span>
+              </div>
+              <div class="author-info">
+                <h3 class="author-name">{{ p.author || 'Kansbe Technology Team' }}</h3>
+                <p class="author-meta">{{ p.title || 'Platform Release' }} - Today</p>
+              </div>
+            </div>
+
+            <!-- Post Content Text -->
+            <p class="post-description-body">
+              {{ p.description || 'Building for the web is turning ideas into working systems. Every step matters, from structure to launch.' }}
+            </p>
+
+            <!-- Featured Post Media -->
+            <div class="post-featured-media-box" *ngIf="p.thumbnail">
+              <img [src]="p.thumbnail" [alt]="p.title" class="featured-media-img" loading="lazy">
+              <div class="media-tag-pill">
+                <span>ANNOUNCEMENT</span>
+              </div>
+            </div>
+          </ng-container>
+        </article>
+      </section>
+
+    </main>
+
+  </div>
+
+<app-error-message *ngIf="!data"></app-error-message>

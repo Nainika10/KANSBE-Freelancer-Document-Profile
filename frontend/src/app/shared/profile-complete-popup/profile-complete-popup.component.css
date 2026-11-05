@@ -1,0 +1,219 @@
+/* ═══════════════════════════════════════════
+   Profile Complete Popup — Premium Styling
+   ═══════════════════════════════════════════ */
+
+.popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+  animation: fadeIn 0.25s ease;
+}
+
+.popup-card {
+  background: #fff;
+  border-radius: 20px;
+  padding: 40px 36px 32px;
+  max-width: 440px;
+  width: 92%;
+  text-align: center;
+  position: relative;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.2), 0 0 0 1px rgba(0, 0, 0, 0.04);
+}
+
+/* Close Button */
+.popup-close-btn {
+  position: absolute;
+  top: 14px;
+  right: 16px;
+  background: #f5f5f5;
+  border: none;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  color: #666;
+  font-size: 14px;
+}
+
+.popup-close-btn:hover {
+  background: #e8e8e8;
+  color: #333;
+  transform: scale(1.1);
+}
+
+/* Icon Section */
+.popup-icon-wrapper {
+  margin-bottom: 20px;
+}
+
+.icon-ring {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #fff5f5 0%, #ffe0e0 100%);
+  border: 2px solid #ffcdd2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+  animation: pulse-ring 2s ease-in-out infinite;
+}
+
+.icon-ring i {
+  font-size: 32px;
+  color: #e53935;
+}
+
+/* Title */
+.popup-title {
+  font-family: 'Poppins', sans-serif;
+  font-size: 22px;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin-bottom: 10px;
+  letter-spacing: -0.3px;
+}
+
+/* Message */
+.popup-message {
+  font-size: 14px;
+  color: #666;
+  line-height: 1.6;
+  margin-bottom: 20px;
+  padding: 0 8px;
+}
+
+/* Missing Fields Container */
+.missing-fields-container {
+  background: #fef9f0;
+  border: 1px solid #fde8c8;
+  border-radius: 12px;
+  padding: 14px 16px;
+  margin-bottom: 24px;
+  text-align: left;
+}
+
+.missing-fields-label {
+  font-size: 12px;
+  font-weight: 700;
+  color: #e65100;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 10px;
+}
+
+.missing-fields-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.missing-field-tag {
+  font-size: 12px;
+  color: #5d4037;
+  background: #fff3e0;
+  border: 1px solid #ffe0b2;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+/* Action Buttons */
+.popup-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.btn-navigate {
+  width: 100%;
+  padding: 13px 24px;
+  background: linear-gradient(135deg, #1a1a1a 0%, #333 100%);
+  color: #fff;
+  border: none;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  letter-spacing: 0.3px;
+}
+
+.btn-navigate:hover {
+  background: linear-gradient(135deg, #333 0%, #555 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+}
+
+.btn-dismiss {
+  width: 100%;
+  padding: 11px 24px;
+  background: transparent;
+  color: #999;
+  border: none;
+  border-radius: 12px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-dismiss:hover {
+  color: #666;
+  background: #f8f8f8;
+}
+
+/* ── Animations ── */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.animate-pop {
+  animation: popIn 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes popIn {
+  0% { opacity: 0; transform: scale(0.85) translateY(20px); }
+  100% { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+@keyframes pulse-ring {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(229, 57, 53, 0.15); }
+  50% { box-shadow: 0 0 0 10px rgba(229, 57, 53, 0); }
+}
+
+/* ── Responsive ── */
+@media (max-width: 480px) {
+  .popup-card {
+    padding: 32px 24px 24px;
+    border-radius: 16px;
+  }
+
+  .popup-title {
+    font-size: 20px;
+  }
+
+  .icon-ring {
+    width: 60px;
+    height: 60px;
+  }
+
+  .icon-ring i {
+    font-size: 26px;
+  }
+}

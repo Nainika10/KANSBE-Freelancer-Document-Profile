@@ -1,0 +1,824 @@
+/* ============================================================
+   POPPINS FONT STANDARDIZATION (400 REGULAR)
+   ============================================================ */
+:host {
+  font-family: 'Poppins', sans-serif !important;
+}
+
+:host *:not(i):not([class*="fa-"]):not([class*="bi-"]):not(.material-icons):not([class*="material-"]) {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 400;
+}
+
+h1, h2, h3, h4, h5, h6,
+input, textarea, select, button,
+.form-control, label, p,
+span:not(.material-icons):not([class*="material-"]):not([class*="fa-"]):not([class*="bi-"]),
+a, li, td, th {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 400;
+}
+
+.material-icons,
+.material-icons-outlined,
+.material-symbols-outlined,
+[class*="material-icons"],
+[class*="material-symbols"] {
+  font-family: 'Material Icons' !important;
+  font-weight: normal !important;
+  font-style: normal !important;
+  display: inline-block;
+  line-height: 1;
+  text-transform: none;
+  letter-spacing: normal;
+  word-wrap: normal;
+  white-space: nowrap;
+  direction: ltr;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,600&display=swap');
+
+:host {
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+  font-family: 'Poppins', sans-serif;
+  color: #ffffff;
+  background-color: #060606;
+  min-height: 100vh;
+  min-height: 100dvh;
+}
+
+/* ─── Ambient Photographic Red Glow Mesh Backdrop ─── */
+.ambient-glow-mesh {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  height: 100dvh;
+  background-color: #060606;
+  background-image: url('/assets/projectpage bi.png');
+  background-position: left center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ─── Page Wrapper & Layout ─── */
+.fl-page-wrapper {
+  position: relative;
+  z-index: 1;
+  min-height: 100vh;
+  min-height: 100dvh;
+  padding-top: max(96px, calc(env(safe-area-inset-top) + 84px));
+  padding-bottom: max(60px, calc(env(safe-area-inset-bottom) + 30px));
+  padding-left: max(16px, env(safe-area-inset-left));
+  padding-right: max(16px, env(safe-area-inset-right));
+  -webkit-text-size-adjust: 100%;
+}
+
+.fl-page-content {
+  max-width: 1200px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+/* ─── Header Section ─── */
+.fl-header-section {
+  margin-bottom: 32px;
+}
+
+.fl-btn-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: transparent;
+  border: none;
+  color: #ffffff;
+  font-size: 18px;
+  font-weight: 400;
+  padding: 0;
+  margin-bottom: 24px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  font-family: inherit;
+}
+
+.fl-btn-back:hover {
+  color: #FF0100;
+  transform: translateX(-4px);
+}
+
+.fl-btn-back i {
+  font-size: 20px;
+}
+
+.fl-title-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.fl-title-col {
+  display: flex;
+  flex-direction: column;
+}
+
+.fl-project-title {
+  font-size: 28px;
+  font-weight: 300 !important;
+  color: #ffffff;
+  margin: 0 0 4px 0;
+  line-height: 1.2;
+  letter-spacing: -0.4px;
+}
+
+.fl-subtitle {
+  font-size: 16px;
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.65);
+  margin: 0;
+}
+
+.fl-badges-group {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 4px;
+}
+
+.fl-badge-counter {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  color: #ffffff;
+  font-size: 11px;
+  font-weight: 400;
+  padding: 6px 16px;
+  border-radius: 999px;
+  letter-spacing: 0.5px;
+  white-space: nowrap;
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  box-shadow: 0 4px 14px rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(8px);
+  transition: all 0.3s ease;
+}
+
+.fl-badge-counter.fl-counter-full {
+  background: #ffffff;
+  color: #060606;
+  border-color: #ffffff;
+  box-shadow: 0 4px 18px rgba(255, 255, 255, 0.4);
+}
+
+.fl-badge-available {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: #ffffff;
+  font-size: 11px;
+  font-weight: 400;
+  padding: 6px 18px;
+  border-radius: 999px;
+  letter-spacing: 0.6px;
+  white-space: nowrap;
+  flex-shrink: 0;
+  box-shadow: 0 4px 14px rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(8px);
+}
+
+/* ─── Limit Reached Banner ─── */
+.fl-limit-banner {
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.16) 0%, rgba(16, 185, 129, 0.04) 100%);
+  border: 1px solid rgba(16, 185, 129, 0.4);
+  border-top: 1.5px solid rgba(16, 185, 129, 0.6);
+  border-radius: 16px;
+  padding: 18px 24px;
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4), inset 0 1px 1px rgba(16, 185, 129, 0.3);
+}
+
+.fl-limit-banner-icon {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: rgba(16, 185, 129, 0.2);
+  border: 1px solid rgba(16, 185, 129, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #10B981;
+  font-size: 20px;
+  flex-shrink: 0;
+}
+
+.fl-limit-banner-content {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.fl-limit-banner-title {
+  font-size: 15px;
+  font-weight: 400;
+  color: #10B981;
+  margin: 0;
+  line-height: 1.2;
+}
+
+.fl-limit-banner-desc {
+  font-size: 13px;
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.8);
+  margin: 0;
+}
+
+/* ─── Freelancer Cards Section ─── */
+.fl-cards-section {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+
+.fl-freelancer-card {
+  background: linear-gradient(135deg,
+      rgba(255, 255, 255, 0.07) 0%,
+      rgba(255, 255, 255, 0.02) 40%,
+      rgba(255, 255, 255, 0.005) 70%,
+      rgba(255, 255, 255, 0.04) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-top: 1.5px solid rgba(255, 255, 255, 0.35);
+  border-radius: 20px;
+  padding: 26px 32px;
+  display: flex;
+  align-items: center;
+  gap: 36px;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  box-shadow:
+    inset 0 1.5px 2px 0 rgba(255, 255, 255, 0.35),
+    inset 0 -1.5px 2px 0 rgba(0, 0, 0, 0.5),
+    0 16px 40px rgba(0, 0, 0, 0.65);
+  transition: all 0.3s ease;
+}
+
+.fl-freelancer-card:hover {
+  border-color: rgba(255, 255, 255, 0.28);
+  border-top-color: rgba(255, 255, 255, 0.55);
+  box-shadow:
+    inset 0 2px 3px 0 rgba(255, 255, 255, 0.5),
+    0 20px 48px rgba(0, 0, 0, 0.8);
+  transform: translateY(-2px);
+}
+
+/* ─── Left Column: Avatar + Profile Info ─── */
+.fl-card-left {
+  flex: 0 0 280px;
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.fl-avatar-circle {
+  width: 54px;
+  height: 54px;
+  min-width: 54px;
+  border-radius: 50%;
+  overflow: hidden;
+  background: radial-gradient(circle at 35% 30%, #ff4d4d 0%, #FF0100 65%, #b80000 100%);
+  border: 1.5px solid rgba(255, 255, 255, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow: 0 0 20px rgba(255, 1, 0, 0.55), inset 0 2px 4px rgba(255, 255, 255, 0.35);
+}
+
+.fl-avatar-circle img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.fl-avatar-initials {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  font-weight: 400;
+  color: #ffffff;
+  text-transform: uppercase;
+}
+
+.fl-info-col {
+  display: flex;
+  flex-direction: column;
+}
+
+.fl-freelancer-id {
+  font-size: 11px;
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.45);
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  margin-bottom: 2px;
+}
+
+.fl-freelancer-name {
+  font-size: 17.5px;
+  font-weight: 400;
+  color: #ffffff;
+  margin: 0 0 2px 0;
+  line-height: 1.25;
+  letter-spacing: -0.2px;
+}
+
+.fl-freelancer-role {
+  font-size: 10px;
+  font-weight: 400;
+  color: #FF0100;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  margin: 0 0 6px 0;
+}
+
+.fl-match-line {
+  font-size: 12px;
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.65);
+  margin: 0 0 8px 0;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.fl-match-line i {
+  color: #FF0100;
+  font-size: 12px;
+}
+
+.fl-match-badge {
+  display: inline-block;
+  background: rgba(255, 1, 0, 0.12);
+  border: 1px solid rgba(255, 1, 0, 0.45);
+  color: #FF0100;
+  font-size: 11px;
+  font-weight: 400;
+  padding: 3px 10px;
+  border-radius: 6px;
+  white-space: nowrap;
+  width: fit-content;
+}
+
+/* ─── Center Column: Key Skills ─── */
+.fl-card-center {
+  flex: 1;
+  min-width: 0;
+  padding: 0 8px;
+}
+
+.fl-card-center .fl-btn-view {
+  margin-top: 14px;
+}
+
+.fl-skills-label {
+  font-size: 10.5px;
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.45);
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  margin: 0 0 10px 0;
+}
+
+.fl-skills-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.fl-skill-pill {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-top: 1.5px solid rgba(255, 255, 255, 0.25);
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 12px;
+  font-weight: 400;
+  padding: 6px 14px;
+  border-radius: 999px;
+  white-space: nowrap;
+  transition: all 0.2s ease;
+  backdrop-filter: blur(8px);
+}
+
+.fl-skill-pill:hover {
+  background: rgba(255, 1, 0, 0.14);
+  border-color: rgba(255, 1, 0, 0.5);
+  color: #ffffff;
+  transform: translateY(-1px);
+}
+
+.fl-no-skills-text {
+  font-size: 12.5px;
+  color: rgba(255, 255, 255, 0.4);
+  margin: 0;
+}
+
+/* ─── Right Column: Accept / Reject Buttons ─── */
+.fl-card-right {
+  flex: 0 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: stretch;
+}
+
+.fl-btn-accept {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: #FF0100;
+  color: #ffffff;
+  border: none;
+  font-size: 13.5px;
+  font-weight: 400;
+  padding: 10px 32px;
+  border-radius: 999px;
+  cursor: pointer;
+  font-family: inherit;
+  transition: all 0.25s ease;
+  min-width: 140px;
+  box-shadow: 0 4px 16px rgba(255, 1, 0, 0.4);
+}
+
+.fl-btn-accept:hover:not(:disabled) {
+  background: #e00000;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 22px rgba(255, 1, 0, 0.55);
+}
+
+.fl-btn-accept:disabled {
+  background: rgba(255, 255, 255, 0.12);
+  color: rgba(255, 255, 255, 0.35);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  cursor: not-allowed;
+  box-shadow: none;
+  transform: none;
+}
+
+.fl-btn-accept i {
+  font-size: 16px;
+}
+
+.fl-btn-view {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: transparent;
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.45);
+  font-size: 13px;
+  font-weight: 400;
+  padding: 9px 22px;
+  border-radius: 999px;
+  cursor: pointer;
+  font-family: inherit;
+  transition: all 0.25s ease;
+  min-width: 140px;
+}
+
+.fl-btn-view:hover {
+  background: rgba(255, 255, 255, 0.14);
+  border-color: rgba(255, 255, 255, 0.75);
+  transform: translateY(-2px);
+}
+
+.fl-btn-view i {
+  font-size: 15px;
+}
+
+/* ─── "View Resume" button: sits under the skill chips ─── */
+.fl-btn-resume {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: rgba(255, 1, 0, 0.12);
+  color: #ffffff;
+  border: 1px solid rgba(255, 1, 0, 0.55);
+  font-size: 13px;
+  font-weight: 400;
+  padding: 9px 22px;
+  border-radius: 999px;
+  cursor: pointer;
+  font-family: inherit;
+  transition: all 0.25s ease;
+  margin-top: 12px;
+}
+
+.fl-btn-resume:hover {
+  background: rgba(255, 1, 0, 0.22);
+  border-color: rgba(255, 1, 0, 0.85);
+  transform: translateY(-2px);
+}
+
+.fl-btn-resume i {
+  font-size: 15px;
+}
+
+.fl-btn-reject {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-top: 1.5px solid rgba(255, 255, 255, 0.32);
+  color: #ffffff;
+  font-size: 13.5px;
+  font-weight: 400;
+  padding: 10px 32px;
+  border-radius: 999px;
+  cursor: pointer;
+  font-family: inherit;
+  transition: all 0.25s ease;
+  min-width: 140px;
+  backdrop-filter: blur(10px);
+}
+
+.fl-btn-reject:hover {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.4);
+  transform: translateY(-2px);
+}
+
+.fl-btn-reject i {
+  font-size: 14px;
+}
+
+/* ─── Empty & Scanning Loading State ─── */
+.fl-empty-state {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.fl-empty-card {
+  background: linear-gradient(135deg,
+      rgba(255, 255, 255, 0.07) 0%,
+      rgba(255, 255, 255, 0.015) 40%,
+      rgba(255, 255, 255, 0.003) 70%,
+      rgba(255, 255, 255, 0.04) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-top: 1.5px solid rgba(255, 255, 255, 0.4);
+  border-radius: 20px;
+  padding: 48px 40px;
+  text-align: center;
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.65);
+}
+
+.fl-empty-icon-wrap {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 22px;
+}
+
+.fl-empty-icon-frame {
+  width: 76px;
+  height: 76px;
+  background: rgba(255, 1, 0, 0.12);
+  color: #FF0100;
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 32px;
+  border: 1px solid rgba(255, 1, 0, 0.35);
+  box-shadow: 0 0 24px rgba(255, 1, 0, 0.3);
+}
+
+.fl-empty-title {
+  font-size: 22px;
+  font-weight: 400;
+  color: #ffffff;
+  margin-bottom: 12px;
+  letter-spacing: -0.3px;
+}
+
+.fl-empty-subtitle {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.65);
+  line-height: 1.65;
+  max-width: 580px;
+  margin: 0 auto 24px;
+}
+
+.fl-scanning-indicator {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 16px;
+}
+
+.fl-scan-bar-wrap {
+  max-width: 380px;
+  width: 100%;
+}
+
+.fl-scan-bar-labels {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.7);
+  margin-bottom: 8px;
+}
+
+.fl-scan-pct {
+  color: #FF0100;
+}
+
+.fl-scan-bar-track {
+  height: 6px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.fl-scan-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #ff4d4d, #FF0100);
+  border-radius: 999px;
+  transition: width 0.3s ease;
+  box-shadow: 0 0 10px rgba(255, 1, 0, 0.8);
+}
+
+.fl-scan-status-text {
+  font-size: 10.5px;
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.45);
+  letter-spacing: 1px;
+  margin-top: 12px;
+}
+
+.fl-assurance-card {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 14px;
+  padding: 16px 20px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.fl-assurance-icon {
+  font-size: 24px;
+  color: #FF0100;
+  flex-shrink: 0;
+}
+
+.fl-assurance-text h6 {
+  font-size: 14px;
+  font-weight: 400;
+  color: #ffffff;
+  margin: 0 0 2px 0;
+}
+
+.fl-assurance-text p {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.6);
+  margin: 0;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   RESPONSIVE BREAKPOINTS
+   ═══════════════════════════════════════════════════════════ */
+
+/* Tablet (≤ 1024px) */
+@media (max-width: 1024px) {
+  .fl-freelancer-card {
+    padding: 22px 24px;
+    gap: 24px;
+  }
+
+  .fl-card-left {
+    flex: 0 0 240px;
+  }
+
+  .fl-btn-accept,
+  .fl-btn-reject,
+  .fl-btn-view {
+    min-width: 120px;
+    padding: 9px 24px;
+    font-size: 13px;
+  }
+}
+
+/* Small Tablet / Large Mobile (≤ 768px) */
+@media (max-width: 768px) {
+  .fl-page-wrapper {
+    padding-top: max(84px, calc(env(safe-area-inset-top) + 72px));
+    padding-bottom: max(48px, calc(env(safe-area-inset-bottom) + 30px));
+  }
+
+  .fl-header-section {
+    margin-bottom: 24px;
+  }
+
+  .fl-project-title {
+    font-size: 24px;
+  }
+
+  .fl-freelancer-card {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 20px;
+    gap: 20px;
+  }
+
+  .fl-card-left {
+    flex: 1 1 auto;
+    width: 100%;
+  }
+
+  .fl-card-center {
+    padding: 0;
+    width: 100%;
+  }
+
+  .fl-card-right {
+    flex-direction: row;
+    justify-content: stretch;
+    gap: 12px;
+    width: 100%;
+  }
+
+  .fl-btn-accept,
+  .fl-btn-reject,
+  .fl-btn-view {
+    flex: 1;
+    min-width: 0;
+    min-height: 42px;
+  }
+}
+
+/* Mobile (≤ 420px) */
+@media (max-width: 420px) {
+  .fl-project-title {
+    font-size: 20px;
+  }
+
+  .fl-subtitle {
+    font-size: 14px;
+  }
+
+  .fl-badge-available {
+    font-size: 10px;
+    padding: 4px 12px;
+  }
+
+  .fl-avatar-circle {
+    width: 46px;
+    height: 46px;
+    min-width: 46px;
+  }
+
+  .fl-avatar-initials {
+    font-size: 18px;
+  }
+
+  .fl-freelancer-name {
+    font-size: 16px;
+  }
+
+  .fl-skill-pill {
+    font-size: 11px;
+    padding: 5px 11px;
+  }
+
+  .fl-btn-accept,
+  .fl-btn-reject {
+    font-size: 12.5px;
+    padding: 8px 16px;
+  }
+}

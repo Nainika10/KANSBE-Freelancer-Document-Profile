@@ -1,0 +1,136 @@
+<!-- Navbar injected by Parent Layout -->
+
+<div class="dashboard-wrapper">
+  <div class="container-fluid container-lg">
+    <div class="row g-4">
+      
+      <!-- Left Column: Profile (Reused) -->
+      <aside class="col-lg-3">
+        <div class="card-premium profile-card d-none d-lg-block">
+          <div class="profile-banner" [style.backgroundImage]="'url(' + coverImage + ')'"></div>
+          <div class="avatar-wrapper">
+            <img src="https://i.pravatar.cc/150?u=alex" alt="Alex Rivers">
+          </div>
+          <div class="text-center px-3 pb-2">
+            <h5 class="mb-1">Alex Rivers</h5>
+            <p class="text-muted-custom">Creative Director & Full-Stack Developer</p>
+          </div>
+          <div class="profile-stats">
+            <hr class="mt-2 mb-3 opacity-10">
+            <div class="stat-item"><span>Ongoing Projects</span><span class="stat-value">42</span></div>
+            <div class="stat-item"><span>Completed Projects</span><span class="stat-value">42</span></div>
+            <div class="stat-item"><span>Total Projects</span><span class="stat-value">1,204</span></div>
+          </div>
+        </div>
+
+        <div class="card-premium running-card">
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <h6 class="mb-0">Running Projects</h6>
+            <span class="badge-active">4 ACTIVE</span>
+          </div>
+          <div class="project-scroll">
+            <div class="running-project-item">
+              <div class="rp-header"><span>Product Landing Page</span><span class="rp-pct">75%</span></div>
+              <div class="progress-thin"><div class="progress-fill" style="width: 75%"></div></div>
+            </div>
+            <div class="running-project-item">
+              <div class="rp-header"><span>Social Media Assets</span><span class="rp-pct">20%</span></div>
+              <div class="progress-thin"><div class="progress-fill" style="width: 20%"></div></div>
+            </div>
+          </div>
+        </div>
+      </aside>
+
+      <!-- Center Column: Scanning Content -->
+      <main class="col-lg-6">
+        <div class="list-header mb-4">
+          <h2 class="mb-1">{{ projectTitle }}</h2>
+          <h3 class="section-title mb-0">Select Freelancers</h3>
+        </div>
+
+        <div class="card-premium scanning-card text-center p-5">
+          <div class="scanner-icon-wrap mb-4">
+            <div class="icon-circle">
+                <i class="bi bi-person-search"></i>
+            </div>
+          </div>
+          
+          <h2 class="scan-title mb-3">Finding Your Best Matches</h2>
+          <p class="scan-subtitle mb-5">We are currently analyzing 100+ professional profiles<br>to find the perfect fit for your project.</p>
+
+          <div class="scan-status-container">
+            <div class="d-flex justify-content-between mb-2">
+              <span class="status-label">Scanning Talent Pool</span>
+              <span class="status-percent">{{ progress }}%</span>
+            </div>
+            <div class="progress-main">
+              <div class="progress-bar-fill" [style.width.%]="progress"></div>
+            </div>
+          </div>
+
+          <div class="matching-visuals mt-5">
+            <div class="avatar-scanner">
+              <img src="https://i.pravatar.cc/150?u=f1" class="avatar-fade left">
+              <div class="center-scan">
+                <img src="https://i.pravatar.cc/150?u=scan" class="avatar-active">
+                <div class="scan-line"></div>
+              </div>
+              <img src="https://i.pravatar.cc/150?u=f2" class="avatar-fade right">
+            </div>
+          </div>
+        </div>
+
+        <!-- Scanning Steps Card -->
+        <div class="card-premium steps-card p-4">
+          <div class="step-item" [class.active]="progress > 0" [class.done]="progress > 30">
+            <div class="step-icon"><i class="bi bi-check2"></i></div>
+            <div class="step-content">
+              <h6 class="mb-0">Verifying skills</h6>
+              <p class="mb-0 text-muted small">Validated technical stack and portfolio quality.</p>
+            </div>
+          </div>
+          <div class="step-item" [class.active]="progress > 40" [class.done]="progress > 70">
+            <div class="step-icon"><i class="bi bi-circle-fill"></i></div>
+            <div class="step-content">
+              <h6 class="mb-0">Checking availability</h6>
+              <p class="mb-0 text-muted small">Scanning real-time calendars for start dates.</p>
+            </div>
+          </div>
+          <div class="step-item" [class.active]="progress > 80">
+            <div class="step-icon"><i class="bi bi-three-dots"></i></div>
+            <div class="step-content">
+              <h6 class="mb-0">Finalizing top 5 matches</h6>
+              <p class="mb-0 text-muted small">Manual curation of the final selection.</p>
+            </div>
+          </div>
+        </div>
+      </main>
+
+      <!-- Right Column: Sidebar (Reused) -->
+      <aside class="col-lg-3 d-none d-lg-block">
+        <div class="card-premium testimonial-card p-4">
+            <h6 class="mb-3">Client Testimonials</h6>
+            <div class="testimonial-slide text-center">
+                <img [src]="testimonials[0].avatar" class="test-avatar mb-3">
+                <h6 class="mb-0 text-danger">{{ testimonials[0].name }}</h6>
+                <p class="small text-uppercase fw-bold">{{ testimonials[0].role }}</p>
+                <p class="test-quote fst-italic text-muted">"{{ testimonials[0].quote }}"</p>
+            </div>
+        </div>
+
+        <div class="card-premium p-4 mt-4">
+            <h6 class="mb-4 fw-bold">Active Projects</h6>
+            <div *ngFor="let p of activeProjects" class="mb-3 ps-3 border-start border-danger border-3">
+                <h6 class="small fw-bold mb-1">{{ p.title }}</h6>
+                <div class="d-flex justify-content-between small text-muted">
+                    <span>{{ p.dueDate }}</span>
+                    <span class="text-danger">{{ p.candidates }} Candidates</span>
+                </div>
+            </div>
+            <button class="btn-outline-dark btn w-100 mt-3 rounded-pill btn-sm fw-bold">View All Projects</button>
+        </div>
+      </aside>
+
+    </div>
+  </div>
+</div>

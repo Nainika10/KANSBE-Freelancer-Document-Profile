@@ -1,0 +1,102 @@
+<div class="frv-wrap">
+
+  <!-- Back link -->
+  <button type="button" class="frv-back" (click)="goBack()">
+    <i class="bi bi-arrow-left"></i> Back
+  </button>
+
+  <!-- Loading state -->
+  <div *ngIf="loading" class="frv-state">
+    <span class="frv-spinner"></span>
+    <span>Loading resume...</span>
+  </div>
+
+  <!-- Error state -->
+  <div *ngIf="!loading && errorMessage" class="frv-state frv-state-error">
+    <span class="material-icons frv-state-icon">lock</span>
+    <span>{{ errorMessage }}</span>
+    <button type="button" class="frv-btn-back" (click)="goBack()">Back</button>
+  </div>
+
+  <!-- Not available state -->
+  <div *ngIf="!loading && !errorMessage && notAvailable" class="frv-state">
+    <span class="material-icons frv-state-icon">description</span>
+    <span>Resume not available yet</span>
+    <button type="button" class="frv-btn-back" (click)="goBack()">Back</button>
+  </div>
+
+  <!-- Resume sheet -->
+  <div *ngIf="!loading && !errorMessage && !notAvailable && clientView" class="frv-sheet">
+
+    <header class="frv-header">
+      <h1 class="frv-name">{{ freelancerName || 'Freelancer' }}</h1>
+      <p class="frv-title" *ngIf="freelancerTitle">{{ freelancerTitle }}</p>
+      <p class="frv-privacy">Personal details removed for privacy.</p>
+    </header>
+
+    <div class="frv-divider"></div>
+
+    <!-- Skills -->
+    <section *ngIf="hasContent(clientView.skills)" class="frv-section">
+      <h2 class="frv-section-title">Skills</h2>
+      <ul class="frv-inline-list">
+        <li *ngFor="let item of clientView.skills">{{ item }}</li>
+      </ul>
+    </section>
+
+    <!-- Experience -->
+    <section *ngIf="hasContent(clientView.experience)" class="frv-section">
+      <h2 class="frv-section-title">Experience</h2>
+      <ul class="frv-bullets">
+        <li *ngFor="let item of clientView.experience">{{ item }}</li>
+      </ul>
+    </section>
+
+    <!-- Responsibilities -->
+    <section *ngIf="hasContent(clientView.responsibilities)" class="frv-section">
+      <h2 class="frv-section-title">Responsibilities</h2>
+      <ul class="frv-bullets">
+        <li *ngFor="let item of clientView.responsibilities">{{ item }}</li>
+      </ul>
+    </section>
+
+    <!-- Projects -->
+    <section *ngIf="hasContent(clientView.projects)" class="frv-section">
+      <h2 class="frv-section-title">Projects</h2>
+      <div class="frv-project" *ngFor="let item of clientView.projects">{{ item }}</div>
+    </section>
+
+    <!-- Technologies -->
+    <section *ngIf="hasContent(clientView.technologies)" class="frv-section">
+      <h2 class="frv-section-title">Technologies</h2>
+      <ul class="frv-inline-list frv-inline-list-alt">
+        <li *ngFor="let item of clientView.technologies">{{ item }}</li>
+      </ul>
+    </section>
+
+    <!-- Certifications -->
+    <section *ngIf="hasContent(clientView.certifications)" class="frv-section">
+      <h2 class="frv-section-title">Certifications</h2>
+      <ul class="frv-bullets">
+        <li *ngFor="let item of clientView.certifications">{{ item }}</li>
+      </ul>
+    </section>
+
+    <!-- Achievements -->
+    <section *ngIf="hasContent(clientView.achievements)" class="frv-section">
+      <h2 class="frv-section-title">Achievements</h2>
+      <ul class="frv-bullets">
+        <li *ngFor="let item of clientView.achievements">{{ item }}</li>
+      </ul>
+    </section>
+
+    <!-- Portfolio -->
+    <section *ngIf="hasContent(clientView.portfolio)" class="frv-section">
+      <h2 class="frv-section-title">Portfolio</h2>
+      <ul class="frv-bullets">
+        <li *ngFor="let item of clientView.portfolio">{{ item }}</li>
+      </ul>
+    </section>
+
+  </div>
+</div>

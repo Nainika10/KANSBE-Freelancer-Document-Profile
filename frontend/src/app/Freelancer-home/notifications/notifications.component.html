@@ -1,0 +1,267 @@
+<div class="notifications-page-wrapper" *ngIf="data">
+
+  <!-- Cinematic Photographic Background (Character Fade on Far Right) -->
+  <div class="notif-bg-canvas"></div>
+
+  <!-- Main Centered Content Container (Fixed Viewport) -->
+  <main class="notif-main-container">
+
+    <!-- Top Utility / Quick Actions Bar -->
+    <div class="notif-top-bar" *ngIf="notificationList.length > 0">
+      <div class="notif-top-left">
+        <h1 class="notif-page-title d-none">Notifications</h1>
+      </div>
+      <div class="notif-top-right">
+        <button *ngIf="hasUnread" class="btn-mark-all-read" (click)="markAllAsRead()">
+          <i class="bi bi-check-all"></i>
+          <span>Mark all read</span>
+        </button>
+        <span class="badge-unread-count" *ngIf="hasUnread">
+          {{ unreadCount }} UNREAD
+        </span>
+      </div>
+    </div>
+
+    <!-- Centered Notifications Cards List (ONLY THIS STACK SCROLLS) -->
+    <div class="notif-cards-stack custom-scrollbar" *ngIf="notificationList.length > 0">
+
+      <div class="notif-glass-card cursor-pointer" *ngFor="let n of notificationList" [class.unread-card]="n.unread"
+        [class.read-card]="!n.unread" (click)="handleNotificationClick(n)">
+
+        <!-- Left Column: Circular Icon Orb -->
+        <div class="notif-icon-col">
+          <div class="notif-icon-orb">
+            <i class="bi" [ngClass]="getNotificationIcon(n.title, n.category)"></i>
+          </div>
+        </div>
+
+        <!-- Center Column: Title & Description -->
+        <div class="notif-content-col">
+          <h3 class="notif-card-title">{{ n.title }}</h3>
+          <p class="notif-card-desc">{{ n.description }}</p>
+        </div>
+
+        <!-- Right Column: Timestamp & Arrow -->
+        <div class="notif-meta-col">
+          <div class="notif-card-time">{{ n.time }}</div>
+          <div class="notif-card-arrow">
+            <i class="bi bi-arrow-right"></i>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- Empty State (Kansbe Pure Liquid Glass Dark Theme) -->
+    <div class="notif-empty-state-card" *ngIf="notificationList.length === 0">
+      <div class="empty-icon-circle">
+        <i class="bi bi-bell-slash"></i>
+      </div>
+      <h3 class="empty-title">No notifications yet</h3>
+      <p class="empty-sub">When you receive project updates, task alerts, or messages, they will appear here.</p>
+    </div>
+
+  </main>
+
+  <!-- ═════════════════════════════════════════════════════════════
+       CREATIVE LIQUID GLASS GREETING & ANNOUNCEMENT MODAL
+       ═════════════════════════════════════════════════════════════ -->
+  <div class="modal-overlay" *ngIf="showGreetingModal" [class.show]="showGreetingModal" (click)="closeGreetingModal()">
+  </div>
+  <div class="greeting-modal-glass" *ngIf="showGreetingModal && activeGreeting" (click)="$event.stopPropagation()">
+
+    <!-- Radiant Red Ambient Beam Flare -->
+    <div class="greeting-beam-flare"></div>
+
+    <!-- Header Section -->
+    <div class="greeting-modal-header">
+      <div class="greeting-icon-wrapper">
+        <div class="greeting-icon-orb">
+          <i class="bi" [ngClass]="getNotificationIcon(activeGreeting.title, activeGreeting.category)"></i>
+        </div>
+        <div class="greeting-pulse-ring"></div>
+      </div>
+      <button class="modal-close-btn-glass" (click)="closeGreetingModal()" title="Close">
+        <i class="bi bi-x-lg"></i>
+      </button>
+    </div>
+
+    <!-- Content Body -->
+    <div class="greeting-modal-body custom-scrollbar">
+      <!-- Tag / Category Chip -->
+      <div class="greeting-tag-row">
+        <span class="greeting-category-chip">
+          <i class="bi bi-stars text-white me-1"></i>
+          {{ activeGreeting.category || 'Announcement' | uppercase }}
+        </span>
+        <span class="greeting-timestamp">{{ activeGreeting.time }} • {{ activeGreeting.date }}</span>
+      </div>
+
+      <!-- Main Headline -->
+      <h2 class="greeting-title">{{ activeGreeting.title }}</h2>
+
+      <!-- Personal Salutation -->
+      <div class="greeting-salutation">
+        Hello <span class="text-white fw-semibold">{{ usr?.fullname || 'Creator' }}</span>,
+      </div>
+
+      <!-- Message Text Card -->
+      <div class="greeting-message-card">
+        <p class="greeting-desc-text">{{ activeGreeting.description }}</p>
+      </div>
+
+      <!-- Sender Info Badge -->
+      <div class="greeting-sender-badge" *ngIf="activeGreeting.manager">
+        <div class="sender-avatar-circle">
+          <i class="bi bi-person-check-fill"></i>
+        </div>
+        <div class="sender-info-text">
+          <span class="sender-name">{{ activeGreeting.manager }}</span>
+          <span class="sender-role">Kansbe Operations & Platform Team</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Actions Footer -->
+    <div class="greeting-modal-footer">
+      <a [href]="activeGreeting.meetingLink" target="_blank" class="btn-greeting-link"
+        *ngIf="activeGreeting.meetingLink">
+        <i class="bi bi-box-arrow-up-right me-2"></i> Join Call / Open Link
+      </a>
+      <button class="btn-greeting-acknowledge" (click)="closeGreetingModal()">
+        <i class="bi bi-check2 me-1"></i>
+        <span>Understood</span>
+      </button>
+    </div>
+
+  </div>
+
+  <!-- ═════════════════════════════════════════════════════════════
+       MODALS: PRESERVED & STYLED IN LIQUID GLASS DARK THEME
+       ═════════════════════════════════════════════════════════════ -->
+
+  <!-- Skill Management Modal -->
+  <div class="modal-overlay" *ngIf="showSkillModal" [class.show]="showSkillModal" (click)="closeSkillModal()"></div>
+  <div class="skill-modal-glass" *ngIf="showSkillModal" [class.show]="showSkillModal"
+    (click)="$event.stopPropagation()">
+    <div class="skill-modal-header-glass">
+      <div class="d-flex align-items-center gap-3">
+        <div class="skill-modal-icon-orb">
+          <i class="bi bi-stars"></i>
+        </div>
+        <div>
+          <h5 class="fw-semibold mb-0 text-white" style="font-size: 17px;">Manage Skills</h5>
+          <p class="mb-0 text-white text-opacity-50" style="font-size: 11px;">Add or remove your professional skills</p>
+        </div>
+      </div>
+      <button class="modal-close-btn-glass" (click)="closeSkillModal()">
+        <i class="bi bi-x-lg"></i>
+      </button>
+    </div>
+
+    <!-- Current Skills Section -->
+    <div class="skill-modal-body-glass custom-scrollbar">
+      <div class="current-skills-section" *ngIf="getSkillsArray().length > 0">
+        <label class="modal-dim-lbl mb-2">
+          <i class="bi bi-check2-circle text-danger me-2"></i>My Skills
+          <span class="badge bg-danger bg-opacity-20 text-danger ms-2 rounded-pill" style="font-size: 10px;">
+            {{ getSkillsArray().length }}
+          </span>
+        </label>
+        <div class="skills-chips-grid">
+          <div class="skill-chip-dark" *ngFor="let skill of getSkillsArray()">
+            <div class="skill-chip-info">
+              <span class="skill-chip-name">{{ skill.skill }}</span>
+              <span class="skill-chip-level" *ngIf="skill.status">{{ skill.status }}</span>
+            </div>
+            <button class="skill-chip-delete"
+              (click)="$event.stopPropagation(); openConfirmDelete(skill.id || skill._id)" title="Remove skill">
+              <i class="bi bi-x"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Empty Skills State -->
+      <div class="no-skills-empty text-center py-4" *ngIf="getSkillsArray().length === 0">
+        <i class="bi bi-lightning-charge text-danger opacity-50" style="font-size: 2rem;"></i>
+        <p class="text-white text-opacity-50 mb-0 mt-2" style="font-size: 13px;">No skills added yet. Start building
+          your profile!</p>
+      </div>
+
+      <!-- Divider -->
+      <div class="modal-glass-divider my-3" *ngIf="getSkillsArray().length > 0"></div>
+
+      <!-- Add New Skill Form -->
+      <div class="add-skill-section">
+        <label class="modal-dim-lbl mb-2">
+          <i class="bi bi-plus-circle text-danger me-2"></i>Add New Skill
+        </label>
+
+        <!-- Error Message -->
+        <div class="skill-error-banner" *ngIf="skillErrorMessage">
+          <i class="bi bi-exclamation-triangle-fill text-danger"></i>
+          <span>{{ skillErrorMessage }}</span>
+        </div>
+
+        <div class="mb-3">
+          <div class="skill-input-wrapper-dark">
+            <i class="bi bi-code-slash text-white text-opacity-50"></i>
+            <input type="text" class="modal-glass-input" [(ngModel)]="skilldetails.skill"
+              placeholder="e.g. Angular, Figma, Python..." (keyup.enter)="addNewSkill()">
+          </div>
+        </div>
+
+        <div class="proficiency-section mb-3">
+          <label class="modal-dim-lbl mb-2">Proficiency Level</label>
+          <div class="proficiency-pills-dark">
+            <button class="proficiency-pill-dark" [class.active]="skilldetails.status === 'Beginner'"
+              (click)="setSkillLevel('Beginner')">
+              <i class="bi bi-circle me-1" style="font-size: 10px;"></i>Beginner
+            </button>
+            <button class="proficiency-pill-dark" [class.active]="skilldetails.status === 'Intermediate'"
+              (click)="setSkillLevel('Intermediate')">
+              <i class="bi bi-circle-half me-1" style="font-size: 10px;"></i>Intermediate
+            </button>
+            <button class="proficiency-pill-dark" [class.active]="skilldetails.status === 'Experienced'"
+              (click)="setSkillLevel('Experienced')">
+              <i class="bi bi-circle-fill me-1" style="font-size: 10px;"></i>Experienced
+            </button>
+          </div>
+        </div>
+
+        <button class="btn-add-skill-submit" (click)="addNewSkill()"
+          [disabled]="!skilldetails.skill || !skilldetails.status">
+          <i class="bi bi-plus-lg me-2"></i>Add to Profile
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Delete Confirmation Modal -->
+  <div class="modal-overlay" *ngIf="showConfirmModal" (click)="cancelDelete()" style="z-index: 9998;"></div>
+  <div class="confirm-delete-modal-glass" *ngIf="showConfirmModal">
+    <div class="confirm-delete-icon-orb">
+      <i class="bi bi-trash3-fill text-danger"></i>
+    </div>
+    <h6 class="fw-bold text-white mb-1" style="font-size: 16px;">Remove Skill?</h6>
+    <p class="text-white text-opacity-60 mb-4" style="font-size: 13px;">This skill will be permanently removed from your
+      profile.</p>
+    <div class="d-flex gap-3 w-100">
+      <button class="btn-modal-cancel flex-grow-1" (click)="cancelDelete()">Cancel</button>
+      <button class="btn-modal-danger flex-grow-1" (click)="confirmDelete()">
+        <i class="bi bi-trash3 me-1"></i>Remove
+      </button>
+    </div>
+  </div>
+
+  <!-- Profile Complete Popup -->
+  <app-profile-complete-popup [visible]="showProfilePopup" [userType]="'freelancer'"
+    [missingFields]="profileMissingFields" [actionBlocked]="'adding skills'"
+    (navigateToSettings)="onProfilePopupNavigate()" (closePopup)="onProfilePopupClose()">
+  </app-profile-complete-popup>
+
+</div>
+
+<app-error-message *ngIf="!data"></app-error-message>

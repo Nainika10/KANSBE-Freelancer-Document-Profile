@@ -1,0 +1,166 @@
+<div class="course-list-page-wrapper">
+  <!-- Atmospheric Cyberpunk Glow Backdrop -->
+  <div class="ambient-glow-mesh"></div>
+
+  <main class="course-list-container">
+
+    <!-- ═════════════════════════════════════════════════════════════
+         TOP HEADER BAR: BACK BUTTON, TITLE/SUBTITLE & SEARCH BAR
+         ═════════════════════════════════════════════════════════════ -->
+    <header class="course-list-header-row">
+
+      <!-- Back Button (Left) -->
+      <button class="btn-back-link" (click)="goBack()">
+        <i class="bi bi-arrow-left"></i>
+        <span>Back</span>
+      </button>
+
+      <!-- Middle Title & Subtitle -->
+      <div class="header-center-info">
+        <h1 class="header-main-title">What do you want to learn today?</h1>
+        <p class="header-main-sub">Explore premium courses tailored for your freelance career.</p>
+      </div>
+
+      <!-- Search Bar (Right) -->
+      <div class="header-search-wrap">
+        <i class="bi bi-search header-search-icon"></i>
+        <input type="text" class="header-search-input" placeholder="Search courses, skills, technologies..."
+          [(ngModel)]="searchQuery" (ngModelChange)="applyFilters()">
+      </div>
+
+    </header>
+
+    <!-- ═════════════════════════════════════════════════════════════
+         TWO-COLUMN MAIN CONTENT (LEFT SIDEBAR + RIGHT SCROLLABLE GRID)
+         ═════════════════════════════════════════════════════════════ -->
+    <div class="course-list-body-grid">
+
+      <!-- ─── LEFT SIDEBAR: FILTERS ─── -->
+      <aside class="course-filter-sidebar">
+
+        <!-- Category Filters -->
+        <div class="filter-block">
+          <h4 class="filter-block-title">CATEGORIES</h4>
+          <div class="filter-pills-wrap">
+            <button type="button" class="filter-pill-btn" [class.active]="selectedCategory === ''"
+              (click)="selectedCategory = ''; applyFilters()">
+              All
+            </button>
+            <button type="button" class="filter-pill-btn" *ngFor="let cat of categories"
+              [class.active]="selectedCategory === cat" (click)="selectedCategory = cat; applyFilters()">
+              {{ cat }}
+            </button>
+          </div>
+        </div>
+
+        <!-- Difficulty Level Filters -->
+        <div class="filter-block">
+          <h4 class="filter-block-title">DIFFICULTY LEVEL</h4>
+          <div class="filter-pills-wrap">
+            <button type="button" class="filter-pill-btn" [class.active]="selectedLevel === ''"
+              (click)="selectedLevel = ''; applyFilters()">
+              Any Level
+            </button>
+            <button type="button" class="filter-pill-btn" *ngFor="let lvl of levels"
+              [class.active]="selectedLevel === lvl" (click)="selectedLevel = lvl; applyFilters()">
+              {{ lvl }}
+            </button>
+          </div>
+        </div>
+
+      </aside>
+
+      <!-- ─── RIGHT CONTENT: INTERNAL SCROLLABLE COURSE CARDS ─── -->
+      <section class="course-catalog-scroll-panel custom-scrollbar">
+
+        <!-- Loading State -->
+        <div class="catalog-loading-box" *ngIf="isLoading">
+          <div class="catalog-spinner"></div>
+          <p>Loading courses...</p>
+        </div>
+
+        <!-- Empty State -->
+        <div class="catalog-empty-box" *ngIf="!isLoading && filteredCourses.length === 0">
+          <i class="bi bi-search text-muted fs-1 mb-3"></i>
+          <h3>No courses found</h3>
+          <p>Try adjusting your search or clearing the filters to find what you're looking for.</p>
+          <button class="btn-clear-filters-glass" (click)="clearFilters()">Clear All Filters</button>
+        </div>
+
+        <!-- 3-Column Course Grid -->
+        <div class="course-cards-grid-3" *ngIf="!isLoading && filteredCourses.length > 0">
+          <div class="course-catalog-card" *ngFor="let course of filteredCourses">
+
+            <!-- Thumbnail Graphic with Level Badge -->
+            <div class="catalog-card-thumb"
+              [style.backgroundImage]="'url(' + (course.thumbnail || 'assets/default-course.jpg') + ')'">
+              <span class="catalog-level-pill" *ngIf="course.level">{{ course.level }}</span>
+            </div>
+
+            <!-- Card Body Info -->
+            <div class="catalog-card-body">
+
+              <!-- Category & Rating Row -->
+              <div class="catalog-card-top-row">
+                <span class="catalog-category-tag">{{ course.category || 'PROGRAMMING' }}</span>
+                <div class="catalog-rating-score" *ngIf="course.rating">
+                  <i class="bi bi-star-fill text-warning"></i>
+                  <span>{{ course.rating }}</span>
+                  <span class="rating-count-text">({{ course.reviewsCount || 2054 }})</span>
+                </div>
+              </div>
+
+              <!-- Course Title -->
+              <h3 class="catalog-card-title" [title]="course.title">{{ course.title }}</h3>
+
+              <!-- Instructor -->
+              <p class="catalog-card-instructor">
+                <i class="bi bi-person"></i>
+                <span>{{ course.instructor || 'Kansbe Instructor' }}</span>
+              </p>
+
+              <!-- Meta: Lessons & Duration -->
+              <div class="catalog-card-meta">
+                <span class="meta-item">
+                  <i class="bi bi-journal-text"></i>
+                  <span>{{ course.lessonCount || course.lessons?.length || 1 }} lessons</span>
+                </span>
+                <span class="meta-item" *ngIf="course.duration">
+                  <i class="bi bi-clock"></i>
+                  <span>{{ course.duration }}</span>
+                </span>
+              </div>
+
+              <!-- Micro Skills Tags -->
+              <div class="catalog-card-skills" *ngIf="course.skills?.length > 0">
+                <span class="skill-micro-pill" *ngFor="let sk of course.skills">{{ sk }}</span>
+              </div>
+
+              <!-- Progress Bar if enrolled -->
+              <div class="catalog-card-progress" *ngIf="course.progress">
+                <div class="progress-info-row">
+                  <span>Progress</span>
+                  <span>{{ course.progress.progressPercentage }}%</span>
+                </div>
+                <div class="progress-bar-track">
+                  <div class="progress-bar-fill" [style.width]="course.progress.progressPercentage + '%'"></div>
+                </div>
+              </div>
+
+              <!-- Action Button -->
+              <button class="btn-catalog-action" (click)="navigateToCourse(course._id)">
+                {{ course.progress?.progressPercentage > 0 && !course.progress?.completed ? 'Continue Learning' : 'Start
+                Course' }}
+              </button>
+
+            </div>
+
+          </div>
+        </div>
+
+      </section>
+
+    </div>
+
+  </main>
+</div>

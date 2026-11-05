@@ -1,0 +1,607 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700;800&display=swap');
+
+.sub-domain-page {
+    background-color: #050505;
+    color: #ffffff;
+
+    min-height: 100vh;
+    overflow-x: hidden;
+}
+
+/* Reused Classes from Blog for parity */
+.footer-logo {
+    font-size: 1.5rem;
+    letter-spacing: -0.5px;
+    font-weight: 700;
+}
+
+.logo-accent {
+    color: #ff0000 !important;
+    text-shadow: 0 0 15px rgba(255, 0, 0, 0.4);
+}
+
+.back-btn {
+    width: 42px;
+    height: 42px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 12px;
+    backdrop-filter: blur(8px);
+    transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+.back-btn:hover {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: #ff0000;
+    transform: translateX(-4px);
+    box-shadow: 0 0 20px rgba(255, 0, 0, 0.15);
+}
+
+.display-1 {
+    font-size: clamp(2rem, 5vw, 3.8rem);
+    font-weight: 700;
+    letter-spacing: -1.5px;
+    line-height: 1.05;
+}
+
+.max-w-600 {
+    max-width: 650px;
+    line-height: 1.8;
+    font-size: 1.25rem;
+    font-weight: 400;
+    color: rgba(255, 255, 255, 1) !important;
+    margin-bottom: 2rem;
+}
+
+.main-description {
+    letter-spacing: 0.3px;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+    opacity: 1 !important;
+}
+
+.extra-small {
+    font-size: 0.65rem;
+    letter-spacing: 2px;
+    font-weight: 600;
+    text-transform: uppercase;
+    opacity: 0.85;
+}
+
+.stats-box {
+    background: rgba(255, 255, 255, 0.015);
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    border-radius: 16px;
+    padding: 16px 28px;
+    backdrop-filter: blur(12px);
+}
+
+.stat-item .h2 {
+    font-size: 1.8rem;
+    font-weight: 700;
+    letter-spacing: -1px;
+}
+
+/* Hero Card */
+.hero-card {
+    height: clamp(300px, 45vh, 480px);
+    background: #000;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 24px !important;
+}
+
+.hero-card img {
+    object-fit: cover;
+    height: 100%;
+    width: 100%;
+    opacity: 0.85;
+    filter: brightness(0.7) contrast(1.1);
+    transition: transform 1.5s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+.hero-card:hover img {
+    transform: scale(1.05);
+    opacity: 1;
+    filter: brightness(0.8) contrast(1.1);
+}
+
+.hero-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, transparent 40%, rgba(0, 0, 0, 0.7) 100%);
+}
+
+/* Component Specific Styles */
+.content-card {
+    background: #0a0a0a;
+    border-radius: 24px;
+    border: 1px solid rgba(255, 255, 255, 0.03);
+    position: relative;
+}
+
+.vertical-divider {
+    position: absolute;
+    top: 15%;
+    bottom: 15%;
+    right: 0;
+    width: 1px;
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.content-text {
+    line-height: 1.9;
+    font-weight: 400;
+    font-size: 1.05rem;
+    color: rgba(255, 255, 255, 0.85) !important;
+}
+
+.content-text p {
+    color: rgba(255, 255, 255, 0.85) !important;
+}
+
+.toolkit-box {
+    background: #0f0f0f;
+    border: 1px solid rgba(255, 255, 255, 0.04);
+    border-radius: 18px;
+    height: 100%;
+    transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+.toolkit-box:hover {
+    background: #151515;
+    border-color: rgba(255, 0, 0, 0.4);
+    transform: translateY(-10px);
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.6);
+}
+
+.toolkit-box:hover .text-danger,
+.toolkit-box:hover i.text-danger {
+    color: #ff0000 !important;
+    opacity: 1 !important;
+    transform: scale(1.1);
+}
+
+.toolkit-box h6 {
+    font-weight: 700;
+    font-size: 1.15rem;
+    letter-spacing: -0.3px;
+    margin-bottom: 8px;
+}
+
+.toolkit-box p {
+    line-height: 1.6;
+    font-weight: 400;
+    font-size: 0.88rem;
+    color: rgba(255, 255, 255, 0.75);
+}
+
+.sidebar-card {
+    background: #080808;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 20px;
+    padding: 32px !important;
+    transition: all 0.4s ease;
+}
+
+.sidebar-card:hover {
+    border-color: rgba(255, 0, 0, 0.15);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+}
+
+.trending-item {
+    padding: 15px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+    transition: all 0.3s ease;
+}
+
+.trending-item:hover {
+    transform: translateX(8px);
+    background: rgba(255, 255, 255, 0.02);
+}
+
+.trending-item:hover p {
+    color: #ff0000 !important;
+}
+
+.progress-bar.bg-primary {
+    background-color: #0d6efd !important;
+}
+
+.progress-bar.bg-danger {
+    background-color: #ff0000 !important;
+}
+
+.stack-img {
+    width: 34px;
+    height: 34px;
+    border-width: 2px !important;
+}
+
+.plus-circle {
+    width: 34px;
+    height: 34px;
+    background: #222;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+
+/* ==============================================================
+   PREMIUM KANSBE FOOTER REDESIGN (CLONED FROM HOME)
+   ============================================================== */
+
+.kansbe-footer-section {
+    background-color: #000000;
+    padding: 100px 0 40px;
+    color: #ffffff;
+    position: relative;
+    overflow: hidden;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    margin-top: 80px;
+}
+
+.footer-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding-left: 60px;
+    padding-right: 60px;
+}
+
+/* TOP ROW: Brand & Tooltip Socials */
+.footer-top-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 80px;
+    gap: 40px;
+}
+
+.footer-brand {
+    max-width: 450px;
+}
+
+.footer-primary-logo {
+    height: 40px;
+    margin-bottom: 30px;
+    filter: brightness(1);
+}
+
+.footer-tagline {
+
+    font-size: 15px;
+    line-height: 1.8;
+    color: rgba(255, 255, 255, 0.6);
+    font-weight: 300;
+    margin: 0;
+}
+
+.footer-social-block {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
+.footer-social-icons {
+    display: flex;
+    gap: 15px;
+}
+
+/* Premium Social Buttons with Tooltips */
+.social-btn {
+    position: relative;
+    width: 50px;
+    height: 50px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #ffffff;
+    transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+    text-decoration: none;
+}
+
+.social-btn svg {
+    width: 20px;
+    height: 20px;
+    fill: currentColor;
+    transition: transform 0.4s ease;
+}
+
+.social-btn:hover {
+    background: #FF0100;
+    border-color: #FF0100;
+    transform: translateY(-5px);
+    color: #ffffff;
+    box-shadow: 0 10px 20px rgba(255, 1, 0, 0.3);
+}
+
+.social-btn:hover svg {
+    transform: scale(1.1);
+}
+
+/* Tooltip implementation */
+.social-tooltip {
+    position: absolute;
+    bottom: calc(100% + 15px);
+    left: 50%;
+    transform: translateX(-50%) translateY(10px);
+    background: #FF0100;
+    color: white;
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+    pointer-events: none;
+}
+
+.social-tooltip::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: #FF0100 transparent transparent transparent;
+}
+
+.social-btn:hover .social-tooltip {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(-50%) translateY(0);
+}
+
+.footer-divider {
+    height: 1px;
+    background: linear-gradient(to right, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.1) 50%, rgba(255, 255, 255, 0.05) 100%);
+    margin-bottom: 60px;
+}
+
+/* MID ROW: Navigation Columns */
+.footer-mid-row {
+    margin-bottom: 80px;
+}
+
+.footer-heading {
+
+    font-size: 13px;
+    font-weight: 700;
+    color: #FF0100;
+    text-transform: uppercase;
+    letter-spacing: 0.25em;
+    margin-bottom: 30px;
+}
+
+.footer-links-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.f-link {
+    background: none;
+    border: none;
+    padding: 0;
+    color: rgba(255, 255, 255, 0.6);
+
+    font-size: 15px;
+    font-weight: 400;
+    text-align: left;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    width: fit-content;
+}
+
+.f-link:hover {
+    color: #ffffff;
+    transform: translateX(5px);
+}
+
+.f-location {
+    margin-top: 10px;
+    font-size: 13px;
+    color: rgba(255, 255, 255, 0.4);
+    font-style: normal;
+    display: block;
+}
+
+/* BOTTOM ROW: Copyright info */
+.footer-bottom-row {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 25px;
+}
+
+.copyright-text {
+
+    font-size: 11px;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.3);
+    letter-spacing: 0.3em;
+    text-align: center;
+    word-break: break-word;
+}
+
+.footer-accent-line {
+    width: 100px;
+    height: 2px;
+    background-color: #FF0100;
+    opacity: 0.6;
+}
+
+/* Animations */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+header,
+.hero-card,
+.content-card,
+.toolkit-box,
+.sidebar-card,
+.kansbe-footer-section {
+    animation: fadeInUp 0.8s cubic-bezier(0.19, 1, 0.22, 1) forwards;
+}
+
+/* ===============================================
+   PRIVACY & TERMS MODAL STYLES - PREMIUM DARK GLASS
+   =============================================== */
+
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.45);
+    backdrop-filter: blur(12px) saturate(180%);
+    -webkit-backdrop-filter: blur(12px) saturate(180%);
+    z-index: 99999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+}
+
+.modal-box {
+    background: rgba(18, 18, 18, 0.75);
+    backdrop-filter: blur(25px) saturate(200%);
+    -webkit-backdrop-filter: blur(25px) saturate(200%);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 32px;
+    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.6);
+    max-width: 960px;
+    width: 100%;
+    max-height: 85vh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.modal-content-wrapper {
+    flex: 1;
+    overflow-y: auto;
+    padding: 48px 56px;
+}
+
+.modal-content {
+    color: rgba(255, 255, 255, 0.85);
+
+    line-height: 1.7;
+}
+
+.modal-content h2 {
+    font-size: 32px;
+    font-weight: 700;
+    color: #ffffff;
+    margin-bottom: 24px;
+}
+
+.modal-content h3 {
+    font-size: 20px;
+    font-weight: 600;
+    color: #ff1a1a;
+    margin-top: 40px;
+}
+
+.modal-content ul {
+    padding-left: 20px;
+}
+
+.modal-content ul li {
+    margin-bottom: 10px;
+}
+
+.modal-footer {
+    padding: 32px 56px;
+    background: rgba(255, 255, 255, 0.03);
+    display: flex;
+    justify-content: flex-end;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.close-btn {
+    background: linear-gradient(135deg, #ff1a1a 0%, #cc0000 100%);
+    color: #ffffff;
+    border: none;
+    padding: 14px 44px;
+    font-size: 15px;
+    font-weight: 600;
+    border-radius: 100px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.close-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px rgba(255, 26, 26, 0.3);
+}
+
+/* Responsiveness */
+@media (max-width: 991px) {
+    .footer-top-row {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+
+    .footer-social-block {
+        align-items: center;
+    }
+
+    .footer-nav-col {
+        margin-bottom: 40px;
+        text-align: center;
+    }
+
+    .f-link {
+        width: 100%;
+        text-align: center;
+    }
+
+    .display-1 {
+        font-size: 2.5rem;
+    }
+}
+
+@media (max-width: 767px) {
+    .modal-box {
+        max-height: 90vh;
+    }
+
+    .modal-content-wrapper {
+        padding: 24px;
+    }
+
+    .modal-content h2 {
+        font-size: 24px;
+    }
+
+    .kansbe-footer-section {
+        padding: 60px 0 30px;
+    }
+
+    .footer-container {
+        padding-left: 25px;
+        padding-right: 25px;
+    }
+
+    .footer-primary-logo {
+        height: 32px;
+    }
+}

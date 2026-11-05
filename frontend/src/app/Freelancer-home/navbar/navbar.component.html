@@ -1,0 +1,223 @@
+<!-- Futuristic Liquid Glass Header Capsule Bar -->
+<header class="futuristic-top-navbar" *ngIf="flid || cid">
+  <div class="header-pill-capsule">
+    <!-- Brand Logo Image from Assets -->
+    <div class="nav-brand-area cursor-pointer" (click)="cleanupOnNavigation()" title="Kansbe Home">
+      <img src="assets/pics.webp" alt="KANSBE" class="nav-brand-logo-img">
+    </div>
+
+    <!-- Mobile Hamburger Toggle -->
+    <button class="mobile-hamburger-btn d-lg-none" (click)="toggleMobileMenu()" [class.active]="isMobileMenuOpen" aria-label="Toggle navigation">
+      <span class="hamburger-bar"></span>
+      <span class="hamburger-bar"></span>
+      <span class="hamburger-bar"></span>
+    </button>
+    
+    <!-- Mobile Overlay Backdrop -->
+    <div class="mobile-menu-overlay d-lg-none" [class.show]="isMobileMenuOpen" (click)="isMobileMenuOpen = false"></div>
+
+    <!-- ═══ DESKTOP NAVIGATION STREAM (>= 992px) ═══ -->
+    <nav class="nav-items-stream d-none d-lg-flex">
+      <!-- Home Tab -->
+      <a class="nav-pill-link tour-nav-home" 
+         [routerLink]="isClient ? '/home/client-dash' : '/home/freelancer-dash'"
+         [class.active]="isHomeActive()">
+        <i class="bi bi-house-door"></i>
+        <span>Home</span>
+      </a>
+
+      <!-- Projects Tab -->
+      <a class="nav-pill-link tour-nav-projects" 
+         [routerLink]="isClient ? '/home/client-projects' : '/home/projects'" 
+         [class.active]="isProjectsActive()">
+        <i class="bi bi-folder2"></i>
+        <span>Projects</span>
+      </a>
+
+      <!-- Messages Tab -->
+      <a class="nav-pill-link tour-nav-messages" 
+         [routerLink]="isClient ? '/home/client-messages' : '/home/messages'" 
+         [class.active]="isMessagesActive()">
+        <div class="nav-badge-box">
+          <i class="bi bi-chat-right-text"></i>
+          <span class="nav-count-badge" *ngIf="combinedMessageCount > 0">{{ combinedMessageCount }}</span>
+        </div>
+        <span>Messages</span>
+      </a>
+
+      <!-- Notifications Tab -->
+      <a class="nav-pill-link tour-nav-notifications" 
+         [routerLink]="isClient ? '/home/client-notifications' : '/home/notifications'" 
+         [class.active]="isNotificationsActive()">
+        <div class="nav-badge-box">
+          <i class="bi bi-bell"></i>
+          <span class="nav-count-badge" *ngIf="unreadNotificationCount > 0">{{ unreadNotificationCount }}</span>
+        </div>
+        <span>Notifications</span>
+      </a>
+
+      <!-- Profile Tab -->
+      <div class="nav-pill-link profile-pill-tab tour-nav-profile" 
+           [class.active]="isProfileMenuOpen || isProfileActive()" 
+           (click)="toggleProfileMenu($event)">
+        
+        <div class="profile-pill-trigger">
+          <div class="nav-badge-box">
+            <img *ngIf="usr?.profile_pic" [src]="usr.profile_pic" class="nav-avatar-circle" alt="Profile">
+            <i class="bi bi-person-circle" *ngIf="!usr?.profile_pic"></i>
+          </div>
+          <span>Profile</span>
+        </div>
+
+        <!-- Desktop Futuristic Liquid Glass Profile Dropdown -->
+        <div class="glass-profile-dropdown" [class.show]="isProfileMenuOpen" (click)="$event.stopPropagation()">
+          <div class="dropdown-user-header">
+            <div class="dropdown-avatar-wrapper">
+              <img *ngIf="usr?.profile_pic" [src]="usr.profile_pic" class="dropdown-avatar-img" alt="">
+              <div *ngIf="!usr?.profile_pic" class="dropdown-avatar-initials">
+                {{ usr?.fullname?.charAt(0) || '?' }}
+              </div>
+              <span class="user-online-badge" title="Active"></span>
+            </div>
+            <div class="dropdown-user-info text-start">
+              <h6 class="dropdown-user-name mb-0">{{ usr?.fullname || 'User' }} <i class="bi bi-patch-check-fill text-white-50"></i></h6>
+              <p class="dropdown-user-sub mb-0">{{ usr?.skillTitle || usr?.profession || (isClient ? 'Client' : 'Freelancer') }}</p>
+            </div>
+          </div>
+
+          <a [routerLink]="isClient ? '/home/client-profile' : '/home/profile'" (click)="closeProfileMenu()" class="dropdown-action-btn">
+            <i class="bi bi-person-circle me-2"></i> View Profile
+          </a>
+
+          <div class="dropdown-menu-list">
+            <a routerLink="/home/learning" (click)="closeProfileMenu()" class="dropdown-menu-item" *ngIf="!isClient">
+              <span class="menu-item-icon-box"><i class="bi bi-mortarboard-fill"></i></span>
+              <span class="menu-item-text">Learning</span>
+            </a>
+            <a [routerLink]="isClient ? '/home/client-settings' : '/home/settings'" (click)="closeProfileMenu()" class="dropdown-menu-item">
+              <span class="menu-item-icon-box"><i class="bi bi-gear-fill"></i></span>
+              <span class="menu-item-text">Settings</span>
+            </a>
+            <a routerLink="/home/support" (click)="closeProfileMenu()" class="dropdown-menu-item">
+              <span class="menu-item-icon-box"><i class="bi bi-question-circle-fill"></i></span>
+              <span class="menu-item-text">Help Center</span>
+            </a>
+          </div>
+
+          <div class="dropdown-logout-box">
+            <a class="dropdown-logout-btn" (click)="closeProfileMenu(); logout()">
+              <span class="logout-icon-box"><i class="bi bi-box-arrow-right"></i></span>
+              <span>Log out</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <!-- ═══ MOBILE / TABLET CREATIVE LIQUID-GLASS CONTROL HUB (< 992px) ═══ -->
+    <div class="mobile-glass-control-hub d-lg-none" [class.mobile-open]="isMobileMenuOpen">
+      
+      <!-- 1. User Identity Header (Instant Profile Glance) -->
+      <div class="mobile-user-card" [routerLink]="isClient ? '/home/client-profile' : '/home/profile'" (click)="isMobileMenuOpen = false">
+        <div class="mobile-avatar-wrap">
+          <img *ngIf="usr?.profile_pic" [src]="usr.profile_pic" class="mobile-avatar-img" alt="">
+          <div *ngIf="!usr?.profile_pic" class="mobile-avatar-initials">
+            {{ usr?.fullname?.charAt(0) || '?' }}
+          </div>
+          <span class="mobile-online-indicator"></span>
+        </div>
+        <div class="mobile-user-details">
+          <div class="mobile-user-name-row">
+            <span class="mobile-user-name">{{ usr?.fullname || 'User' }}</span>
+            <i class="bi bi-patch-check-fill text-white-50"></i>
+          </div>
+          <span class="mobile-user-role">{{ usr?.skillTitle || usr?.profession || (isClient ? 'Client Partner' : 'Freelancer') }}</span>
+        </div>
+        <div class="mobile-view-profile-pill">
+          <span>Profile</span>
+          <i class="bi bi-chevron-right"></i>
+        </div>
+      </div>
+
+      <!-- 2. Primary Navigation: 2x2 Creative Liquid Glass Tiles -->
+      <div class="mobile-nav-grid">
+        <a class="mobile-grid-tile tour-nav-home" 
+           [routerLink]="isClient ? '/home/client-dash' : '/home/freelancer-dash'"
+           [class.active]="isHomeActive()" 
+           (click)="isMobileMenuOpen = false">
+          <div class="tile-icon-box"><i class="bi bi-house-door"></i></div>
+          <span class="tile-label">Home</span>
+        </a>
+
+        <a class="mobile-grid-tile tour-nav-projects" 
+           [routerLink]="isClient ? '/home/client-projects' : '/home/projects'" 
+           [class.active]="isProjectsActive()"
+           (click)="isMobileMenuOpen = false">
+          <div class="tile-icon-box"><i class="bi bi-folder2"></i></div>
+          <span class="tile-label">Projects</span>
+        </a>
+
+        <a class="mobile-grid-tile tour-nav-messages" 
+           [routerLink]="isClient ? '/home/client-messages' : '/home/messages'" 
+           [class.active]="isMessagesActive()"
+           (click)="isMobileMenuOpen = false">
+          <div class="tile-icon-box position-relative">
+            <i class="bi bi-chat-right-text"></i>
+            <span class="mobile-badge" *ngIf="combinedMessageCount > 0">{{ combinedMessageCount }}</span>
+          </div>
+          <span class="tile-label">Messages</span>
+        </a>
+
+        <a class="mobile-grid-tile tour-nav-notifications" 
+           [routerLink]="isClient ? '/home/client-notifications' : '/home/notifications'" 
+           [class.active]="isNotificationsActive()"
+           (click)="isMobileMenuOpen = false">
+          <div class="tile-icon-box position-relative">
+            <i class="bi bi-bell"></i>
+            <span class="mobile-badge" *ngIf="unreadNotificationCount > 0">{{ unreadNotificationCount }}</span>
+          </div>
+          <span class="tile-label">Notifications</span>
+        </a>
+      </div>
+
+      <!-- 3. Quick Utilities Links -->
+      <div class="mobile-utilities-list">
+        <a [routerLink]="isClient ? '/home/client-settings' : '/home/settings'" 
+           (click)="isMobileMenuOpen = false" 
+           class="mobile-util-item">
+          <div class="util-icon-box"><i class="bi bi-gear-fill"></i></div>
+          <span class="util-label">Settings & Preferences</span>
+          <i class="bi bi-chevron-right util-arrow"></i>
+        </a>
+
+        <a routerLink="/home/learning" 
+           (click)="isMobileMenuOpen = false" 
+           class="mobile-util-item" 
+           *ngIf="!isClient">
+          <div class="util-icon-box"><i class="bi bi-mortarboard-fill"></i></div>
+          <span class="util-label">Learning Portal</span>
+          <i class="bi bi-chevron-right util-arrow"></i>
+        </a>
+
+        <a routerLink="/home/support" 
+           (click)="isMobileMenuOpen = false" 
+           class="mobile-util-item">
+          <div class="util-icon-box"><i class="bi bi-question-circle-fill"></i></div>
+          <span class="util-label">Help Center & Support</span>
+          <i class="bi bi-chevron-right util-arrow"></i>
+        </a>
+      </div>
+
+      <!-- 4. Direct One-Tap Logout Action Bar -->
+      <div class="mobile-logout-wrapper">
+        <button type="button" class="mobile-direct-logout-btn" (click)="isMobileMenuOpen = false; logout()">
+          <div class="logout-icon-wrap"><i class="bi bi-box-arrow-right"></i></div>
+          <span>Log Out</span>
+        </button>
+      </div>
+
+    </div>
+
+  </div>
+</header>
+<router-outlet></router-outlet>

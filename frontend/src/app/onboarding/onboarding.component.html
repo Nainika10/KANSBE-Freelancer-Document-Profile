@@ -1,0 +1,969 @@
+<div class="onboarding-page">
+
+  <!-- ─── Header Bar ─── -->
+  <header class="onboarding-header">
+    <div class="header-inner">
+      <div class="header-brand">
+        <img src="assets/pics.webp" alt="KANSBE" class="brand-logo-img" />
+      </div>
+      <div class="header-step-info">
+        <span class="step-badge">Step {{ currentStep }}</span>
+        <span class="step-label">{{ currentStepLabel }}</span>
+      </div>
+    </div>
+    <div class="header-progress">
+      <div class="progress-bar" [style.width.%]="progressPercentage" style="transition: width 0.5s ease-in-out;"></div>
+    </div>
+  </header>
+
+  <!-- ─── Main Content ─── -->
+  <main class="onboarding-main">
+
+    <!-- ─── STEP 1: SKILLS SELECTION ─── -->
+    <div class="step-content" *ngIf="currentStep === 1">
+      <!-- Title Section -->
+      <div class="title-section">
+        <h1 class="page-title">Tell us your top skills</h1>
+        <p class="page-subtitle">First select your primary domain, then pick up to {{ MAX_SKILLS }} skills that best represent your expertise.</p>
+      </div>
+
+      <!-- Search Bar (Accessible only when a domain is selected) -->
+      <div class="search-container" [class.search-disabled]="!selectedCategory">
+        <div class="search-wrapper" [class.disabled]="!selectedCategory">
+          <span class="material-icons search-icon">search</span>
+          <input type="text" class="search-input" 
+            [placeholder]="selectedCategory ? ('Search skills in ' + selectedCategory.name + '...') : 'Select a domain below first to search & add skills...'"
+            [(ngModel)]="searchTerm" (input)="onSearchChange()" [disabled]="!selectedCategory" id="skills-search-input" />
+          <button *ngIf="searchTerm" class="search-clear" (click)="clearSearch()" type="button"
+            aria-label="Clear search">
+            <span class="material-icons">close</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Max Limit Banner -->
+      <div class="limit-banner" *ngIf="maxLimitReached">
+        <span class="material-icons limit-icon">info</span>
+        <span>You've reached the maximum of {{ MAX_SKILLS }} skills. Remove a skill to add a new one.</span>
+      </div>
+
+      <!-- ─── Single Selection Container ─── -->
+      <div class="selection-container">
+
+        <!-- STATE 1: Domain Selection (REQUIRED) -->
+        <div class="domain-view" *ngIf="!selectedCategory">
+          <div class="selection-header domain-required-header">
+            <div class="domain-header-title-group">
+              <span class="material-icons selection-header-icon">category</span>
+              <h2 class="selection-title">SELECT A DOMAIN</h2>
+            </div>
+            <span class="required-domain-badge">
+              <span class="material-icons" style="font-size: 14px;">lock</span>
+              Required to add skills
+            </span>
+          </div>
+          <div class="selection-notice-bar">
+            <span class="material-icons notice-icon">info</span>
+            <span>You must select a domain first before choosing skills.</span>
+          </div>
+          <div class="selection-body scrollable-step domain-grid">
+            <button *ngFor="let category of categories; trackBy: trackByCategory" class="domain-item"
+              (click)="selectCategory(category)" type="button">
+              <div class="domain-item-left">
+                <span class="material-icons domain-icon">{{ category.icon }}</span>
+                <span class="domain-name">{{ category.name }}</span>
+              </div>
+              <span class="material-icons domain-chevron">arrow_forward</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- STATE 2: Skills Selection (Domain Selected) -->
+        <div class="skills-view" *ngIf="!isSearching && selectedCategory">
+          <div class="selection-header skills-header">
+            <button class="btn-back-domain" (click)="clearCategory()" type="button" title="Change domain">
+              <span class="material-icons">arrow_back</span>
+              <span>Domain: <strong>{{ selectedCategory!.name }}</strong></span>
+              <span class="btn-change-domain-pill">Change Domain</span>
+            </button>
+            <span class="skills-count-badge">{{ displaySkills.length }} skills available</span>
+          </div>
+          <div class="selection-subtitle">Select up to {{ MAX_SKILLS }} skills in {{ selectedCategory!.name }}</div>
+          <div class="selection-body scrollable-step">
+            <div class="skills-grid-modern">
+              <button *ngFor="let skill of displaySkills; trackBy: trackBySkill" class="skill-item-modern"
+                [class.selected]="isSkillSelected(skill)" [class.disabled]="maxLimitReached && !isSkillSelected(skill)"
+                (click)="toggleSkill(skill)" type="button">
+                <span class="skill-name">{{ skill }}</span>
+                <span class="material-icons check-icon" *ngIf="isSkillSelected(skill)">check</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- STATE 3: Search Results (Scoped to selected domain) -->
+        <div class="search-view" *ngIf="isSearching && selectedCategory">
+          <div class="selection-header">
+            <span class="material-icons selection-header-icon">search</span>
+            <h2 class="selection-title">Results in {{ selectedCategory!.name }} for "{{ searchTerm }}"</h2>
+            <span class="skills-count-badge">{{ searchResults.length }} found</span>
+          </div>
+          <div class="selection-body scrollable-step">
+            <div *ngIf="searchResults.length === 0" class="empty-state custom-skill-prompt"
+              style="text-align: center; margin-top: 24px;">
+              <div class="empty-state-visual">
+                <span class="material-icons empty-icon-bg">search</span>
+              </div>
+              <h3 class="empty-title">Skill not found</h3>
+              <p class="empty-text">We couldn't find "{{ searchTerm }}" in {{ selectedCategory!.name }}.</p>
+              <button type="button" class="btn-add-custom" (click)="addCustomSkill(searchTerm)"
+                [disabled]="maxLimitReached">
+                <span class="material-icons">add_circle_outline</span>
+                Add "{{ searchTerm }}" as a skill
+              </button>
+            </div>
+
+            <div class="skills-grid-modern" *ngIf="searchResults.length > 0">
+              <button *ngFor="let result of searchResults; trackBy: trackBySearchResult" class="skill-item-modern"
+                [class.selected]="isSkillSelected(result.skill)"
+                [class.disabled]="maxLimitReached && !isSkillSelected(result.skill)" (click)="toggleSkill(result.skill)"
+                type="button">
+                <span class="skill-name">{{ result.skill }}</span>
+                <span class="material-icons check-icon" *ngIf="isSkillSelected(result.skill)">check</span>
+                <div class="result-category">{{ result.category }}</div>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- ─── Selected Skills Chips Area ─── -->
+        <div class="selected-skills-bottom-area" *ngIf="selectedCategory">
+          <div class="bottom-area-header">
+            <h3 class="bottom-area-title">YOUR SKILLS</h3>
+            <span class="selected-counter" [class.has-skills]="selectedSkills.length > 0">
+              {{ selectedSkills.length }} / {{ MAX_SKILLS }}
+            </span>
+          </div>
+
+          <div *ngIf="selectedSkills.length === 0" class="empty-chips-state">
+            <span class="material-icons">info</span> Pick at least one skill to continue.
+          </div>
+
+          <div class="selected-skills-chips" #skillsContainer *ngIf="selectedSkills.length > 0">
+            <div *ngFor="let skill of selectedSkills; trackBy: trackBySkill" class="selected-skill-chip-container">
+              <div class="selected-skill-chip"
+                [class.expanded]="!skill.level || activeSkillLevelDropdown === skill.name">
+                <div class="chip-header" (click)="toggleSkillLevelDropdown(skill.name)">
+                  <span class="chip-name">{{ skill.name }}</span>
+                  <span class="chip-dot" *ngIf="skill.level">·</span>
+                  <span class="chip-level" *ngIf="skill.level">{{ skill.level }}</span>
+                </div>
+
+                <div class="inline-level-options" *ngIf="!skill.level || activeSkillLevelDropdown === skill.name">
+                  <button type="button" *ngFor="let level of SKILL_LEVELS" class="inline-level-btn"
+                    [class.active]="skill.level === level" (click)="setSkillLevel(skill.name, level, $event)">
+                    {{ level }}
+                  </button>
+                </div>
+
+                <button class="chip-remove" (click)="removeSkill(skill.name)" type="button">
+                  <span class="material-icons">close</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div> <!-- Close selection-container -->
+
+    </div> <!-- Close step-content -->
+
+    <!-- ─── STEP 2: PROFILE DETAILS ─── -->
+    <div class="step-content scrollable-step" *ngIf="currentStep === 2">
+      <div class="title-section">
+        <h1 class="page-title">Profile details</h1>
+        <p class="page-subtitle">Complete your profile to build trust with potential clients.</p>
+      </div>
+
+      <div class="form-card-container">
+        <!-- Account Info Section -->
+        <!-- Account Info Section -->
+        <div class="form-section">
+          <h2 class="form-section-title">Account Info</h2>
+          <div class="avatar-identity-row">
+            <div class="ob-initials-circle">
+              {{ getInitials(fullName) }}
+            </div>
+          </div>
+
+          <div class="form-grid-modern">
+            <!-- Full Name -->
+            <div class="form-field-group">
+              <label class="form-field-label">Full Name <span class="required-asterisk">*</span></label>
+              <div class="glass-input-wrapper readonly-input">
+                <i class="bi bi-person glass-input-icon"></i>
+                <input type="text" id="full-name" class="glass-input-control" [value]="fullName" readonly>
+              </div>
+            </div>
+
+            <!-- Username -->
+            <div class="form-field-group">
+              <label class="form-field-label">Username <span class="optional">(Optional)</span></label>
+              <div class="glass-input-wrapper" [class.has-error]="errorMessages.username">
+                <i class="bi bi-person-badge glass-input-icon"></i>
+                <input type="text" id="username" class="glass-input-control" placeholder="Enter your username" [(ngModel)]="username"
+                  (input)="onProfileChange('username')" (blur)="validateField('username')">
+              </div>
+              <small class="error-msg-text" *ngIf="errorMessages.username">
+                <i class="bi bi-exclamation-circle-fill"></i> {{ errorMessages.username }}
+              </small>
+            </div>
+          </div>
+
+          <div class="form-grid-modern single-col">
+            <!-- Email -->
+            <div class="form-field-group">
+              <label class="form-field-label">Email</label>
+              <div class="glass-input-wrapper readonly-input">
+                <i class="bi bi-envelope glass-input-icon"></i>
+                <input type="email" id="email" class="glass-input-control" [value]="email" readonly>
+              </div>
+              <small class="email-note-text">
+                <i class="bi bi-info-circle-fill me-1"></i> Note: No changes can be made to the registered email address.
+              </small>
+            </div>
+          </div>
+        </div>
+
+        <hr class="form-divider" />
+
+        <!-- Personal Details Section -->
+        <div class="form-section">
+          <h2 class="form-section-title">Personal Details</h2>
+          <div class="form-grid-modern">
+            <!-- Contact Number -->
+            <div class="form-field-group">
+              <label class="form-field-label">Contact Number <span class="required-asterisk">*</span></label>
+              <div class="glass-input-wrapper" [class.has-error]="errorMessages.contact">
+                <i class="bi bi-telephone glass-input-icon"></i>
+                <input type="tel" id="contact-number" class="glass-input-control" placeholder="Enter contact number" maxlength="10" [(ngModel)]="contactNumber"
+                  (input)="onProfileChange('contact')" (blur)="validateField('contact')">
+              </div>
+              <small class="error-msg-text" *ngIf="errorMessages.contact">
+                <i class="bi bi-exclamation-circle-fill"></i> {{ errorMessages.contact }}
+              </small>
+            </div>
+
+            <!-- Gender Dropdown (Matching Settings) -->
+            <div class="form-field-group gender-container" [class.dropdown-active]="showGenderDropdown">
+              <label class="form-field-label">Gender <span class="required-asterisk">*</span></label>
+              <div class="glass-input-wrapper cursor-pointer" [class.has-error]="errorMessages.gender"
+                (click)="showGenderDropdown = !showGenderDropdown">
+                <i class="bi bi-gender-ambiguous glass-input-icon"></i>
+                <input type="text" id="gender" class="glass-input-control cursor-pointer" [(ngModel)]="gender"
+                  placeholder="Select Gender" readonly (blur)="validateField('gender')">
+                <i class="bi bi-chevron-down glass-select-arrow"></i>
+              </div>
+              <!-- Gender Dropdown -->
+              <div class="glass-dropdown-menu" *ngIf="showGenderDropdown && filteredGenders.length > 0">
+                <div class="glass-dropdown-option" *ngFor="let g of filteredGenders" (mousedown)="selectGender(g)">
+                  {{ g }}
+                </div>
+              </div>
+              <small class="error-msg-text" *ngIf="errorMessages.gender">
+                <i class="bi bi-exclamation-circle-fill"></i> {{ errorMessages.gender }}
+              </small>
+            </div>
+
+            <!-- Date of Birth (Matching Settings) -->
+            <div class="form-field-group dob-picker-container" [class.dropdown-active]="showDatePicker">
+              <label class="form-field-label">Date of Birth <span class="required-asterisk">*</span></label>
+              <div class="glass-input-wrapper cursor-pointer" [class.has-error]="errorMessages.dob" (click)="toggleDatePicker($event)">
+                <i class="bi bi-calendar4 glass-input-icon"></i>
+                <input type="text" id="dob" class="glass-input-control cursor-pointer" [value]="dateOfBirth"
+                  placeholder="YYYY-MM-DD" readonly (blur)="validateField('dob')">
+                <i class="bi bi-chevron-down glass-select-arrow"></i>
+              </div>
+              <!-- DOB Picker Dropdown -->
+              <div class="glass-datepicker-menu" *ngIf="showDatePicker" (click)="$event.stopPropagation()">
+                <div class="datepicker-selectors-row">
+                  <select class="glass-date-select" [(ngModel)]="selectedMonth" (change)="generateCalendar()">
+                    <option *ngFor="let m of months; let i = index" [ngValue]="i">{{ m }}</option>
+                  </select>
+                  <select class="glass-date-select" [(ngModel)]="selectedYear" (change)="generateCalendar()">
+                    <option *ngFor="let y of years" [ngValue]="y">{{ y }}</option>
+                  </select>
+                </div>
+                <div class="datepicker-grid-days">
+                  <div *ngFor="let day of calendarDays" class="datepicker-day-cell" (click)="selectDate(day)"
+                    [class.active-day]="isDateActive(day)" [class.disabled-day]="!isDateSelectable(day)">
+                    {{ day }}
+                  </div>
+                </div>
+              </div>
+              <small class="error-msg-text" *ngIf="errorMessages.dob">
+                <i class="bi bi-exclamation-circle-fill"></i> {{ errorMessages.dob }}
+              </small>
+            </div>
+
+            <!-- Nationality Dropdown (Matching Settings) -->
+            <div class="form-field-group nationality-container" [class.dropdown-active]="showNationalityDropdown">
+              <label class="form-field-label">Nationality <span class="required-asterisk">*</span></label>
+              <div class="glass-input-wrapper" [class.has-error]="errorMessages.nationality">
+                <i class="bi bi-globe glass-input-icon"></i>
+                <input type="text" id="nationality" class="glass-input-control" [(ngModel)]="nationality"
+                  placeholder="Nationality" (input)="onNationalityInput($event)" (focus)="onNationalityInput($event)"
+                  (blur)="validateField('nationality')">
+              </div>
+              <!-- Nationality Dropdown -->
+              <div class="glass-dropdown-menu" *ngIf="showNationalityDropdown && filteredNationalities.length > 0">
+                <div class="glass-dropdown-option" *ngFor="let nat of filteredNationalities"
+                  (mousedown)="selectNationality(nat)">
+                  {{ nat }}
+                </div>
+              </div>
+              <small class="error-msg-text" *ngIf="errorMessages.nationality">
+                <i class="bi bi-exclamation-circle-fill"></i> {{ errorMessages.nationality }}
+              </small>
+            </div>
+          </div>
+
+          <div class="form-grid-modern single-col">
+            <!-- Country Dropdown (Matching Settings) -->
+            <div class="form-field-group country-container" [class.dropdown-active]="showCountryDropdown">
+              <label class="form-field-label">Country of Residence <span class="required-asterisk">*</span></label>
+              <div class="glass-input-wrapper" [class.has-error]="errorMessages.country">
+                <i class="bi bi-flag glass-input-icon"></i>
+                <input type="text" id="country" class="glass-input-control" [(ngModel)]="country" placeholder="Country"
+                  (input)="onCountryInput($event)" (focus)="onCountryInput($event)" (blur)="validateField('country')">
+                <i class="bi bi-chevron-down glass-select-arrow"></i>
+              </div>
+              <!-- Country Dropdown -->
+              <div class="glass-dropdown-menu" *ngIf="showCountryDropdown && filteredCountries.length > 0">
+                <div class="glass-dropdown-option" *ngFor="let country of filteredCountries"
+                  (mousedown)="selectCountry(country)">
+                  {{ country }}
+                </div>
+              </div>
+              <small class="error-msg-text" *ngIf="errorMessages.country">
+                <i class="bi bi-exclamation-circle-fill"></i> {{ errorMessages.country }}
+              </small>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- ─── STEP 3: ABOUT YOURSELF ─── -->
+    <div class="step-content scrollable-step" *ngIf="currentStep === 3">
+      <div class="title-section">
+        <h1 class="page-title">Tell us a bit about yourself</h1>
+        <p class="page-subtitle">Fill out your profile for clients to better understand your services.</p>
+      </div>
+
+      <div class="split-layout-container">
+        <!-- Left: Live Preview Card -->
+        <div class="live-preview-panel">
+          <h2 class="editorial-title">Live Preview</h2>
+          <div class="editorial-preview-card">
+            <div class="editorial-header">
+              <div class="editorial-photo">
+                <span class="editorial-photo-initial">{{ getInitials(fullName) }}</span>
+              </div>
+              <div class="editorial-names">
+                <h3 class="editorial-fullname">{{ fullName || 'Your Name' }}</h3>
+                <p class="editorial-username" *ngIf="username">@{{ username }}</p>
+              </div>
+            </div>
+            <div class="editorial-divider"></div>
+            <div class="editorial-body">
+              <h4 class="editorial-headline">{{ professionalHeadline || 'Your professional headline will appear here...'
+                }}</h4>
+              <p class="editorial-bio">{{ professionalBio || 'Start typing your bio to see how your professional summary
+                will look to potential clients. A strong biography highlights your core skills, experience, and the
+                unique value you bring.' }}</p>
+            </div>
+            <div class="editorial-footer">
+              <span class="editorial-badge"><span class="material-icons">location_on</span> {{ country || 'Global'
+                }}</span>
+              <span class="editorial-badge" *ngIf="selectedSkills.length > 0"><span class="material-icons">stars</span>
+                {{ selectedSkills.length }} Skills</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right: Input Fields -->
+        <div class="form-inputs-panel form-card-container">
+          <h2 class="form-section-title">Professional Summary</h2>
+          <p class="section-description">These details are the first thing clients see on your profile. Make them count!
+          </p>
+
+          <div class="form-field-group" [class.has-error]="errorMessages.headline">
+            <label class="form-field-label" for="headline">Job Title <span class="required-asterisk">*</span></label>
+            <div class="glass-input-wrapper" [class.has-error]="errorMessages.headline">
+              <i class="bi bi-briefcase glass-input-icon"></i>
+              <input type="text" id="headline" class="glass-input-control" placeholder="E.g. Senior Frontend Developer"
+                [(ngModel)]="professionalHeadline" (input)="onProfileChange('headline')" (blur)="validateField('headline')">
+            </div>
+            <span class="input-hint" *ngIf="!errorMessages.headline">Only alphabets and spaces are allowed. (Max 60 chars)</span>
+            <small class="error-msg-text" *ngIf="errorMessages.headline">
+              <i class="bi bi-exclamation-circle-fill"></i> {{ errorMessages.headline }}
+            </small>
+          </div>
+
+          <div class="form-field-group mt-3" [class.has-error]="errorMessages.bio">
+            <label class="form-field-label" for="bio">Biography <span class="required-asterisk">*</span></label>
+            <div class="glass-input-wrapper textarea-wrapper" [class.has-error]="errorMessages.bio">
+              <textarea id="bio" rows="6" class="glass-textarea-control"
+                placeholder="Describe your experience, what you specialize in, and what you can deliver for clients..."
+                [(ngModel)]="professionalBio" (input)="onProfileChange('bio')" (blur)="validateField('bio')"></textarea>
+            </div>
+            <span class="input-hint" *ngIf="!errorMessages.bio">Alphabets, numbers, special characters, and spaces are allowed (min 20 characters).</span>
+            <small class="error-msg-text" *ngIf="errorMessages.bio">
+              <i class="bi bi-exclamation-circle-fill"></i> {{ errorMessages.bio }}
+            </small>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ─── STEP 4: LANGUAGES ─── -->
+    <div class="step-content" *ngIf="currentStep === 4">
+      <div class="title-section centered-title">
+        <h1 class="page-title">What languages do you speak? <span class="required-asterisk">*</span></h1>
+        <p class="page-subtitle">We will use this to help match you with clients who are fluent in these languages.</p>
+      </div>
+
+      <div class="languages-container form-card-container">
+        <!-- Search Input -->
+        <div class="language-search-wrapper">
+          <span class="material-icons search-icon">search</span>
+          <input type="text" class="language-search-input" placeholder="Search languages..."
+            [(ngModel)]="languageSearchTerm" (input)="onLanguageSearch()" (focus)="validateLanguages()" (blur)="validateLanguages()">
+
+          <!-- Dropdown Results -->
+          <div class="language-dropdown" *ngIf="filteredLanguages.length > 0">
+            <div class="language-dropdown-item" *ngFor="let lang of filteredLanguages" (click)="selectLanguage(lang)">
+              {{ lang }}
+            </div>
+          </div>
+        </div>
+
+        <!-- Popular Languages -->
+        <div class="language-section">
+          <h3 class="language-section-title">Popular languages</h3>
+          <div class="language-chips-container">
+            <button type="button" class="lang-chip" *ngFor="let lang of popularLanguages"
+              [class.selected]="selectedLanguages.includes(lang)" (click)="selectLanguage(lang)"
+              [disabled]="selectedLanguages.includes(lang)">
+              {{ lang }}
+              <span class="material-icons check-icon" *ngIf="selectedLanguages.includes(lang)">check</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Selected Languages -->
+        <div class="language-section" *ngIf="selectedLanguages.length > 0">
+          <h3 class="language-section-title">Your languages</h3>
+          <div class="language-chips-container">
+            <div class="lang-chip selected-chip" *ngFor="let lang of selectedLanguages">
+              {{ lang }}
+              <button type="button" class="remove-lang-btn" (click)="removeLanguage(lang)">
+                <span class="material-icons">close</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <small class="error-msg-text mt-3" *ngIf="languageTouched && selectedLanguages.length === 0">
+          <i class="bi bi-exclamation-circle-fill"></i> Please select at least one language.
+        </small>
+      </div>
+    </div>
+
+    <!-- ─── STEP 5: SOCIAL LINKS ─── -->
+    <div class="step-content" *ngIf="currentStep === 5">
+      <div class="title-section centered-title">
+        <h1 class="page-title">Online Presence</h1>
+        <p class="page-subtitle">Connecting your online profiles can help clients learn more about your work. <span
+            class="optional-text">(Optional)</span></p>
+      </div>
+
+      <div class="social-links-container form-card-container">
+        <div class="form-grid">
+          <!-- LinkedIn -->
+          <div class="form-field-group" [class.has-error]="linkErrorMessages.linkedin">
+            <label class="form-field-label" for="linkedin">LinkedIn</label>
+            <div class="glass-input-wrapper" [class.has-error]="linkErrorMessages.linkedin">
+              <i class="bi bi-linkedin glass-input-icon"></i>
+              <input type="url" id="linkedin" class="glass-input-control" placeholder="https://linkedin.com/in/username" [(ngModel)]="linkedinUrl"
+                (input)="validateLink('linkedin')" (blur)="validateLink('linkedin')">
+            </div>
+            <small class="error-msg-text" *ngIf="linkErrorMessages.linkedin">
+              <i class="bi bi-exclamation-circle-fill"></i> {{ linkErrorMessages.linkedin }}
+            </small>
+          </div>
+
+          <!-- Instagram -->
+          <div class="form-field-group" [class.has-error]="linkErrorMessages.instagram">
+            <label class="form-field-label" for="instagram">Instagram</label>
+            <div class="glass-input-wrapper" [class.has-error]="linkErrorMessages.instagram">
+              <i class="bi bi-instagram glass-input-icon"></i>
+              <input type="url" id="instagram" class="glass-input-control" placeholder="https://instagram.com/username" [(ngModel)]="instagramUrl"
+                (input)="validateLink('instagram')" (blur)="validateLink('instagram')">
+            </div>
+            <small class="error-msg-text" *ngIf="linkErrorMessages.instagram">
+              <i class="bi bi-exclamation-circle-fill"></i> {{ linkErrorMessages.instagram }}
+            </small>
+          </div>
+
+          <!-- Twitter (X) -->
+          <div class="form-field-group" [class.has-error]="linkErrorMessages.twitter">
+            <label class="form-field-label" for="twitter">Twitter (X)</label>
+            <div class="glass-input-wrapper" [class.has-error]="linkErrorMessages.twitter">
+              <i class="bi bi-twitter-x glass-input-icon"></i>
+              <input type="url" id="twitter" class="glass-input-control" placeholder="https://x.com/username" [(ngModel)]="twitterUrl"
+                (input)="validateLink('twitter')" (blur)="validateLink('twitter')">
+            </div>
+            <small class="error-msg-text" *ngIf="linkErrorMessages.twitter">
+              <i class="bi bi-exclamation-circle-fill"></i> {{ linkErrorMessages.twitter }}
+            </small>
+          </div>
+
+          <!-- GitHub -->
+          <div class="form-field-group" [class.has-error]="linkErrorMessages.github">
+            <label class="form-field-label" for="github">GitHub</label>
+            <div class="glass-input-wrapper" [class.has-error]="linkErrorMessages.github">
+              <i class="bi bi-github glass-input-icon"></i>
+              <input type="url" id="github" class="glass-input-control" placeholder="https://github.com/username" [(ngModel)]="githubUrl"
+                (input)="validateLink('github')" (blur)="validateLink('github')">
+            </div>
+            <small class="error-msg-text" *ngIf="linkErrorMessages.github">
+              <i class="bi bi-exclamation-circle-fill"></i> {{ linkErrorMessages.github }}
+            </small>
+          </div>
+
+          <!-- Portfolio -->
+          <div class="form-field-group full-width-field" [class.has-error]="linkErrorMessages.portfolio">
+            <label class="form-field-label" for="portfolio">Portfolio</label>
+            <div class="glass-input-wrapper" [class.has-error]="linkErrorMessages.portfolio">
+              <i class="bi bi-globe2 glass-input-icon"></i>
+              <input type="url" id="portfolio" class="glass-input-control" placeholder="https://yourportfolio.com" [(ngModel)]="portfolioUrl"
+                (input)="validateLink('portfolio')" (blur)="validateLink('portfolio')">
+            </div>
+            <small class="error-msg-text" *ngIf="linkErrorMessages.portfolio">
+              <i class="bi bi-exclamation-circle-fill"></i> {{ linkErrorMessages.portfolio }}
+            </small>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ─── STEP 6: EXPERIENCE, RESUME & CERTS ─── -->
+    <div class="step-content scrollable-step" *ngIf="currentStep === 6 && !isSubmitting && !isSuccess">
+      <div class="title-section centered-title">
+        <h1 class="page-title">Tell us about your experience</h1>
+        <p class="page-subtitle">Add your experience, resume, and certifications to help clients understand what you can
+          do.</p>
+      </div>
+
+      <div class="final-step-container">
+        <!-- Left: Experience Form -->
+        <div class="experience-card form-card-container">
+          <div class="form-section-title">
+            <span class="material-icons title-icon-red">work</span>
+            Project Experience
+          </div>
+          <div class="form-grid-modern single-col">
+            <div class="form-field-group" [class.has-error]="errorMessages.years">
+              <label class="form-field-label" for="yearsExp">Years of Experience <span class="required-asterisk">*</span></label>
+              <div class="custom-dropdown" [class.has-error]="errorMessages.years">
+                <div class="dropdown-header" (click)="toggleYearsDropdown()">
+                  <span [class.placeholder-active]="!yearsOfExperience">{{ yearsOfExperience || 'Select experience'
+                    }}</span>
+                  <span class="material-icons dropdown-chevron">keyboard_arrow_down</span>
+                </div>
+                <div class="dropdown-options" *ngIf="showYearsDropdown">
+                  <div class="dropdown-option" *ngFor="let option of yearsOptions"
+                    (click)="selectYearsOfExperience(option)">
+                    {{ option }}
+                  </div>
+                </div>
+              </div>
+              <small class="error-msg-text" *ngIf="errorMessages.years">
+                <i class="bi bi-exclamation-circle-fill"></i> {{ errorMessages.years }}
+              </small>
+            </div>
+
+            <div class="project-experience-list">
+              <div *ngIf="projects.length === 0" class="empty-projects-state">
+                No projects added yet. Click below to add your first project.
+              </div>
+              <div class="project-experience-item" *ngFor="let project of projects; let i = index">
+                <div class="project-header">
+                  <div class="project-header-info">
+                    <h4 class="project-title">{{ project.title }}</h4>
+                    <span class="project-domain-tag">{{ project.domain }} • {{ project.experience }} Exp</span>
+                    <p class="project-desc" *ngIf="project.description">{{ project.description }}</p>
+                  </div>
+                  <button type="button" class="btn-remove-project" (click)="removeProject(i)" title="Remove Project">
+                    <span class="material-icons">delete_outline</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+            <button type="button" class="btn-add-project" (click)="openProjectModal()">
+              <span class="material-icons">add_circle_outline</span>
+              Add Project
+            </button>
+          </div>
+        </div>
+
+        <!-- Right: Profile Boosts -->
+        <div class="boosts-container">
+          <div class="boost-card form-card-container">
+            <div class="form-section-title">
+              <span class="material-icons title-icon-red">rocket_launch</span>
+              Profile Boost
+            </div>
+            <div class="panel-body">
+
+              <!-- Resume -->
+              <div class="boost-section">
+                <div class="boost-section-header">
+                  <span class="material-icons boost-icon">description</span>
+                  <div>
+                    <h3 class="boost-title">Resume</h3>
+                    <p class="boost-subtitle">Recommended &middot; Stand out</p>
+                  </div>
+                </div>
+                <p class="boost-desc">Adding a resume gives clients more context about your experience and can help you
+                  stand out for relevant projects.</p>
+
+                <div class="resume-upload-area" *ngIf="!resumeFileName" (click)="resumeInput.click()">
+                  <span class="material-icons upload-icon">cloud_upload</span>
+                  <span class="upload-text">Upload Resume</span>
+                  <span class="upload-hint">PDF, DOC, or DOCX</span>
+                  <input type="file" #resumeInput (change)="onResumeSelected($event)" accept=".pdf,.doc,.docx" hidden>
+                </div>
+
+                <div class="resume-selected" *ngIf="resumeFileName">
+                  <div class="file-info">
+                    <span class="material-icons file-icon">picture_as_pdf</span>
+                    <span class="file-name">{{ resumeFileName }}</span>
+                  </div>
+                  <button type="button" class="remove-file-btn" (click)="removeResume()">
+                    <span class="material-icons">close</span>
+                  </button>
+                </div>
+              </div>
+
+              <div class="boost-divider"></div>
+
+              <!-- Certifications -->
+              <div class="boost-section">
+                <div class="boost-section-header">
+                  <span class="material-icons boost-icon">workspace_premium</span>
+                  <div>
+                    <h3 class="boost-title">Certifications</h3>
+                    <p class="boost-subtitle">Showcase your verified credentials</p>
+                  </div>
+                </div>
+
+                <div class="certifications-list" *ngIf="certifications.length > 0">
+                  <div class="cert-item" *ngFor="let cert of certifications; let i = index">
+                    <div class="cert-info">
+                      <h4 class="cert-title">{{ cert.title }}</h4>
+                      <p class="cert-issuer">{{ cert.issuer }} &middot; {{ cert.issueDate }}</p>
+                      <a *ngIf="cert.credentialUrl" [href]="cert.credentialUrl" target="_blank"
+                        class="cert-link">Verify</a>
+                    </div>
+                    <button type="button" class="btn-remove-cert" (click)="removeCertification(i)">
+                      <span class="material-icons">delete_outline</span>
+                    </button>
+                  </div>
+                </div>
+
+                <button type="button" class="btn-add-cert" (click)="openCertModal()">
+                  <span class="material-icons">add_circle_outline</span>
+                  Add Certification
+                </button>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ─── LOADING / SUCCESS SIMULATION ─── -->
+    <div class="saving-screen" *ngIf="isSubmitting || isSuccess">
+      <div class="saving-content">
+
+        <!-- Loading State -->
+        <div class="spinner-wrapper" *ngIf="isSubmitting && !isSuccess">
+          <div class="spinner"></div>
+        </div>
+
+        <!-- Success State -->
+        <div class="success-wrapper" *ngIf="isSuccess">
+          <span class="material-icons icon-success">check_circle</span>
+        </div>
+
+        <div class="loading-text-container">
+          <h2 class="creative-loading-title">
+            {{ isSuccess ? "Profile Created Successfully" : "Setting up your profile" }}
+          </h2>
+          <p class="creative-loading-subtitle">
+            {{ isSuccess ? "Welcome to Kansbe. You are now ready to start your freelance journey." : "Please wait a
+            moment while we process your information." }}
+          </p>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- ─── Footer Navigation ─── -->
+  <footer class="onboarding-footer">
+    <button class="btn-back" (click)="onBack()" type="button">
+      <span class="material-icons">arrow_back</span>
+      Back
+    </button>
+    <div class="footer-info">
+      <span *ngIf="!canContinue() && currentStep === 1" class="validation-hint">
+        <span class="material-icons hint-icon">info</span>
+        <span *ngIf="!selectedCategory">Please select a domain to continue</span>
+        <span *ngIf="selectedCategory && selectedSkills.length === 0">Select at least 1 skill in {{ selectedCategory!.name }} to continue</span>
+        <span *ngIf="selectedCategory && selectedSkills.length > 0 && !areSkillLevelsSelected()">Please select proficiency level for all skills</span>
+      </span>
+      <span *ngIf="!canContinue() && currentStep === 2" class="validation-hint">
+        <span class="material-icons hint-icon">info</span>
+        <span *ngIf="!fullName.trim()">Full name is required</span>
+        <span *ngIf="fullName.trim() && !isUsernameValid()">Username must contain only alphabets and dot (.)</span>
+        <span *ngIf="fullName.trim() && isUsernameValid() && !isContactValid()">Contact number must be exactly 10 numerical digits</span>
+        <span *ngIf="fullName.trim() && isUsernameValid() && isContactValid() && !gender">Please select gender</span>
+        <span *ngIf="fullName.trim() && isUsernameValid() && isContactValid() && gender && !isDobValid()">{{ validateDob() || 'Valid Date of Birth is required' }}</span>
+        <span *ngIf="fullName.trim() && isUsernameValid() && isContactValid() && gender && isDobValid() && !isNationalityValid()">Nationality must contain only alphabets and spaces</span>
+        <span *ngIf="fullName.trim() && isUsernameValid() && isContactValid() && gender && isDobValid() && isNationalityValid() && !isCountryValid()">Country must contain only alphabets and spaces</span>
+      </span>
+      <span *ngIf="!canContinue() && currentStep === 3" class="validation-hint">
+        <span class="material-icons hint-icon">info</span>
+        <span *ngIf="!isHeadlineValid()">Job Title must contain only alphabets and spaces</span>
+        <span *ngIf="isHeadlineValid() && !isBioValid()">Biography must be at least 20 characters</span>
+      </span>
+      <span *ngIf="!canContinue() && currentStep === 4" class="validation-hint">
+        <span class="material-icons hint-icon">info</span>
+        Please select at least one language to continue
+      </span>
+      <span *ngIf="!canContinue() && currentStep === 5" class="validation-hint">
+        <span class="material-icons hint-icon">info</span>
+        Please ensure all entered links are valid URLs
+      </span>
+      <span *ngIf="!canContinue() && currentStep === 6" class="validation-hint">
+        <span class="material-icons hint-icon">info</span>
+        Years of Experience is required
+      </span>
+    </div>
+    <div class="footer-actions">
+      <button *ngIf="currentStep === 5" class="btn-skip" (click)="onSkip()" type="button">Skip</button>
+      <button class="btn-next" [class.enabled]="canContinue()" [disabled]="!canContinue() || isSubmitting || isSuccess"
+        (click)="onNext()" type="button" id="onboarding-next-btn">
+        <ng-container *ngIf="currentStep < 6">
+          Next
+          <span class="material-icons">arrow_forward</span>
+        </ng-container>
+        <ng-container *ngIf="currentStep === 6">
+          Complete Profile
+          <span class="material-icons">check</span>
+        </ng-container>
+      </button>
+    </div>
+  </footer>
+
+</div>
+
+<!-- ─── PROJECT EXPERIENCE MODAL ─── -->
+<div class="modal-overlay" *ngIf="showProjectModal">
+  <div class="modal-card">
+    <div class="modal-header">
+      <h2>Add Project</h2>
+      <button type="button" class="btn-close" (click)="closeProjectModal()">
+        <span class="material-icons">close</span>
+      </button>
+    </div>
+    <div class="modal-body form-grid-modern single-col">
+      <!-- Project Domain -->
+      <div class="form-field-group" [class.has-error]="projectErrorMessages.domain">
+        <label class="form-field-label">Project Domain <span class="required-asterisk">*</span></label>
+        <div class="glass-input-wrapper" [class.has-error]="projectErrorMessages.domain">
+          <input type="text" class="glass-input-control" placeholder="e.g. E-Commerce, Healthcare, Finance..."
+            [(ngModel)]="newProject.domain" (input)="validateProjectField('domain')" (blur)="validateProjectField('domain')">
+        </div>
+        <span class="input-hint" *ngIf="!projectErrorMessages.domain">Alphabets, spaces, and special characters are allowed.</span>
+        <small class="error-msg-text" *ngIf="projectErrorMessages.domain">
+          <i class="bi bi-exclamation-circle-fill"></i> {{ projectErrorMessages.domain }}
+        </small>
+      </div>
+
+      <!-- Project Title -->
+      <div class="form-field-group mt-3" [class.has-error]="projectErrorMessages.title">
+        <label class="form-field-label">Project Title <span class="required-asterisk">*</span></label>
+        <div class="glass-input-wrapper" [class.has-error]="projectErrorMessages.title">
+          <input type="text" class="glass-input-control" placeholder="e.g. Frontend Redesign for Retail App"
+            [(ngModel)]="newProject.title" (input)="validateProjectField('title')" (blur)="validateProjectField('title')">
+        </div>
+        <span class="input-hint" *ngIf="!projectErrorMessages.title">Only alphabets and spaces are allowed.</span>
+        <small class="error-msg-text" *ngIf="projectErrorMessages.title">
+          <i class="bi bi-exclamation-circle-fill"></i> {{ projectErrorMessages.title }}
+        </small>
+      </div>
+
+      <!-- Project Experience -->
+      <div class="form-field-group mt-3" [class.has-error]="projectErrorMessages.experience">
+        <label class="form-field-label">Project Experience <span class="required-asterisk">*</span></label>
+        <div class="custom-dropdown" [class.has-error]="projectErrorMessages.experience">
+          <div class="dropdown-header" (click)="toggleProjectExperienceDropdown()">
+            <span [class.placeholder-active]="!newProject.experience">{{ newProject.experience || 'Select experience' }}</span>
+            <span class="material-icons dropdown-chevron">keyboard_arrow_down</span>
+          </div>
+          <div class="dropdown-options" *ngIf="showProjectExperienceDropdown">
+            <div class="dropdown-option" *ngFor="let option of yearsOptions"
+              (click)="selectProjectExperience(option)">
+              {{ option }}
+            </div>
+          </div>
+        </div>
+        <small class="error-msg-text" *ngIf="projectErrorMessages.experience">
+          <i class="bi bi-exclamation-circle-fill"></i> {{ projectErrorMessages.experience }}
+        </small>
+      </div>
+
+      <!-- Project Description -->
+      <div class="form-field-group mt-3" [class.has-error]="projectErrorMessages.description">
+        <label class="form-field-label">Project Description <span class="optional">(Optional)</span></label>
+        <div class="glass-input-wrapper textarea-wrapper" [class.has-error]="projectErrorMessages.description">
+          <textarea rows="4" class="glass-textarea-control"
+            placeholder="Describe your responsibilities, technologies used, and outcomes..."
+            [(ngModel)]="newProject.description" (input)="validateProjectField('description')" (blur)="validateProjectField('description')"></textarea>
+        </div>
+        <span class="input-hint" *ngIf="!projectErrorMessages.description">Alphabets, numbers, special characters, and spaces are allowed.</span>
+        <small class="error-msg-text" *ngIf="projectErrorMessages.description">
+          <i class="bi bi-exclamation-circle-fill"></i> {{ projectErrorMessages.description }}
+        </small>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn-cancel" (click)="closeProjectModal()">Cancel</button>
+      <button type="button" class="btn-modal-submit" [disabled]="!isProjectValid()"
+        (click)="addProject()">Add Project</button>
+    </div>
+  </div>
+</div>
+
+<!-- ─── CERTIFICATIONS MODAL ─── -->
+<div class="modal-overlay" *ngIf="showCertModal">
+  <div class="modal-card">
+    <div class="modal-header">
+      <h2>Add Certification</h2>
+      <button type="button" class="btn-close" (click)="closeCertModal()">
+        <span class="material-icons">close</span>
+      </button>
+    </div>
+    <div class="modal-body form-grid-modern single-col">
+      <!-- Certification Title -->
+      <div class="form-field-group" [class.has-error]="certErrorMessages.title">
+        <label class="form-field-label">Certification Title <span class="required-asterisk">*</span></label>
+        <div class="glass-input-wrapper" [class.has-error]="certErrorMessages.title">
+          <input type="text" class="glass-input-control" placeholder="e.g. Google UX Design Professional Certificate"
+            [(ngModel)]="newCertification.title" (input)="validateCertField('title')" (blur)="validateCertField('title')">
+        </div>
+        <small class="error-msg-text" *ngIf="certErrorMessages.title">
+          <i class="bi bi-exclamation-circle-fill"></i> {{ certErrorMessages.title }}
+        </small>
+      </div>
+
+      <!-- Issued By -->
+      <div class="form-field-group mt-3" [class.has-error]="certErrorMessages.issuer">
+        <label class="form-field-label">Issued By <span class="required-asterisk">*</span></label>
+        <div class="glass-input-wrapper" [class.has-error]="certErrorMessages.issuer">
+          <input type="text" class="glass-input-control" placeholder="e.g. Google"
+            [(ngModel)]="newCertification.issuer" (input)="validateCertField('issuer')" (blur)="validateCertField('issuer')">
+        </div>
+        <small class="error-msg-text" *ngIf="certErrorMessages.issuer">
+          <i class="bi bi-exclamation-circle-fill"></i> {{ certErrorMessages.issuer }}
+        </small>
+      </div>
+
+      <!-- Issue Date -->
+      <div class="form-field-group mt-3">
+        <label class="form-field-label">Issue Date</label>
+        <div class="glass-input-wrapper">
+          <input type="date" class="glass-input-control" [(ngModel)]="newCertification.issueDate">
+        </div>
+      </div>
+
+      <!-- Credential URL -->
+      <div class="form-field-group mt-3" [class.has-error]="certErrorMessages.url">
+        <label class="form-field-label">Credential URL <span class="optional">(Optional)</span></label>
+        <div class="glass-input-wrapper" [class.has-error]="certErrorMessages.url">
+          <input type="url" class="glass-input-control" placeholder="https://" [(ngModel)]="newCertification.credentialUrl"
+            (input)="validateCertField('url')" (blur)="validateCertField('url')">
+        </div>
+        <small class="error-msg-text" *ngIf="certErrorMessages.url">
+          <i class="bi bi-exclamation-circle-fill"></i> {{ certErrorMessages.url }}
+        </small>
+      </div>
+
+      <!-- Certificate File Upload -->
+      <div class="form-field-group mt-3">
+        <label class="form-field-label">Certificate File <span class="optional">(Optional)</span></label>
+        <div class="resume-upload-area" *ngIf="!newCertification.fileName" (click)="certInput.click()">
+          <span class="material-icons upload-icon">cloud_upload</span>
+          <span class="upload-text">Upload Certificate</span>
+          <span class="upload-hint">PDF, JPG, or PNG</span>
+          <input type="file" #certInput (change)="onCertFileSelected($event)" accept=".pdf,.jpg,.jpeg,.png" hidden>
+        </div>
+        <div class="resume-selected" *ngIf="newCertification.fileName">
+          <div class="file-info">
+            <span class="material-icons file-icon">verified</span>
+            <span class="file-name">{{ newCertification.fileName }}</span>
+          </div>
+          <button type="button" class="remove-file-btn" (click)="removeCertFile()">
+            <span class="material-icons">close</span>
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn-cancel" (click)="closeCertModal()">Cancel</button>
+      <button type="button" class="btn-modal-submit" [disabled]="!isCertValid()"
+        (click)="addCertification()">Add Certification</button>
+    </div>
+  </div>
+</div>
+
+
+<!-- Avatar Selection Modal - Removed: using name initials instead -->
+<!-- <div class="avatar-modal-overlay" *ngIf="isAvatarModalOpen">
+  <div class="avatar-modal-content glass-modal">
+    <div class="modal-header glass-header">
+      <h2>CHOOSE YOUR AVATAR</h2>
+      <button class="btn-close-modal" (click)="closeAvatarModal()">
+        <span class="material-icons">close</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <p class="avatar-subtitle">Pick an avatar that represents you across Kansbe.</p>
+      <div class="avatar-grid">
+        <div class="avatar-item" *ngFor="let avatar of avatars" [class.selected]="selectedAvatar?.id === avatar.id"
+          (click)="selectAvatar(avatar)">
+          <img [src]="avatar.image" [alt]="avatar.name">
+          <div class="selected-glow"></div>
+          <div class="selected-indicator" *ngIf="selectedAvatar?.id === avatar.id">
+            <span class="material-icons">check_circle</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div> -->

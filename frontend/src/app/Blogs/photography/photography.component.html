@@ -1,0 +1,824 @@
+<app-header></app-header>
+
+<main class="photography-page">
+    <!-- Back Button Navigation -->
+    <div class="back-navigation-container">
+        <button class="btn-back-pill" (click)="navigateToBlogs()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
+                stroke-linejoin="round" class="back-arrow">
+                <line x1="19" y1="12" x2="5" y2="12"></line>
+                <polyline points="12 19 5 12 12 5"></polyline>
+            </svg>
+            <span>Back</span>
+        </button>
+    </div>
+
+    <section class="hero-section" style="background-image: url('assets/Photography 1.webp');">
+        <div class="hero-overlay"></div>
+        <div class="container hero-container">
+            <div class="hero-content-flex">
+                <div class="hero-left-content">
+                    <h1 class="hero-title" *ngIf="!isGlobal">BEST<br><span class="text-red">PHOTOGRAPHERS</span><br>IN
+                        INDIA</h1>
+                    <h1 class="hero-title" *ngIf="isGlobal">PHOTOGRAPHERS:<br><span class="text-red">A PRACTICAL
+                            GUIDE</span></h1>
+                    <p class="hero-subtitle" *ngIf="!isGlobal">
+                        Finding the best photographer in India isn't about choosing the most popular one — it's about
+                        finding
+                        someone
+                        who aligns with your vision. With so many options available, most people spend hours searching
+                        without
+                        clarity on who is the right fit.
+                    </p>
+                    <p class="hero-subtitle" *ngIf="isGlobal">
+                        Before choosing a photographer, it's important to understand your requirement, style, and the
+                        kind of story you want to capture.
+                    </p>
+                    <p class="hero-challenge-line" *ngIf="!isGlobal">The real challenge is not availability — it’s
+                        alignment.</p>
+                    <p class="hero-challenge-line" *ngIf="isGlobal" style="text-transform: uppercase;">The Kinetic
+                        Manuscript series explores the intersection of visual precision and narrative intent.</p>
+                </div>
+
+                <div class="hero-right-content">
+                    <div class="hero-action-box">
+                        <button class="btn-hero-pill" (click)="joinAsClient()">
+                            Create an Account <svg viewBox="0 0 24 24" class="arrow-icon">
+                                <path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" fill="none" stroke-width="2" />
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- THE SPECIALISTS -->
+    <section class="specialists-section">
+        <div class="container">
+            <div class="specialists-header">
+                <h2 class="title-main">The Specialists</h2>
+                <div class="header-line"></div>
+                <span class="header-label">SELECT YOUR CATEGORY</span>
+            </div>
+
+            <div class="row g-4">
+                <div class="col-12 col-md-6 col-lg-4" *ngFor="let spec of (isGlobal ? globalSpecialists : specialists)">
+                    <div class="spec-card">
+                        <div class="spec-icon">
+                            <!-- Dynamic Icons based on spec.icon -->
+                            <svg *ngIf="spec.icon === 'heart'" viewBox="0 0 24 24" fill="none" stroke="red"
+                                stroke-width="2">
+                                <path
+                                    d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+                            </svg>
+                            <svg *ngIf="spec.icon === 'camera-plus'" viewBox="0 0 24 24" fill="none" stroke="red"
+                                stroke-width="2">
+                                <path
+                                    d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z" />
+                                <circle cx="12" cy="13" r="4" />
+                                <path d="M12 10v6M9 13h6" />
+                            </svg>
+                            <svg *ngIf="spec.icon === 'box'" viewBox="0 0 24 24" fill="none" stroke="red"
+                                stroke-width="2">
+                                <path
+                                    d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z" />
+                                <path d="m3.3 7 8.7 5 8.7-5M12 22V12" />
+                            </svg>
+                            <svg *ngIf="spec.icon === 'hanger'" viewBox="0 0 24 24" fill="none" stroke="red"
+                                stroke-width="2">
+                                <path d="M22 19V9a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v10" />
+                                <path d="M12 7V3a2 2 0 0 1 2-2h0a2 2 0 0 1 2 2v1M12 7l-5 5M12 7l5 5" />
+                            </svg>
+                            <svg *ngIf="spec.icon === 'calendar'" viewBox="0 0 24 24" fill="none" stroke="red"
+                                stroke-width="2">
+                                <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
+                                <line x1="16" y1="2" x2="16" y2="6" />
+                                <line x1="8" y1="2" x2="8" y2="6" />
+                                <line x1="3" y1="10" x2="21" y2="10" />
+                            </svg>
+                            <svg *ngIf="spec.icon === 'video'" viewBox="0 0 24 24" fill="none" stroke="red"
+                                stroke-width="2">
+                                <polygon points="23 7 16 12 23 17 23 7" />
+                                <rect x="1" y="5" width="15" height="14" rx="2" ry="2" />
+                            </svg>
+                        </div>
+                        <h3>{{ spec.title }}</h3>
+                        <p>{{ spec.desc }}</p>
+                        <div class="spec-img-box">
+                            <img [src]="spec.img" [alt]="spec.title">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- HOW KANSBE WORKS -->
+    <section class="how-it-works-section">
+        <div class="container">
+            <h2 class="section-title center small-caps" *ngIf="!isGlobal">HOW KANSBE WORKS</h2>
+            <h2 class="section-title center small-caps" *ngIf="isGlobal">THE KINETIC PATH</h2>
+
+            <div class="row g-4 mt-5 justify-content-center" *ngIf="!isGlobal">
+                <div class="col-lg-2-4 col-md-6 d-flex">
+                    <div class="work-step h-100">
+                        <div class="step-num">01</div>
+                        <h3>Create Account</h3>
+                        <p>Get started by setting up your profile on Kansbe.</p>
+                    </div>
+                </div>
+                <div class="col-lg-2-4 col-md-6 d-flex">
+                    <div class="work-step h-100">
+                        <div class="step-num">02</div>
+                        <h3>Share Requirement</h3>
+                        <p>Describe the shoot type, location, and your desired visual aesthetic.</p>
+                    </div>
+                </div>
+                <div class="col-lg-2-4 col-md-6 d-flex">
+                    <div class="work-step h-100">
+                        <div class="step-num">03</div>
+                        <h3>Get Matched</h3>
+                        <p>Relevant photographers are aligned based on your genre and lighting requirements.</p>
+                    </div>
+                </div>
+                <div class="col-lg-2-4 col-md-6 d-flex">
+                    <div class="work-step h-100">
+                        <div class="step-num">04</div>
+                        <h3>Start Collaborating</h3>
+                        <p>Connect with the selected photographer and move forward with vision and clarity.</p>
+                    </div>
+                </div>
+                <div class="col-lg-2-4 col-md-6 d-flex">
+                    <div class="work-step h-100">
+                        <div class="step-num">05</div>
+                        <h3>Structured Payments</h3>
+                        <p>Payments are handled smoothly through Kansbe, ensuring a reliable process for both you and
+                            the creative.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row g-4 mt-5 justify-content-center" *ngIf="isGlobal">
+                <div class="col-lg-4 col-md-4 d-flex" *ngFor="let step of globalWorkSteps">
+                    <div class="work-step h-100 w-100">
+                        <div class="step-num">{{ step.num }}</div>
+                        <h3>{{ step.title }}</h3>
+                        <p>{{ step.desc }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- WHAT TO LOOK FOR & DIFFERENT -->
+    <section class="lensman-diff-section">
+        <div class="container">
+            <div class="row g-0">
+                <!-- LEFT COLUMN: TITLE & IMAGE -->
+                <div class="col-12 col-lg-5 position-relative">
+                    <h2 class="look-title" *ngIf="!isGlobal">What to Look for<br>in a Lensman</h2>
+                    <h2 class="look-title" *ngIf="isGlobal">How to<br>Choose</h2>
+                    <div class="look-image-container">
+                        <img src="../../assets/Studiophotography.webp" alt="Photography Studio" class="look-main-img">
+                    </div>
+                </div>
+
+                <!-- RIGHT COLUMN: POINTS & DIFFERENCE BOX -->
+                <div class="col-12 col-lg-7 position-relative">
+                    <div class="look-right-content ps-lg-5">
+                        <!-- TOP POINTS -->
+                        <div class="look-points-top">
+                            <ng-container *ngIf="!isGlobal">
+                                <div class="look-item mb-5 d-flex gap-4">
+                                    <div class="look-icon-box">
+                                        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#FF0100"
+                                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                            <circle cx="12" cy="12" r="3" />
+                                            <path
+                                                d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z" />
+                                        </svg>
+                                    </div>
+                                    <div class="look-text">
+                                        <h3>Clear Thinking</h3>
+                                        <p>An artist must be able to articulate 'why' they make a choice. If they cannot
+                                            explain their
+                                            lighting, they cannot replicate success.</p>
+                                    </div>
+                                </div>
+                                <div class="look-item mb-5 d-flex gap-4">
+                                    <div class="look-icon-box">
+                                        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#FF0100"
+                                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                            <polygon
+                                                points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+                                        </svg>
+                                    </div>
+                                    <div class="look-text">
+                                        <h3>Consistency</h3>
+                                        <p>One great photo is luck. A portfolio of 50 great photos is a signature. Look
+                                            for
+                                            the thread that
+                                            connects their work.</p>
+                                    </div>
+                                </div>
+                                <div class="look-item mb-5 d-flex gap-4">
+                                    <div class="look-icon-box">
+                                        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#FF0100"
+                                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+                                        </svg>
+                                    </div>
+                                    <div class="look-text">
+                                        <h3>Communication</h3>
+                                        <p>The best technical photographer fails if they cannot command a room or listen
+                                            to
+                                            a client's nuance.
+                                            Communication is the catalyst.</p>
+                                    </div>
+                                </div>
+                            </ng-container>
+
+                            <ng-container *ngIf="isGlobal">
+                                <div class="look-item mb-5 d-flex gap-4">
+                                    <div class="look-icon-box">
+                                        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#FF0100"
+                                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                            <circle cx="12" cy="12" r="3" />
+                                            <path
+                                                d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z" />
+                                        </svg>
+                                    </div>
+                                    <div class="look-text">
+                                        <h3>Portfolio Depth</h3>
+                                        <p>Don't just look at their best shots; look for consistency across whole
+                                            albums.</p>
+                                    </div>
+                                </div>
+                                <div class="look-item mb-5 d-flex gap-4">
+                                    <div class="look-icon-box">
+                                        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#FF0100"
+                                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                            <polygon
+                                                points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+                                        </svg>
+                                    </div>
+                                    <div class="look-text">
+                                        <h3>Style Alignment</h3>
+                                        <p>Do they prefer moody shadows or bright, clinical high-key lighting?</p>
+                                    </div>
+                                </div>
+                                <div class="look-item mb-5 d-flex gap-4">
+                                    <div class="look-icon-box">
+                                        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#FF0100"
+                                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+                                        </svg>
+                                    </div>
+                                    <div class="look-text">
+                                        <h3>Post-Production</h3>
+                                        <p>Understand the editing turnaround and the level of retouching provided.</p>
+                                    </div>
+                                </div>
+                                <div class="look-item mb-5 d-flex gap-4">
+                                    <div class="look-icon-box">
+                                        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#FF0100"
+                                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                            <circle cx="12" cy="12" r="10" />
+                                            <line x1="12" y1="16" x2="12" y2="12" />
+                                            <line x1="12" y1="8" x2="12.01" y2="8" />
+                                        </svg>
+                                    </div>
+                                    <div class="look-text">
+                                        <h3>Chemical Bond</h3>
+                                        <p>The relationship between the subject and shooter is visible in the frame.</p>
+                                    </div>
+                                </div>
+                            </ng-container>
+                        </div>
+
+                        <!-- DIFFERENT BOX (OVERLAPPING) -->
+                        <div class="different-overlap-box">
+                            <h2 class="different-title mb-5" *ngIf="!isGlobal">WHY <span class="text-red">KANSBE</span>
+                                IS DIFFERENT</h2>
+                            <h2 class="different-title mb-5" *ngIf="isGlobal">THE <span class="text-red">CLARITY</span>
+                                FRAMEWORK</h2>
+                            <div class="row g-4 g-lg-5" *ngIf="!isGlobal">
+                                <div class="col-12 col-md-6">
+                                    <div class="diff-point">
+                                        <h4>No Endless Scrolling</h4>
+                                        <p>Don't spend hours looking through thousands of profiles. We provide a curated
+                                            short-list that
+                                            matches your exact vibe.</p>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-6">
+                                    <div class="diff-point">
+                                        <h4>Curated photographers</h4>
+                                        <p>We understand the difference between 'commercial' and 'editorial'. Our
+                                            matching engine respects
+                                            your brand's visual identity.</p>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-6">
+                                    <div class="diff-point">
+                                        <h4>Smooth end-to-end process</h4>
+                                        <p>No hidden costs. Every project is scoped with clarity on delivery timelines
+                                            and usage rights from
+                                            day one.</p>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-6">
+                                    <div class="diff-point">
+                                        <h4>Focus on quality and clarity</h4>
+                                        <p>Most platforms are directories. Kansbe is a filter. We value your time as
+                                            much as your creative
+                                            outcome.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row g-4 g-lg-5" *ngIf="isGlobal">
+                                <div class="col-12 col-md-6">
+                                    <div class="diff-point">
+                                        <h4>Transparent Workflow</h4>
+                                        <p>Unlike traditional agencies, we provide a transparent, 100% digital workflow.
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-6">
+                                    <div class="diff-point">
+                                        <h4>Streamlined Process</h4>
+                                        <p>From initial moodboards to final raw file delivery, the process is
+                                            streamlined for high-velocity teams.</p>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-6">
+                                    <div class="diff-point">
+                                        <h4>Strategic Alignment</h4>
+                                        <p>We don't just "take photos." We produce visual assets designed for
+                                            multi-channel distribution.</p>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-6">
+                                    <div class="diff-point">
+                                        <h4>Performance Driven</h4>
+                                        <p>Ensuring your content performs across social, print, and high-res display.
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- WHY BETTER -->
+    <section class="why-better-section">
+        <div class="container">
+            <div class="why-better-header d-flex flex-column gap-3">
+                <h2 class="why-title" *ngIf="!isGlobal">WHY THIS APPROACH<br>WORKS BETTER</h2>
+                <h2 class="why-title" *ngIf="isGlobal" style="text-transform: none;">Why This Decision<br>Matters...
+                </h2>
+                <p class="why-subtitle" *ngIf="!isGlobal">When the process is simplified, excellence becomes inevitable.
+                </p>
+                <p class="why-subtitle" *ngIf="isGlobal">In the digital age, everyone has a camera, but few possess the
+                    Vision. Choosing the wrong photographer isn't just a waste of budget; it's a dilution of your
+                    brand's kinetic energy.</p>
+            </div>
+
+            <div class="row g-4 mt-5" *ngIf="!isGlobal">
+                <div class="col-12 col-md-4">
+                    <div class="why-card h-100">
+                        <div class="why-card-icon mb-4">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#FF0100"
+                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" />
+                            </svg>
+                        </div>
+                        <h3>DECISIONS BECOME FASTER</h3>
+                        <p>Eliminate bureaucratic drag and technical debt. Our lean framework empowers stakeholders to
+                            act with
+                            surgical precision and confidence.</p>
+                    </div>
+                </div>
+                <div class="col-12 col-md-4">
+                    <div class="why-card h-100">
+                        <div class="why-card-icon mb-4">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#FF0100"
+                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M17 1l4 4-4 4m6-4H11a4 4 0 0 0-4 4v2M7 23l-4-4 4-4M1 19h12a4 4 0 0 0 4-4v-2" />
+                            </svg>
+                        </div>
+                        <h3>BETTER ALIGNMENT HAPPENS</h3>
+                        <p>Synchronize cross-functional teams under a unified visual and technical language, ensuring
+                            every pixel
+                            serves a strategic purpose.</p>
+                    </div>
+                </div>
+                <div class="col-12 col-md-4">
+                    <div class="why-card h-100">
+                        <div class="why-card-icon mb-4">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#FF0100"
+                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M23 6l-9.5 9.5-5-5L1 18m22-12h-6m6 0v6" />
+                            </svg>
+                        </div>
+                        <h3>RESULTS IMPROVE SIGNIFICANTLY</h3>
+                        <p>Move from vanity metrics to meaningful impact. Our industrial-grade methodology guarantees a
+                            level of
+                            quality that is simply unachievable elsewhere.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row g-4 mt-5" *ngIf="isGlobal">
+                <div class="col-12 col-md-4">
+                    <div class="why-card h-100">
+                        <div class="why-card-icon mb-4">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#FF0100"
+                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" />
+                            </svg>
+                        </div>
+                        <h3>FINAL TRANSLATOR</h3>
+                        <p>A photographer acts as the final translator of your intent, bringing clarity and vision to
+                            every shoot.</p>
+                    </div>
+                </div>
+                <div class="col-12 col-md-4">
+                    <div class="why-card h-100">
+                        <div class="why-card-icon mb-4">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#FF0100"
+                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M17 1l4 4-4 4m6-4H11a4 4 0 0 0-4 4v2M7 23l-4-4 4-4M1 19h12a4 4 0 0 0 4-4v-2" />
+                            </svg>
+                        </div>
+                        <h3>RAW EMOTION & PRECISION</h3>
+                        <p>Whether it's the raw emotion of a fashion shoot or the clinical precision of product staging.
+                        </p>
+                    </div>
+                </div>
+                <div class="col-12 col-md-4">
+                    <div class="why-card h-100">
+                        <div class="why-card-icon mb-4">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#FF0100"
+                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M23 6l-9.5 9.5-5-5L1 18m22-12h-6m6 0v6" />
+                            </svg>
+                        </div>
+                        <h3>NOISE VS. NARRATIVE</h3>
+                        <p>The alignment between your goal and their eye is the difference between noise and narrative.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- REGION SECTION -->
+    <section class="region-section">
+        <div class="container">
+            <div class="region-card">
+                <div class="row align-items-center">
+                    <div class="col-lg-6">
+                        <h2 class="region-title" *ngIf="!isGlobal">Looking for a perfect Photographer<br>in your region?
+                        </h2>
+                        <h2 class="region-title" *ngIf="isGlobal">Looking for a perfect Photographer<br>in your region?
+                        </h2>
+                        <p class="region-subtitle" *ngIf="!isGlobal">Connect with elite professionals in India's major
+                            tech and creative hubs.</p>
+                        <p class="region-subtitle" *ngIf="isGlobal" style="color: rgba(255, 255, 255, 0.6);">Connect
+                            with elite professionals in major global tech and creative hubs.</p>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="city-grid" *ngIf="!isGlobal">
+                            <a [routerLink]="['/hire-freelancers-in-noida']"
+                                [queryParams]="{ from: 'photography-page' }" class="city-link">
+                                <span>Noida</span>
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                    stroke-linecap="round" stroke-linejoin="round">
+                                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                                    <polyline points="12 5 19 12 12 19"></polyline>
+                                </svg>
+                            </a>
+                            <a [routerLink]="['/hire-freelancers-in-hyderabad']"
+                                [queryParams]="{ from: 'photography-page' }" class="city-link">
+                                <span>Hyderabad</span>
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                    stroke-linecap="round" stroke-linejoin="round">
+                                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                                    <polyline points="12 5 19 12 12 19"></polyline>
+                                </svg>
+                            </a>
+                            <a [routerLink]="['/hire-freelancers-in-bengaluru']"
+                                [queryParams]="{ from: 'photography-page' }" class="city-link">
+                                <span>Bangalore</span>
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                    stroke-linecap="round" stroke-linejoin="round">
+                                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                                    <polyline points="12 5 19 12 12 19"></polyline>
+                                </svg>
+                            </a>
+                            <a [routerLink]="['/hire-freelancers-in-mumbai']"
+                                [queryParams]="{ from: 'photography-page' }" class="city-link">
+                                <span>Mumbai</span>
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                    stroke-linecap="round" stroke-linejoin="round">
+                                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                                    <polyline points="12 5 19 12 12 19"></polyline>
+                                </svg>
+                            </a>
+                            <a [routerLink]="['/hire-freelancers-in-pune']" [queryParams]="{ from: 'photography-page' }"
+                                class="city-link">
+                                <span>Pune</span>
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                    stroke-linecap="round" stroke-linejoin="round">
+                                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                                    <polyline points="12 5 19 12 12 19"></polyline>
+                                </svg>
+                            </a>
+                            <a [routerLink]="['/hire-freelancers-in-chennai']"
+                                [queryParams]="{ from: 'photography-page' }" class="city-link">
+                                <span>Chennai</span>
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                    stroke-linecap="round" stroke-linejoin="round">
+                                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                                    <polyline points="12 5 19 12 12 19"></polyline>
+                                </svg>
+                            </a>
+                        </div>
+                        <!-- GLOBAL city grid -->
+                        <div class="city-grid" *ngIf="isGlobal">
+                            <a [routerLink]="['/best-photographers-india']" class="city-link">
+                                <span>India</span>
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                    stroke-linecap="round" stroke-linejoin="round">
+                                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                                    <polyline points="12 5 19 12 12 19"></polyline>
+                                </svg>
+                            </a>
+                            <a (click)="showComingSoon('UK')" class="city-link"
+                                [class.active-soon]="activeComingSoon === 'UK'">
+                                <div class="city-content">
+                                    <span>UK</span>
+                                    <svg *ngIf="activeComingSoon === 'UK'" viewBox="0 0 24 24" fill="none"
+                                        stroke="currentColor" stroke-width="2" class="lock-icon">
+                                        <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                                        <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                                    </svg>
+                                </div>
+                                <svg *ngIf="activeComingSoon !== 'UK'" viewBox="0 0 24 24" fill="none"
+                                    stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round">
+                                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                                    <polyline points="12 5 19 12 12 19"></polyline>
+                                </svg>
+                                <span class="soon-dot" *ngIf="activeComingSoon === 'UK'"></span>
+                            </a>
+                            <a (click)="showComingSoon('Dubai')" class="city-link"
+                                [class.active-soon]="activeComingSoon === 'Dubai'">
+                                <div class="city-content">
+                                    <span>Dubai</span>
+                                    <svg *ngIf="activeComingSoon === 'Dubai'" viewBox="0 0 24 24" fill="none"
+                                        stroke="currentColor" stroke-width="2" class="lock-icon">
+                                        <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                                        <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                                    </svg>
+                                </div>
+                                <svg *ngIf="activeComingSoon !== 'Dubai'" viewBox="0 0 24 24" fill="none"
+                                    stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round">
+                                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                                    <polyline points="12 5 19 12 12 19"></polyline>
+                                </svg>
+                                <span class="soon-dot" *ngIf="activeComingSoon === 'Dubai'"></span>
+                            </a>
+                            <a (click)="showComingSoon('Singapore')" class="city-link"
+                                [class.active-soon]="activeComingSoon === 'Singapore'">
+                                <div class="city-content">
+                                    <span>Singapore</span>
+                                    <svg *ngIf="activeComingSoon === 'Singapore'" viewBox="0 0 24 24" fill="none"
+                                        stroke="currentColor" stroke-width="2" class="lock-icon">
+                                        <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                                        <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                                    </svg>
+                                </div>
+                                <svg *ngIf="activeComingSoon !== 'Singapore'" viewBox="0 0 24 24" fill="none"
+                                    stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round">
+                                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                                    <polyline points="12 5 19 12 12 19"></polyline>
+                                </svg>
+                                <span class="soon-dot" *ngIf="activeComingSoon === 'Singapore'"></span>
+                            </a>
+                            <a (click)="showComingSoon('USA')" class="city-link"
+                                [class.active-soon]="activeComingSoon === 'USA'">
+                                <div class="city-content">
+                                    <span>USA</span>
+                                    <svg *ngIf="activeComingSoon === 'USA'" viewBox="0 0 24 24" fill="none"
+                                        stroke="currentColor" stroke-width="2" class="lock-icon">
+                                        <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                                        <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                                    </svg>
+                                </div>
+                                <svg *ngIf="activeComingSoon !== 'USA'" viewBox="0 0 24 24" fill="none"
+                                    stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round">
+                                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                                    <polyline points="12 5 19 12 12 19"></polyline>
+                                </svg>
+                                <span class="soon-dot" *ngIf="activeComingSoon === 'USA'"></span>
+                            </a>
+                            <a (click)="showComingSoon('Australia')" class="city-link"
+                                [class.active-soon]="activeComingSoon === 'Australia'">
+                                <div class="city-content">
+                                    <span>Australia</span>
+                                    <svg *ngIf="activeComingSoon === 'Australia'" viewBox="0 0 24 24" fill="none"
+                                        stroke="currentColor" stroke-width="2" class="lock-icon">
+                                        <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                                        <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                                    </svg>
+                                </div>
+                                <svg *ngIf="activeComingSoon !== 'Australia'" viewBox="0 0 24 24" fill="none"
+                                    stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round">
+                                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                                    <polyline points="12 5 19 12 12 19"></polyline>
+                                </svg>
+                                <span class="soon-dot" *ngIf="activeComingSoon === 'Australia'"></span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ SECTION -->
+    <section class="faq-section">
+        <div class="container">
+            <h2 class="faq-title">Frequently Asked Questions</h2>
+            <div class="faq-list">
+                <div class="faq-item" *ngFor="let faq of (isGlobal ? globalFaqs : faqs); let i = index">
+                    <div class="faq-header" (click)="toggleFaq(i)">
+                        <h3>{{ faq.question }}</h3>
+                        <svg class="chevron-icon" [class.rotated]="faq.isOpen" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2">
+                            <path d="M6 9l6 6 6-6" />
+                        </svg>
+                    </div>
+                    <div class="faq-body" *ngIf="faq.isOpen">
+                        <p>{{ faq.answer }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+
+    <!-- Fixed Join Us Button - Visible Throughout -->
+    <div class="fixed-join-us-wrapper">
+        <button class="btn-join-fixed" (click)="toggleModal()">Join Us</button>
+
+        <!-- Join Us Modal - Single Pill with Divider -->
+        <div class="modal-buttons-fixed" [class.show]="showModal">
+            <div class="pill-container">
+                <button class="pill-button pill-left" (click)="startAsFreelancer()">
+                    Start as Freelancer
+                </button>
+                <div class="pill-divider"></div>
+                <button class="pill-button pill-right" (click)="joinAsClient()">
+                    Join as Client
+                </button>
+            </div>
+        </div>
+    </div>
+
+</main>
+
+<!-- FOOTER SECTION (Exact Master Sync) -->
+<footer class="kansbe-footer-section" id="contact">
+    <div class="footer-container container-fluid">
+        <!-- TOP FOOTER: BRAND & CONNECT -->
+        <div class="footer-top-row">
+            <div class="footer-brand">
+                <img src="assets/pics.webp" alt="KANSBE" class="footer-primary-logo">
+                <p class="footer-tagline">
+                    For people who care about how their days feel, who value freedom, balance, clarity, and build
+                    everything else
+                    around that.
+                </p>
+            </div>
+
+            <div class="footer-social-block">
+                <h4 class="footer-heading">Connect with us</h4>
+                <div class="footer-social-icons">
+                    <a *ngFor="let social of socialLinks" [href]="social.url" class="social-btn" target="_blank"
+                        rel="noopener noreferrer" [attr.aria-label]="social.name">
+                        <span class="social-tooltip">{{ social.name }}</span>
+                        <svg *ngIf="social.icon === 'linkedin'" viewBox="0 0 24 24">
+                            <path
+                                d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z" />
+                        </svg>
+                        <svg *ngIf="social.icon === 'instagram'" viewBox="0 0 24 24">
+                            <path
+                                d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" />
+                        </svg>
+                        <svg *ngIf="social.icon === 'x'" viewBox="0 0 24 24">
+                            <path
+                                d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+                        </svg>
+                        <svg *ngIf="social.icon === 'facebook'" viewBox="0 0 24 24">
+                            <path
+                                d="M22.675 0h-21.35c-.732 0-1.325.593-1.325 1.325v21.351c0 .731.593 1.324 1.325 1.324h11.495v-9.294h-3.128v-3.622h3.128v-2.671c0-3.1 1.893-4.788 4.659-4.788 1.325 0 2.463.099 2.795.143v3.24l-1.918.001c-1.504 0-1.795.715-1.795 1.763v2.313h3.587l-.467 3.622h-3.12v9.293h6.116c.73 0 1.323-.593 1.323-1.325v-21.35c0-.732-.593-1.325-1.325-1.325z" />
+                        </svg>
+                    </a>
+                </div>
+                <div class="footer-email-block">
+                    <p class="footer-heading" style="margin-bottom: 10px;">For any support</p>
+                    <a href="mailto:support@kansbe.com" class="footer-email">support@kansbe.com</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-divider"></div>
+
+        <!-- MIDDLE FOOTER: NAVIGATION -->
+        <div class="footer-mid-row row">
+            <div class="col-lg-4 col-md-6 footer-nav-col">
+                <h4 class="footer-heading">Company</h4>
+                <nav class="footer-links-list">
+                    <button (click)="scrollToTop()" class="f-link">Home</button>
+                    <button (click)="navigateToAbout()" class="f-link">About Kansbe</button>
+                    <button (click)="navigateToHowItWorks()" class="f-link">How Kansbe Works</button>
+                    <button (click)="navigateToWhyFreelancers()" class="f-link">Why Kansbe Freelancers</button>
+                    <button (click)="navigateToBlogs()" class="f-link">Blogs</button>
+                </nav>
+            </div>
+
+            <div class="col-lg-4 col-md-6 footer-nav-col">
+                <h4 class="footer-heading">Independence</h4>
+                <nav class="footer-links-list">
+                    <button (click)="registerAsFreelancer()" class="f-link">For Freelancers</button>
+                    <button (click)="registerAsClient()" class="f-link">For Clients</button>
+                    <button (click)="toggleModal()" class="f-link">Join the Network</button>
+                </nav>
+            </div>
+
+            <div class="col-lg-4 col-md-12 footer-nav-col">
+                <h4 class="footer-heading">Legal</h4>
+                <nav class="footer-links-list">
+                    <button (click)="openModal('privacy')" class="f-link">Privacy Statement</button>
+                    <button (click)="openModal('terms')" class="f-link">Terms & Conditions</button>
+                    <span class="f-location">Singapore Inc. HQ</span>
+                </nav>
+            </div>
+        </div>
+
+        <!-- BOTTOM FOOTER: COPYRIGHT -->
+        <div class="footer-bottom-row">
+            <div class="copyright-container">
+                <span class="copyright-text">© {{ currentYear }} KANSBE. ALL RIGHTS RESERVED.</span>
+            </div>
+            <div class="footer-accent-line"></div>
+        </div>
+    </div>
+
+    <!-- LEGAL MODAL (Exact Master Sync) -->
+    <div class="modal-overlay" *ngIf="isModalOpen" (click)="closeModal()">
+        <div class="modal-box" (click)="$event.stopPropagation()">
+            <div class="modal-content-wrapper">
+                <div *ngIf="modalType === 'privacy'" class="modal-content">
+                    <h2>Privacy Policy and Data Security</h2>
+                    <p><strong>Kansbe privacy policy last updated on {{ currentYear }}</strong></p>
+                    <h3>Data Sharing & Confidentiality</h3>
+                    <p>Kansbe does not sell or share your personal data with other clients or freelancers. Only profile
+                        details
+                        necessary for matching and collaboration are used within the platform.</p>
+                    <h3>Current Security Status (MVP Disclosure)</h3>
+                    <p>Kansbe is operating as a Minimum Viable Product (MVP). While we use standard security practices,
+                        our
+                        platform infrastructure does not yet provide the comprehensive protection typical of fully
+                        scaled services.
+                    </p>
+                </div>
+                <div *ngIf="modalType === 'terms'" class="modal-content">
+                    <h2>KANSBE – Terms & Conditions</h2>
+                    <p>These Terms apply to all users of the KANSBE Platform: Freelancers, Clients, and Visitors.</p>
+                    <h3>Platform Usage</h3>
+                    <ul>
+                        <li>KANSBE connects clients and freelancers — it does not manage project execution.</li>
+                        <li>All communication and deals must stay within the platform.</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="close-btn" (click)="closeModal()">Close</button>
+            </div>
+        </div>
+    </div>
+</footer>

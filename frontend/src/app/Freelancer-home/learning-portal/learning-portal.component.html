@@ -1,0 +1,180 @@
+<div class="learning-page-wrapper" *ngIf="data">
+  <!-- Atmospheric Cyberpunk Glow Backdrop -->
+  <div class="ambient-glow-mesh"></div>
+
+  <main class="learning-container">
+
+    <!-- ═════════════════════════════════════════════════════════════
+         TOP SECTION: HERO GREETING & STATS CARDS
+         ═════════════════════════════════════════════════════════════ -->
+    <section class="learning-top-section">
+
+      <!-- Hero Greeting (Left) -->
+      <div class="learning-hero-block">
+        <h1 class="learning-hero-title">
+          Welcome, {{ usr?.fullname?.split(' ')[0] || 'Sunkari' }}!
+        </h1>
+        <p class="learning-hero-sub">
+          Ready to master new skills and elevate your freelance career?
+        </p>
+        <button class="btn-explore-courses" (click)="navigateToAllCourses()">
+          <i class="bi bi-compass"></i> Explore Courses
+        </button>
+      </div>
+
+      <!-- Stats Cards Row (Left/Center 3-Card Row) -->
+      <div class="learning-stats-row">
+
+        <!-- Card 1: Available Courses -->
+        <div class="learning-stat-card">
+          <div class="stat-icon-circle stat-icon-circle--grey">
+            <i class="bi bi-book"></i>
+          </div>
+          <div class="stat-info">
+            <span class="stat-label">Available Courses</span>
+            <span class="stat-value">{{ totalCourses }}</span>
+          </div>
+        </div>
+
+        <!-- Card 2: In Progress -->
+        <div class="learning-stat-card">
+          <div class="stat-icon-circle stat-icon-circle--grey">
+            <i class="bi bi-play-circle"></i>
+          </div>
+          <div class="stat-info">
+            <span class="stat-label">In Progress</span>
+            <span class="stat-value">{{ inProgressCourses }}</span>
+          </div>
+        </div>
+
+        <!-- Card 3: Completed -->
+        <div class="learning-stat-card">
+          <div class="stat-icon-circle stat-icon-circle--red">
+            <i class="bi bi-check-lg"></i>
+          </div>
+          <div class="stat-info">
+            <span class="stat-label">Completed</span>
+            <span class="stat-value">{{ completedCourses }}</span>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ═════════════════════════════════════════════════════════════
+         SECTION: ALL COURSES (MATCHING IMAGE WITH INTERNAL SCROLL)
+         ═════════════════════════════════════════════════════════════ -->
+    <section class="learning-courses-section">
+      <div class="section-header-bar">
+        <h2 class="section-heading">All Courses</h2>
+        <button class="btn-view-all-glass" (click)="navigateToAllCourses()">View All</button>
+      </div>
+
+      <div class="courses-scroll-container custom-scrollbar">
+        <div class="courses-grid-4">
+          <div class="course-glass-card"
+            *ngFor="let course of (recommendedCourses.length > 0 ? recommendedCourses : otherCourses)">
+            <div class="course-card-thumb"
+              [style.backgroundImage]="'url(' + (course.thumbnail || 'assets/default-course.jpg') + ')'">
+            </div>
+
+            <div class="course-card-body">
+              <span class="course-category-tag">{{ course.category || 'SKILL TRACK' }}</span>
+              <h3 class="course-title" [title]="course.title">{{ course.title }}</h3>
+              <p class="course-instructor">Instructor: {{ course.instructor || 'Kansbe Academy' }}</p>
+
+              <div class="course-meta-row">
+                <i class="bi bi-camera-video"></i>
+                <span>{{ course.lessonCount || course.lessons?.length || 1 }} lessons</span>
+              </div>
+
+              <button class="btn-course-explore" (click)="navigateToCourse(course._id)">
+                Explore
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ═════════════════════════════════════════════════════════════
+       MODALS: LIQUID GLASS DARK THEME
+       ═════════════════════════════════════════════════════════════ -->
+
+  <!-- Add Skill Modal -->
+  <div class="modal-backdrop-dark" *ngIf="showSkillModal" (click)="closeSkillModal()">
+    <div class="modal-card-glass" (click)="$event.stopPropagation()">
+      <div class="modal-header-glass">
+        <h5 class="modal-title-glass">Manage Your Skills</h5>
+        <button class="modal-close-btn" (click)="closeSkillModal()"><i class="bi bi-x-lg"></i></button>
+      </div>
+
+      <div class="modal-body-glass custom-scrollbar">
+        <div *ngIf="skillErrorMessage" class="modal-alert-error mb-3">
+          {{ skillErrorMessage }}
+        </div>
+
+        <!-- Existing skills -->
+        <div class="existing-skills-wrap mb-4" *ngIf="getSkillsArray().length > 0">
+          <label class="modal-field-label">Your Current Skills</label>
+          <div class="skills-chip-container">
+            <div class="skill-chip-glass" *ngFor="let s of getSkillsArray()">
+              <span>{{ s.skill }}</span>
+              <i class="bi bi-x ms-1 cursor-pointer" (click)="openConfirmDelete(s._id || s.id)"></i>
+            </div>
+          </div>
+        </div>
+
+        <div class="modal-form-group mb-3">
+          <label class="modal-field-label">Add a New Skill</label>
+          <input type="text" class="modal-input-glass" [(ngModel)]="skilldetails.skill"
+            placeholder="e.g. React, UX Design...">
+        </div>
+
+        <div class="modal-form-group mb-3">
+          <label class="modal-field-label">Proficiency</label>
+          <div class="prof-btn-grid">
+            <button type="button" class="prof-choice-btn" [class.active]="skilldetails.status === 'Beginner'"
+              (click)="setSkillLevel('Beginner')">Beginner</button>
+            <button type="button" class="prof-choice-btn" [class.active]="skilldetails.status === 'Intermediate'"
+              (click)="setSkillLevel('Intermediate')">Intermediate</button>
+            <button type="button" class="prof-choice-btn" [class.active]="skilldetails.status === 'Advanced'"
+              (click)="setSkillLevel('Advanced')">Advanced</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-footer-glass">
+        <button class="modal-cancel-btn" (click)="closeSkillModal()">Cancel</button>
+        <button class="modal-submit-btn" [disabled]="!skilldetails.skill || !skilldetails.status"
+          (click)="addNewSkill()">Add Skill</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Delete Confirm Modal -->
+  <div class="modal-backdrop-dark" *ngIf="showConfirmModal" (click)="cancelDelete()">
+    <div class="modal-card-glass modal-card-sm text-center" (click)="$event.stopPropagation()">
+      <div class="modal-body-glass py-4">
+        <div class="delete-icon-orb mb-3">
+          <i class="bi bi-trash-fill text-danger"></i>
+        </div>
+        <h5 class="text-white fw-semibold mb-2">Remove Skill?</h5>
+        <p class="text-muted small mb-4">Are you sure you want to remove this skill? This cannot be undone.</p>
+        <div class="d-flex gap-2 justify-content-center">
+          <button class="modal-cancel-btn" (click)="cancelDelete()">Cancel</button>
+          <button class="modal-submit-btn" (click)="confirmDelete()">Remove</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Profile Complete Popup -->
+  <app-profile-complete-popup [visible]="showProfilePopup" [userType]="'freelancer'"
+    [missingFields]="profileMissingFields" [actionBlocked]="'adding skills'"
+    (navigateToSettings)="onProfilePopupNavigate()" (closePopup)="onProfilePopupClose()">
+  </app-profile-complete-popup>
+
+</div>

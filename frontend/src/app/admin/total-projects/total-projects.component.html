@@ -1,0 +1,128 @@
+<div class="main-admin-wrapper">
+    <button class="back-btn" (click)="goBack()">↩ Back</button>
+
+    <div class="projects-page">
+        <!-- Header -->
+        <div class="header">
+            <div class="title-section">
+                <h1>Total Projects</h1>
+                <p>View Total Work Portfolio</p>
+            </div>
+            
+            <div class="pagination-header">
+                <span class="totals">Total Database Results: <b>{{totalItems}}</b></span>
+                <div class="page-controls">
+                    <button class="page-btn" (click)="prevPage()" [disabled]="currentPage === 1">Prev</button>
+                    <span>Page {{currentPage}} of {{totalPages}}</span>
+                    <button class="page-btn" (click)="nextPage()" [disabled]="currentPage >= totalPages">Next</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Filter + Search -->
+        <div class="filter-search-bar">
+            <div class="tabs">
+                <button class="tab" [class.active]="activeTab === 'Total Projects'" (click)="setTab('Total Projects')">All</button>
+                <button class="tab" [class.active]="activeTab === 'Active project'" (click)="setTab('Active project')">Active</button>
+                <button class="tab" [class.active]="activeTab === 'Inactive'" (click)="setTab('Inactive')">Inactive</button>
+                <button class="tab" [class.active]="activeTab === 'Completed'" (click)="setTab('Completed')">Completed</button>
+                <button class="tab" [class.active]="activeTab === 'Assigned'" (click)="setTab('Assigned')">Assigned</button>
+                <button class="tab" [class.active]="activeTab === 'Not Assigned'" (click)="setTab('Not Assigned')">Not Assigned</button>
+            </div>
+
+            <div class="search-area">
+                <input type="text" placeholder="Search title or ID..." [(ngModel)]="searchQuery" (input)="onSearch($event)" />
+                <button class="search-btn">Search</button>
+            </div>
+        </div>
+
+        <!-- Projects List -->
+        <div class="projects-container">
+            <div class="project-card" *ngFor="let project of projects">
+                <div class="card-top">
+                    <div class="project-left">
+                        <div class="icon-box">💻</div>
+                        <div>
+                            <h3>{{project.title}}</h3>
+                            <p class="project-id">Project ID: {{project.p_id}}</p>
+                        </div>
+                    </div>
+
+                    <div class="days-badge" *ngIf="project.startDate && project.endDate">
+                        <p>No. of Days: <b>{{getDays(project.startDate, project.endDate)}}</b></p>
+                    </div>
+                </div>
+
+                <div class="project-details">
+                    <div class="detail">
+                        <p class="label">Technologies / Category</p>
+                        <span class="tech-tag" *ngFor="let s of project.skills">{{s}}</span>
+                        <span class="tech-tag" *ngIf="!project.skills?.length">{{project.category || 'N/A'}}</span>
+                    </div>
+
+                    <div class="detail">
+                        <p class="label">Budget</p>
+                        <p class="budget">${{project.budget}}</p>
+                    </div>
+
+                    <div class="detail description">
+                        <p class="label">Description</p>
+                        <p>{{project.description}}</p>
+                    </div>
+                </div>
+
+                <!-- Assign Managers (Multi-select) -->
+                <div class="manager-selection-area" *ngIf="project.status === 'waiting-for-approval' || project.status === 'pending'">
+                    <p class="selection-title">Assign Project Managers</p>
+                    <div class="manager-chips-container">
+                        <div 
+                            *ngFor="let m of managers" 
+                            class="manager-chip" 
+                            [class.selected]="isManagerSelected(project, m.fl_id || m._id || m.id)"
+                            (click)="toggleManager(project, m.fl_id || m._id || m.id)"
+                        >
+                            <i class="bi" [ngClass]="isManagerSelected(project, m.fl_id || m._id || m.id) ? 'bi-check-circle-fill' : 'bi-person-circle'"></i>
+                            {{ m.fullname || m.name }}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Display Assigned Managers -->
+                <div class="manager-section" *ngIf="project.status !== 'waiting-for-approval' && project.status !== 'pending' && project.selectedManagers?.length">
+                    <p class="label">Assigned Managers:</p>
+                    <div class="manager-list-display">
+                        <span class="manager-badge" *ngFor="let mid of project.selectedManagers">
+                            {{ mid }}
+                        </span>
+                    </div>
+                </div>
+
+                <div class="card-actions">
+                    <div class="buttons">
+                        <!-- Admin Actions -->
+                        <button class="accept-btn" (click)="acceptProject(project)" *ngIf="project.status === 'waiting-for-approval' || project.status === 'pending'">
+                            Accept & Assign
+                        </button>
+                        <button class="reject-btn" (click)="rejectProject(project)" *ngIf="project.status === 'waiting-for-approval' || project.status === 'pending'">
+                            Reject
+                        </button>
+
+                        <span class="accepted" *ngIf="project.status !== 'waiting-for-approval' && project.status !== 'pending' && project.status !== 'rejected'">
+                            {{project.status | uppercase}}
+                        </span>
+
+                        <span class="rejected" *ngIf="project.status === 'rejected'">
+                            REJECTED
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Empty State -->
+            <div class="empty-state" *ngIf="projects.length === 0">
+                <p>No projects matched your criteria.</p>
+            </div>
+            
+        </div>
+    </div>
+</div>

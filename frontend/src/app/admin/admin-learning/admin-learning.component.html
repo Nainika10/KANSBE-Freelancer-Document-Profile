@@ -1,0 +1,185 @@
+<div class="admin-learning-container">
+
+  <!-- List View -->
+  <div *ngIf="currentView === 'list'">
+    <header class="d-flex justify-content-between align-items-center mb-4">
+      <h2>Manage Learning Portal</h2>
+      <button class="btn btn-primary" (click)="openCreateCourse()">
+        <i class="bi bi-plus-lg"></i> Create New Course
+      </button>
+    </header>
+
+    <div *ngIf="isLoading" class="text-center py-5">
+      <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+    </div>
+
+    <div class="empty-state" *ngIf="!isLoading && courses.length === 0">
+      <p>No courses found. Create one to get started.</p>
+    </div>
+
+    <!-- Course List Accordion -->
+    <div class="course-list" *ngIf="!isLoading && courses.length > 0">
+      <mat-accordion multi="true">
+        <mat-expansion-panel *ngFor="let course of courses; let cIdx = index" class="mb-3 border rounded shadow-sm">
+          
+          <mat-expansion-panel-header class="bg-light">
+            <mat-panel-title class="fw-bold d-flex align-items-center justify-content-between w-100 me-3">
+              <span>{{ course.title }} <span class="badge bg-secondary ms-2">{{ course.level }}</span> <span class="badge ms-1" [ngClass]="course.isPublished ? 'bg-success' : 'bg-warning text-dark'">{{ course.isPublished ? 'Published' : 'Draft' }}</span></span>
+              
+              <div class="action-btns" (click)="$event.stopPropagation()">
+                <button class="btn btn-sm btn-outline-primary me-2" (click)="openCreateModule(course._id)">
+                  <i class="bi bi-plus-circle"></i> Add Module
+                </button>
+                <button class="btn btn-sm btn-outline-secondary me-2" (click)="openEditCourse(course)">
+                  <i class="bi bi-pencil"></i>
+                </button>
+                <button class="btn btn-sm btn-outline-danger" (click)="deleteCourse(course._id)">
+                  <i class="bi bi-trash"></i>
+                </button>
+              </div>
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+
+          <div class="p-3">
+            <div *ngIf="course.modules.length === 0" class="text-muted fst-italic">No modules added yet.</div>
+            
+            <div class="module-item mb-3 p-3 border rounded" *ngFor="let mod of course.modules; let mIdx = index">
+              <div class="d-flex justify-content-between align-items-center mb-2 border-bottom pb-2">
+                <h5 class="mb-0 text-primary">Module {{ mIdx + 1 }}: {{ mod.title }}</h5>
+                <div>
+                  <button class="btn btn-sm btn-outline-success me-2" (click)="openCreateLesson(mod._id)">
+                    <i class="bi bi-plus"></i> Add Lesson
+                  </button>
+                  <button class="btn btn-sm btn-outline-secondary me-2" (click)="openEditModule(mod, course._id)">
+                    <i class="bi bi-pencil"></i>
+                  </button>
+                  <button class="btn btn-sm btn-outline-danger" (click)="deleteModule(mod._id)">
+                    <i class="bi bi-trash"></i>
+                  </button>
+                </div>
+              </div>
+
+              <div class="ps-3 pt-2">
+                <div *ngIf="mod.lessons.length === 0" class="text-muted small fst-italic">No lessons added yet.</div>
+                <div class="lesson-item d-flex justify-content-between align-items-center py-2 border-bottom" *ngFor="let les of mod.lessons; let lIdx = index">
+                  <span>{{ lIdx + 1 }}. {{ les.title }} <small class="text-muted ms-2" *ngIf="les.duration">({{ les.duration }})</small></span>
+                  <div>
+                    <button class="btn btn-sm btn-link text-secondary p-0 me-3" (click)="openEditLesson(les, mod._id)">
+                      <i class="bi bi-pencil"></i>
+                    </button>
+                    <button class="btn btn-sm btn-link text-danger p-0" (click)="deleteLesson(les._id)">
+                      <i class="bi bi-trash"></i>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </mat-expansion-panel>
+      </mat-accordion>
+    </div>
+  </div>
+
+  <!-- Forms Section (Shared Container) -->
+  <div class="form-container card shadow-sm p-4" *ngIf="currentView !== 'list'">
+    <header class="d-flex justify-content-between align-items-center mb-4 border-bottom pb-3">
+      <h3 class="mb-0">
+        {{ currentView === 'course-form' ? (selectedCourse ? 'Edit Course' : 'Create Course') : '' }}
+        {{ currentView === 'module-form' ? (selectedModule ? 'Edit Module' : 'Create Module') : '' }}
+        {{ currentView === 'lesson-form' ? (selectedLesson ? 'Edit Lesson' : 'Create Lesson') : '' }}
+      </h3>
+      <button class="btn btn-outline-secondary" (click)="showList()">
+        <i class="bi bi-x-lg"></i> Cancel
+      </button>
+    </header>
+
+    <!-- Course Form -->
+    <form *ngIf="currentView === 'course-form'" (ngSubmit)="saveCourse()">
+      <div class="mb-3">
+        <label class="form-label fw-bold">Title</label>
+        <input type="text" class="form-control" [(ngModel)]="courseForm.title" name="title" required>
+      </div>
+      <div class="mb-3">
+        <label class="form-label fw-bold">Description</label>
+        <textarea class="form-control" rows="3" [(ngModel)]="courseForm.description" name="description"></textarea>
+      </div>
+      <div class="row">
+        <div class="col-md-6 mb-3">
+          <label class="form-label fw-bold">Category</label>
+          <input type="text" class="form-control" [(ngModel)]="courseForm.category" name="category" placeholder="e.g. Development">
+        </div>
+        <div class="col-md-6 mb-3">
+          <label class="form-label fw-bold">Level</label>
+          <select class="form-select" [(ngModel)]="courseForm.level" name="level">
+            <option value="Beginner">Beginner</option>
+            <option value="Intermediate">Intermediate</option>
+            <option value="Advanced">Advanced</option>
+          </select>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-6 mb-3">
+          <label class="form-label fw-bold">Instructor Name</label>
+          <input type="text" class="form-control" [(ngModel)]="courseForm.instructor" name="instructor">
+        </div>
+        <div class="col-md-6 mb-3">
+          <label class="form-label fw-bold">Thumbnail URL</label>
+          <input type="text" class="form-control" [(ngModel)]="courseForm.thumbnail" name="thumbnail">
+        </div>
+      </div>
+      <div class="form-check form-switch mb-3 mt-3">
+        <input class="form-check-input" type="checkbox" role="switch" id="publishSwitch" [(ngModel)]="courseForm.isPublished" name="isPublished">
+        <label class="form-check-label fw-bold" for="publishSwitch">
+          Publish Course <small class="text-muted">(Visible to freelancers when enabled)</small>
+        </label>
+      </div>
+      <div class="text-end mt-4">
+        <button type="submit" class="btn btn-primary px-4" [disabled]="!courseForm.title">Save Course</button>
+      </div>
+    </form>
+
+    <!-- Module Form -->
+    <form *ngIf="currentView === 'module-form'" (ngSubmit)="saveModule()">
+      <div class="mb-3">
+        <label class="form-label fw-bold">Module Title</label>
+        <input type="text" class="form-control" [(ngModel)]="moduleForm.title" name="title" required>
+      </div>
+      <div class="mb-3">
+        <label class="form-label fw-bold">Description (Optional)</label>
+        <textarea class="form-control" rows="3" [(ngModel)]="moduleForm.description" name="description"></textarea>
+      </div>
+      <div class="text-end mt-4">
+        <button type="submit" class="btn btn-primary px-4" [disabled]="!moduleForm.title">Save Module</button>
+      </div>
+    </form>
+
+    <!-- Lesson Form -->
+    <form *ngIf="currentView === 'lesson-form'" (ngSubmit)="saveLesson()">
+      <div class="mb-3">
+        <label class="form-label fw-bold">Lesson Title</label>
+        <input type="text" class="form-control" [(ngModel)]="lessonForm.title" name="title" required>
+      </div>
+      <div class="mb-3">
+        <label class="form-label fw-bold">YouTube Video URL</label>
+        <input type="text" class="form-control" [(ngModel)]="lessonForm.youtubeUrl" name="youtubeUrl" placeholder="https://www.youtube.com/watch?v=...">
+        <small class="text-muted">Provide the full YouTube link. The system will automatically extract the ID.</small>
+      </div>
+      <div class="mb-3">
+        <label class="form-label fw-bold">Duration</label>
+        <input type="text" class="form-control" [(ngModel)]="lessonForm.duration" name="duration" placeholder="e.g. 10m 30s">
+      </div>
+      <div class="mb-3">
+        <label class="form-label fw-bold">Text Content / Overview</label>
+        <textarea class="form-control" rows="4" [(ngModel)]="lessonForm.content" name="content"></textarea>
+      </div>
+      <div class="text-end mt-4">
+        <button type="submit" class="btn btn-primary px-4" [disabled]="!lessonForm.title">Save Lesson</button>
+      </div>
+    </form>
+
+  </div>
+
+</div>

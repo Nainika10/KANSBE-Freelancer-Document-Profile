@@ -1,0 +1,272 @@
+<!-- ===================== NAVBAR ===================== -->
+<header class="header" #headerRef>
+    <div class="container-fluid">
+        <div class="header-container">
+            <div class="back-button-container">
+                <button class="btn-back" (click)="goBack()" aria-label="Go back">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <line x1="19" y1="12" x2="5" y2="12"></line>
+                        <polyline points="12 19 5 12 12 5"></polyline>
+                    </svg>
+                    <span>Back</span>
+                </button>
+            </div>
+            <div class="logo" (click)="scrollToTop()">
+                <img routerLink="" src="assets/pics.webp" alt="KANSBE Logo" class="logo-img">
+            </div>
+
+            <button class="hamburger-menu" (click)="toggleMenu()" [class.active]="menuOpen" aria-label="Toggle menu">
+                <span class="hamburger-line"></span>
+                <span class="hamburger-line"></span>
+                <span class="hamburger-line"></span>
+            </button>
+
+            <ul class="nav-menu" [class.mobile-menu-open]="menuOpen">
+                <li class="nav-item">
+                    <button class="nav-link nav-link-button" (click)="scrollToAbout()">About</button>
+                </li>
+                <li class="nav-item login-nav-item">
+                    <button class="nav-link nav-link-button" (click)="toggleRegisterModal()">Login / Signup</button>
+
+                    <div class="register-modal" [class.show]="showRegisterModal">
+                        <div class="pill-container">
+                            <button class="pill-button pill-left" (click)="registerAsFreelancer()">Freelancer</button>
+                            <div class="pill-divider"></div>
+                            <button class="pill-button pill-right" (click)="registerAsClient()">Client</button>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+</header>
+
+<!-- ===================== HERO SECTION ===================== -->
+<section class="hero-section d-flex align-items-center justify-content-center text-center">
+    <div class="hero-overlay"></div>
+    <div class="container position-relative hero-content">
+        <h1 class="hero-heading">
+            Hire Verified Freelancers in<br />
+            <span class="text-accent">{{ cityName }}</span> | Kansbe
+        </h1>
+        <p class="hero-subtext mx-auto">
+            {{ heroSubtext }}
+        </p>
+        <div class="hero-buttons mt-5 d-flex justify-content-center gap-3 flex-wrap" style="gap: 16px;">
+            <a href="clientsignup" class="btn btn-accent btn-lg px-5 py-3">
+                Post a Project
+            </a>
+            <a href="freelancersignup" class="btn btn-outline-light btn-lg px-5 py-3">
+                Join as Freelancer
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- ===================== ABOUT SECTION ===================== -->
+<section class="about-section">
+    <div class="about-bg-grid"></div>
+    <div class="container position-relative py-5">
+        <!-- Section header -->
+        <div class="text-center mb-5">
+            <span class="about-badge">DISCOVER THE CITY</span>
+            <h2 class="about-title mt-3">
+                About <span class="text-accent">{{ cityName }}</span>
+            </h2>
+            <div class="about-title-line mx-auto mt-3"></div>
+        </div>
+
+        <!-- Main content card -->
+        <div class="about-futuristic-card">
+            <div class="about-card-glow"></div>
+            <div class="row g-0 align-items-stretch">
+                <!-- Image side -->
+                <div class="col-lg-5">
+                    <div class="about-img-container">
+                        <img src="assets/about-dev.webp" alt="Freelancer working in futuristic workspace"
+                            class="img-fluid about-img" />
+                        <div class="about-img-scanline"></div>
+                        <div class="about-img-overlay">
+                            <div class="about-img-label">
+                                <i class="fa-solid fa-location-dot me-2"></i>{{ cityName }}, India
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Text side -->
+                <div class="col-lg-7">
+                    <div class="about-text-wrapper p-4 p-lg-5">
+                        <div class="about-tag mb-3">
+                            <span class="about-tag-dot"></span>
+                            {{ aboutTag }}
+                        </div>
+                        <p class="about-text" *ngFor="let text of aboutText">
+                            {{ text }}
+                        </p>
+
+                        <!-- Stats row -->
+                        <div class="about-stats">
+                            <div class="about-stat">
+                                <span class="about-stat-number">500<span class="text-accent">+</span></span>
+                                <span class="about-stat-label">Verified Freelancers</span>
+                            </div>
+                            <div class="about-stat-divider"></div>
+                            <div class="about-stat">
+                                <span class="about-stat-number">50<span class="text-accent">+</span></span>
+                                <span class="about-stat-label">Industries Served</span>
+                            </div>
+                            <div class="about-stat-divider"></div>
+                            <div class="about-stat">
+                                <span class="about-stat-number">98<span class="text-accent">%</span></span>
+                                <span class="about-stat-label">Satisfaction Rate</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ===================== POPULAR SERVICES SECTION ===================== -->
+<section class="py-5 services-section">
+    <div class="container py-4">
+        <h2 class="section-title text-center mb-5">
+            Popular Freelance Services in <span class="text-accent">{{ cityName }}</span>
+        </h2>
+        <div class="row g-4">
+            <div class="col-12 col-sm-6 col-lg-3" *ngFor="let service of services">
+                <div class="service-card p-4">
+                    <div class="service-icon-wrapper mb-3">
+                        <i [class]="service.icon + ' service-icon'"></i>
+                    </div>
+                    <h5 class="service-title">{{ service.title }}</h5>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ===================== WHY CITY SECTION ===================== -->
+<section class="py-5 why-hyd-section">
+    <div class="container py-4">
+        <div class="row align-items-center">
+            <div class="col-lg-6 mb-4 mb-lg-0">
+                <h2 class="section-title mb-4">
+                    Why Choose Freelancers in <span class="text-accent">{{ cityName }}?</span>
+                </h2>
+                <ul class="why-list list-unstyled">
+                    <li class="d-flex align-items-start mb-3" *ngFor="let item of whyReasons">
+                        <div class="check-icon-wrapper me-3">
+                            <i class="fa-solid fa-circle-check text-accent"></i>
+                        </div>
+                        <span class="why-text">{{ item }}</span>
+                    </li>
+                </ul>
+            </div>
+            <div class="col-lg-6 text-center">
+                <div class="why-graphic">
+                    <div class="why-graphic-inner">
+                        <i class="fa-solid fa-city why-graphic-icon"></i>
+                        <span>{{ cityName }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ===================== WHY KANSBE SECTION ===================== -->
+<section class="py-5 kansbe-section">
+    <div class="container py-4">
+        <h2 class="section-title text-center mb-3">
+            Why Hire Through <span class="text-accent">Kansbe?</span>
+        </h2>
+        <p class="section-subtitle text-center mx-auto mb-5">
+            Kansbe is a trusted ecosystem built for freelancers and businesses in India. We combine verified talent,
+            transparent pricing, and secure tools to make freelance hiring seamless.
+        </p>
+        <div class="row g-4 justify-content-center">
+            <div class="col-12 col-sm-6 col-lg" *ngFor="let feature of features">
+                <div class="feature-card p-4">
+                    <div class="feature-icon-wrapper mb-3">
+                        <i [class]="feature.icon + ' feature-icon'"></i>
+                    </div>
+                    <h5 class="feature-title mb-2">{{ feature.title }}</h5>
+                    <p class="feature-desc">{{ feature.description }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ===================== INDUSTRIES WE SERVE ===================== -->
+<section class="py-5 industries-section">
+    <div class="container py-4 text-center">
+        <h2 class="section-title mb-5">
+            Industries We <span class="text-accent">Serve</span>
+        </h2>
+        <div class="d-flex flex-wrap justify-content-center gap-3">
+            <span class="industry-pill" *ngFor="let industry of industries">
+                {{ industry }}
+            </span>
+        </div>
+    </div>
+</section>
+
+<!-- ===================== FAQ SECTION ===================== -->
+<section class="faq-section">
+    <div class="faq-bg-grid"></div>
+    <div class="container position-relative py-5">
+        <div class="text-center mb-5">
+            <span class="faq-badge">GOT QUESTIONS?</span>
+            <h2 class="faq-title mt-3">
+                Frequently Asked <span class="text-accent">Questions</span>
+            </h2>
+            <div class="faq-title-line mx-auto mt-3"></div>
+        </div>
+
+        <div class="faq-grid">
+            <div class="faq-card" *ngFor="let faq of faqs; let i = index" [class.faq-card--active]="faq.isOpen"
+                (click)="toggleFaq(i)">
+
+                <!-- Glow bar on left -->
+                <div class="faq-glow-bar"></div>
+
+                <div class="faq-card-inner">
+                    <!-- Number indicator -->
+                    <div class="faq-number">
+                        <span>0{{ i + 1 }}</span>
+                    </div>
+
+                    <!-- Content -->
+                    <div class="faq-content">
+                        <div class="faq-question-row">
+                            <h3 class="faq-question">{{ faq.question }}</h3>
+                            <div class="faq-toggle-icon">
+                                <span class="faq-icon-line faq-icon-h"></span>
+                                <span class="faq-icon-line faq-icon-v" [class.faq-icon-v--open]="faq.isOpen"></span>
+                            </div>
+                        </div>
+                        <div class="faq-answer-wrapper" [class.faq-answer-wrapper--open]="faq.isOpen">
+                            <p class="faq-answer">{{ faq.answer }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ===================== FOOTER ===================== -->
+<footer class="py-5 hyd-footer">
+    <div class="container text-center">
+        <img src="assets/pics.webp" alt="Kansbe Logo" class="footer-logo mb-3" />
+        <p class="footer-text mx-auto">
+            {{ footerText }}
+        </p>
+        <div class="footer-divider my-4"></div>
+        <p class="footer-copyright">&copy; 2026 Kansbe. All rights reserved.</p>
+    </div>
+</footer>

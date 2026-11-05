@@ -1,0 +1,154 @@
+<div class="player-page-wrapper">
+  <!-- Atmospheric Cyberpunk Glow Backdrop -->
+  <div class="ambient-glow-mesh"></div>
+
+  <main class="player-container">
+    
+    <!-- ═════════════════════════════════════════════════════════════
+         TOP BAR: BACK BUTTON
+         ═════════════════════════════════════════════════════════════ -->
+    <header class="player-top-bar">
+      <button class="btn-back-link" (click)="goBackToCourse()">
+        <i class="bi bi-arrow-left"></i>
+        <span>Back</span>
+      </button>
+    </header>
+
+    <!-- Loading State -->
+    <div class="player-loading-box" *ngIf="isLoading">
+      <div class="player-spinner"></div>
+      <p>Loading lesson...</p>
+    </div>
+
+    <!-- ═════════════════════════════════════════════════════════════
+         MAIN 2-COLUMN LAYOUT: LEFT SIDEBAR & RIGHT VIDEO/DETAILS
+         ═════════════════════════════════════════════════════════════ -->
+    <div class="player-layout-grid" *ngIf="!isLoading && course">
+      
+      <!-- ─── LEFT COLUMN: PROGRESS CARD & COURSE CONTENT ─── -->
+      <aside class="player-sidebar-col custom-scrollbar">
+        
+        <!-- Card 1: Your Progress -->
+        <div class="glass-card player-progress-card">
+          <div class="progress-card-header">
+            <h4 class="progress-card-title">Your Progress</h4>
+            <span class="progress-ratio-text">
+              {{ getCompletedLessonsCount() }} / {{ getTotalLessonsCount() }} lessons
+            </span>
+          </div>
+
+          <div class="progress-large-num">
+            {{ getProgressPercentage() }}%
+          </div>
+
+          <div class="progress-track-bar">
+            <div class="progress-track-fill" [style.width]="getProgressPercentage() + '%'"></div>
+          </div>
+
+          <button 
+            type="button" 
+            class="btn-start-course"
+            [class.completed]="isCompleted"
+            (click)="markAsComplete()">
+            {{ isCompleted ? 'Completed' : 'Mark as Complete' }}
+          </button>
+        </div>
+
+        <!-- Card 2: Course Content Accordion -->
+        <div class="glass-card course-content-card">
+          <h4 class="content-card-title">Course Content</h4>
+
+          <div class="modules-stack">
+            <div class="module-item-box" *ngFor="let mod of course.modules; let i = index">
+              
+              <!-- Module Header -->
+              <div class="module-header-pill" (click)="mod.isExpanded = (mod.isExpanded === undefined ? false : !mod.isExpanded)">
+                <div class="module-header-text">
+                  <span class="module-num-label">MODULE {{ i + 1 }}</span>
+                  <span class="module-title-label">{{ mod.title }}</span>
+                </div>
+                <i class="bi" [class.bi-chevron-up]="mod.isExpanded !== false" [class.bi-chevron-down]="mod.isExpanded === false"></i>
+              </div>
+
+              <!-- Lessons List in Module -->
+              <div class="module-lessons-list" *ngIf="mod.isExpanded !== false">
+                <div 
+                  class="lesson-item-row" 
+                  *ngFor="let les of mod.lessons; let j = index"
+                  [class.active]="les._id === lessonId"
+                  (click)="navigateToLesson(les._id)">
+                  
+                  <div class="lesson-play-icon">
+                    <i class="bi bi-check-lg" *ngIf="isCompletedFunc(les._id)"></i>
+                    <i class="bi bi-play-fill" *ngIf="!isCompletedFunc(les._id)"></i>
+                  </div>
+
+                  <div class="lesson-info-wrap">
+                    <span class="lesson-name-text">{{ j + 1 }}. {{ les.title }}</span>
+                    <span class="lesson-duration-text" *ngIf="les.duration">{{ les.duration }}</span>
+                  </div>
+
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+      </aside>
+
+      <!-- ─── RIGHT COLUMN: VIDEO PLAYER & LESSON DETAILS ─── -->
+      <section class="player-main-col custom-scrollbar">
+        
+        <!-- Video Screen Player -->
+        <div class="player-screen-wrapper">
+          <iframe 
+            *ngIf="safeYoutubeUrl"
+            [src]="safeYoutubeUrl" 
+            frameborder="0" 
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+            allowfullscreen>
+          </iframe>
+
+          <div class="player-empty-screen" *ngIf="!safeYoutubeUrl">
+            <div class="empty-screen-inner" [style.backgroundImage]="'url(' + (course.thumbnail || 'assets/default-course.jpg') + ')'">
+              <div class="empty-screen-overlay">
+                <i class="bi bi-play-circle-fill play-preview-icon"></i>
+                <p>{{ lesson?.title || course.title }}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Course / Lesson Info Glass Card -->
+        <div class="glass-card player-info-card">
+          
+          <!-- Badges Row -->
+          <div class="info-badges-row">
+            <span class="info-tag-red">{{ course.category || 'WEB DEVELOPMENT' }}</span>
+            <span class="info-tag-glass">{{ course.level || 'INTERMEDIATE' }}</span>
+          </div>
+
+          <!-- Course / Lesson Title -->
+          <h1 class="player-course-title">{{ lesson?.title || course.title }}</h1>
+
+          <!-- Instructor Credit -->
+          <p class="player-instructor-credit">Instructor: <span>{{ course.instructor || 'freeCodeCamp' }}</span></p>
+
+          <!-- Divider -->
+          <div class="info-card-divider"></div>
+
+          <!-- About this course / lesson -->
+          <div class="player-about-block">
+            <h3 class="about-block-title">About this course</h3>
+            <p class="about-block-text">{{ lesson?.content || course.description || 'Learn React by building 8 real-world projects.' }}</p>
+          </div>
+
+        </div>
+
+      </section>
+
+    </div>
+
+  </main>
+</div>

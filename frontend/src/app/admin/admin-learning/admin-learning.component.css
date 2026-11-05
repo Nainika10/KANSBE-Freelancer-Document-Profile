@@ -1,0 +1,47 @@
+.admin-learning-container {
+  padding: 24px;
+  max-width: 1200px;
+  margin: 0 auto;
+
+}
+
+.empty-state {
+  text-align: center;
+  padding: 48px;
+  background: white;
+  border: 1px dashed #cbd5e1;
+  border-radius: 12px;
+  color: #64748b;
+  margin-top: 24px;
+}
+
+.course-list mat-expansion-panel {
+  border-radius: 8px !important;
+  overflow: hidden;
+}
+
+.module-item {
+  background: #f8fafc;
+  border-color: #e2e8f0 !important;
+}
+
+.lesson-item {
+  border-color: #e2e8f0 !important;
+}
+
+.lesson-item:last-child {
+  border-bottom: none !important;
+}
+
+.action-btns {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.form-container {
+  max-width: 800px;
+  margin: 0 auto;
+  border-radius: 12px;
+  border: 1px solid #e2e8f0;
+}

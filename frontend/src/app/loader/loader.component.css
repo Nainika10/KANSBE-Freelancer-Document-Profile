@@ -1,0 +1,77 @@
+:host {
+  display: contents;
+}
+
+/* ─── Global Full-Page Screen Loader (Covers entire viewport, navbar & all pop-ups) ─── */
+.loader-container,
+.loader-container--full,
+.loader-container--content {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  background: #060606 !important; /* 100% Solid opaque deep black so navbar, pop-ups, modals & page content are NEVER visible */
+  z-index: 2147483647 !important; /* Maximum 32-bit signed integer z-index: guaranteed on top of all modals, pop-ups, backdrops and navbars */
+  pointer-events: all !important;
+  box-sizing: border-box !important;
+  overflow: hidden !important;
+  transition: opacity 0.25s ease;
+}
+
+/* ─── Loader text ─── */
+.loader {
+  font-size: clamp(42px, 6vw, 64px);
+  display: inline-block;
+  font-weight: 700;
+  color: rgba(255, 61, 0, 0.2);
+  letter-spacing: 4px;
+  position: relative;
+  text-transform: uppercase;
+  text-shadow: 0 0 20px rgba(255, 61, 0, 0.2);
+  user-select: none;
+}
+
+.loader::after {
+  content: attr(data-text);
+  position: absolute;
+  left: 0;
+  top: 0;
+  color: #FF0100;
+  width: 0%;
+  height: 100%;
+  overflow: hidden;
+  box-sizing: border-box;
+  animation: animloader 3s ease-in-out infinite;
+  white-space: nowrap;
+  filter: drop-shadow(0 0 12px rgba(255, 1, 0, 0.9));
+  border-right: 4px solid #FF0100;
+}
+
+@keyframes animloader {
+  0%   { width: 0%; }
+  50%  { width: 100%; }
+  100% { width: 0%; }
+}
+
+/* ─── Soft radial pulse behind the text ─── */
+.loader-container::before {
+  content: '';
+  position: absolute;
+  width: 180px;
+  height: 180px;
+  background: radial-gradient(circle, rgba(255, 1, 0, 0.2) 0%, transparent 70%);
+  border-radius: 50%;
+  animation: pulse 3s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1);   opacity: 0.5; }
+  50%       { transform: scale(1.5); opacity: 1; }
+}

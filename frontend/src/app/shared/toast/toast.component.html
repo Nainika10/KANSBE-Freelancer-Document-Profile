@@ -1,0 +1,27 @@
+<div class="toast-container">
+    <div *ngFor="let toast of toasts" 
+         class="toast-card animate-slide-in" 
+         [ngClass]="'toast-' + toast.type"
+         (click)="remove(toast.id)">
+        
+        <div class="toast-content">
+            <div class="toast-icon">
+                <i class="bi" [ngClass]="getIcon(toast.type)"></i>
+            </div>
+            <div class="toast-text">
+                <h6 class="toast-title">{{ toast.title }}</h6>
+                <p class="toast-message">{{ toast.message }}</p>
+            </div>
+            <button class="toast-close">
+                <i class="bi bi-x"></i>
+            </button>
+        </div>
+
+        <!-- Progress Bar -->
+        <div class="toast-progress-container">
+            <div class="toast-progress-bar" 
+                 [ngStyle]="{'animation-duration': toast.duration + 'ms'}">
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,615 @@
+<div class="onboarding-page">
+
+  <!-- ─── Header Bar ─── -->
+  <header class="onboarding-header">
+    <div class="header-inner">
+      <div class="header-brand">
+        <img src="assets/pics.webp" alt="KANSBE" class="brand-logo-img" />
+      </div>
+      <div class="header-step-info">
+        <span class="step-badge">Step {{ currentStep }}</span>
+        <span class="step-label">{{ currentStepLabel }}</span>
+      </div>
+    </div>
+    <div class="header-progress">
+      <div class="progress-bar" [style.width.%]="progressPercentage" style="transition: width 0.5s ease-in-out;"></div>
+    </div>
+  </header>
+
+  <!-- ─── Main Content ─── -->
+  <main class="onboarding-main" [class.no-scroll]="currentStep === 4">
+
+    <!-- ─── STEP 1: PROFILE DETAILS ─── -->
+    <div class="step-content scrollable-step" *ngIf="currentStep === 1 && !isSubmitting && !isSuccess">
+      <div class="title-section">
+        <h1 class="page-title">Complete your client profile</h1>
+        <p class="page-subtitle">Provide your primary details to verify your client identity on Kansbe.</p>
+      </div>
+
+      <div class="form-container-card">
+
+        <!-- Account Info Section -->
+        <div class="form-section">
+          <h2 class="form-section-title">Account Identity</h2>
+
+          <div class="avatar-identity-row">
+            <div class="ob-initials-circle">
+              {{ getInitials(fullName) }}
+            </div>
+          </div>
+
+          <div class="form-grid-modern">
+            <!-- Full Name -->
+            <div class="form-field-group">
+              <label class="form-field-label">Full Name <span class="required-asterisk">*</span></label>
+              <div class="glass-input-wrapper" [class.has-error]="errorMessages.fullname">
+                <i class="bi bi-person glass-input-icon"></i>
+                <input type="text" id="client-full-name" class="glass-input-control" placeholder="Enter your full name"
+                  [(ngModel)]="fullName" (input)="validateField('fullname')" (blur)="validateField('fullname')">
+              </div>
+              <small class="error-msg-text" *ngIf="errorMessages.fullname">
+                <i class="bi bi-exclamation-circle-fill"></i> {{ errorMessages.fullname }}
+              </small>
+            </div>
+
+            <!-- Username -->
+            <div class="form-field-group">
+              <label class="form-field-label">Username <span class="optional">(Optional)</span></label>
+              <div class="glass-input-wrapper" [class.has-error]="errorMessages.username">
+                <i class="bi bi-person-badge glass-input-icon"></i>
+                <input type="text" id="client-username" class="glass-input-control" placeholder="e.g. alex_client"
+                  [(ngModel)]="username" (input)="validateField('username')" (blur)="validateField('username')">
+              </div>
+              <small class="error-msg-text" *ngIf="errorMessages.username">
+                <i class="bi bi-exclamation-circle-fill"></i> {{ errorMessages.username }}
+              </small>
+            </div>
+          </div>
+
+          <div class="form-grid-modern single-col mt-3">
+            <!-- Email -->
+            <div class="form-field-group">
+              <label class="form-field-label">Email Address <span class="required-asterisk">*</span></label>
+              <div class="glass-input-wrapper readonly-input">
+                <i class="bi bi-envelope glass-input-icon"></i>
+                <input type="email" id="client-email" class="glass-input-control" [value]="email" readonly>
+              </div>
+              <small class="email-note-text">
+                <i class="bi bi-info-circle-fill me-1"></i> Note: Connected to your verified Kansbe registration
+                account.
+              </small>
+            </div>
+          </div>
+        </div>
+
+        <hr class="form-divider" />
+
+        <!-- Personal Details Section -->
+        <div class="form-section">
+          <h2 class="form-section-title">Personal Details</h2>
+
+          <div class="form-grid-modern">
+            <!-- Contact Number -->
+            <div class="form-field-group">
+              <label class="form-field-label">Contact Number <span class="required-asterisk">*</span></label>
+              <div class="glass-input-wrapper" [class.has-error]="errorMessages.contact">
+                <i class="bi bi-telephone glass-input-icon"></i>
+                <input type="tel" id="client-contact" class="glass-input-control" placeholder="10-digit mobile number"
+                  maxlength="10" [(ngModel)]="contactNumber" (input)="validateField('contact')"
+                  (blur)="validateField('contact')" (keypress)="allowOnlyNumbers($event)">
+              </div>
+              <small class="error-msg-text" *ngIf="errorMessages.contact">
+                <i class="bi bi-exclamation-circle-fill"></i> {{ errorMessages.contact }}
+              </small>
+            </div>
+
+            <!-- Gender Dropdown -->
+            <div class="form-field-group gender-container" [class.dropdown-active]="showGenderDropdown">
+              <label class="form-field-label">Gender <span class="required-asterisk">*</span></label>
+              <div class="glass-input-wrapper cursor-pointer" [class.has-error]="errorMessages.gender"
+                (click)="showGenderDropdown = !showGenderDropdown">
+                <i class="bi bi-gender-ambiguous glass-input-icon"></i>
+                <input type="text" id="client-gender" class="glass-input-control cursor-pointer" [(ngModel)]="gender"
+                  placeholder="Select Gender" readonly (blur)="validateField('gender')">
+                <i class="bi bi-chevron-down glass-select-arrow"></i>
+              </div>
+              <div class="glass-dropdown-menu" *ngIf="showGenderDropdown && filteredGenders.length > 0">
+                <div class="glass-dropdown-option" *ngFor="let g of filteredGenders" (mousedown)="selectGender(g)">
+                  {{ g }}
+                </div>
+              </div>
+              <small class="error-msg-text" *ngIf="errorMessages.gender">
+                <i class="bi bi-exclamation-circle-fill"></i> {{ errorMessages.gender }}
+              </small>
+            </div>
+
+            <!-- Date of Birth -->
+            <div class="form-field-group dob-picker-container" [class.dropdown-active]="showDatePicker">
+              <label class="form-field-label">Date of Birth <span class="required-asterisk">*</span></label>
+              <div class="glass-input-wrapper cursor-pointer" [class.has-error]="errorMessages.dob"
+                (click)="toggleDatePicker($event)">
+                <i class="bi bi-calendar4 glass-input-icon"></i>
+                <input type="text" id="client-dob" class="glass-input-control cursor-pointer" [value]="dateOfBirth"
+                  placeholder="YYYY-MM-DD" readonly (blur)="validateDob()">
+                <i class="bi bi-chevron-down glass-select-arrow"></i>
+              </div>
+              <!-- Custom Datepicker Menu -->
+              <div class="glass-datepicker-menu" *ngIf="showDatePicker" (click)="$event.stopPropagation()">
+                <div class="datepicker-selectors-row">
+                  <select class="glass-date-select" [(ngModel)]="selectedMonth" (change)="changeMonth(selectedMonth)">
+                    <option *ngFor="let m of months; let i = index" [ngValue]="i">{{ m }}</option>
+                  </select>
+                  <select class="glass-date-select" [(ngModel)]="selectedYear" (change)="changeYear(selectedYear)">
+                    <option *ngFor="let y of years" [ngValue]="y">{{ y }}</option>
+                  </select>
+                </div>
+                <div class="datepicker-grid-days">
+                  <div *ngFor="let day of calendarDays" class="datepicker-day-cell" (click)="selectDate(day)"
+                    [class.active-day]="isDateActive(day)" [class.disabled-day]="!isDateSelectable(day)">
+                    {{ day }}
+                  </div>
+                </div>
+              </div>
+              <small class="error-msg-text" *ngIf="errorMessages.dob">
+                <i class="bi bi-exclamation-circle-fill"></i> {{ errorMessages.dob }}
+              </small>
+            </div>
+
+            <!-- Nationality -->
+            <div class="form-field-group nationality-container" [class.dropdown-active]="showNationalityDropdown">
+              <label class="form-field-label">Nationality <span class="required-asterisk">*</span></label>
+              <div class="glass-input-wrapper" [class.has-error]="errorMessages.nationality">
+                <i class="bi bi-globe glass-input-icon"></i>
+                <input type="text" id="client-nationality" class="glass-input-control" [(ngModel)]="nationality"
+                  placeholder="Search Nationality" (input)="onNationalityInput($event)"
+                  (blur)="validateField('nationality')" autocomplete="off">
+              </div>
+              <div class="glass-dropdown-menu" *ngIf="showNationalityDropdown && filteredNationalities.length > 0">
+                <div class="glass-dropdown-option" *ngFor="let nat of filteredNationalities"
+                  (mousedown)="selectNationality(nat)">
+                  {{ nat }}
+                </div>
+              </div>
+              <small class="error-msg-text" *ngIf="errorMessages.nationality">
+                <i class="bi bi-exclamation-circle-fill"></i> {{ errorMessages.nationality }}
+              </small>
+            </div>
+          </div>
+
+          <div class="form-grid-modern single-col mt-3">
+            <!-- Country -->
+            <div class="form-field-group country-container" [class.dropdown-active]="showCountryDropdown">
+              <label class="form-field-label">Country of Residence <span class="required-asterisk">*</span></label>
+              <div class="glass-input-wrapper" [class.has-error]="errorMessages.country">
+                <i class="bi bi-flag glass-input-icon"></i>
+                <input type="text" id="client-country" class="glass-input-control" [(ngModel)]="country"
+                  placeholder="Search Country" (input)="onCountryInput($event)" (blur)="validateField('country')"
+                  autocomplete="off">
+              </div>
+              <div class="glass-dropdown-menu" *ngIf="showCountryDropdown && filteredCountries.length > 0">
+                <div class="glass-dropdown-option" *ngFor="let c of filteredCountries" (mousedown)="selectCountry(c)">
+                  {{ c }}
+                </div>
+              </div>
+              <small class="error-msg-text" *ngIf="errorMessages.country">
+                <i class="bi bi-exclamation-circle-fill"></i> {{ errorMessages.country }}
+              </small>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ─── STEP 2: ABOUT & OVERVIEW ─── -->
+    <div class="step-content scrollable-step" *ngIf="currentStep === 2 && !isSubmitting && !isSuccess">
+      <div class="title-section">
+        <h1 class="page-title">Tell us about yourself & your vision</h1>
+        <p class="page-subtitle">A compelling bio helps freelancers understand who you are and the kinds of projects you
+          drive.</p>
+      </div>
+
+      <div class="split-layout-container">
+        <!-- Left Column: Live Preview Card -->
+        <div class="live-preview-panel">
+          <h2 class="editorial-title">Client Card Preview</h2>
+          <div class="editorial-preview-card">
+            <div class="editorial-header">
+              <div class="editorial-photo ob-initials-preview">
+                <span class="editorial-photo-initial">{{ getInitials(fullName) }}</span>
+              </div>
+              <div class="editorial-names">
+                <h3 class="editorial-fullname">{{ fullName || 'Your Name' }}</h3>
+                <p class="editorial-username" *ngIf="username">&#64;{{ username }}</p>
+                <p class="editorial-location" *ngIf="country || city">
+                  <i class="bi bi-geo-alt-fill text-white me-1"></i>
+                  <span>{{ city ? city + ', ' : '' }}{{ country || 'Global Client' }}</span>
+                </p>
+              </div>
+            </div>
+
+            <div class="editorial-body">
+              <div class="editorial-bio-preview">
+                <p class="editorial-bio-text" *ngIf="bio">{{ bio }}</p>
+                <div class="editorial-bio-placeholder-box" *ngIf="!bio">
+                  <div class="example-bio-badge">
+                    <i class="bi bi-lightbulb-fill text-white me-1"></i> Example Bio Preview
+                  </div>
+                  <p class="editorial-bio-placeholder-text">
+                    "{{ exampleBio }}"
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div class="editorial-footer">
+              <span class="preview-badge"><i class="bi bi-patch-check-fill text-success me-1"></i> Verified
+                Client</span>
+              <span class="preview-role-tag">Kansbe Client Partner</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right Column: Bio Form Input -->
+        <div class="editor-form-panel">
+          <div class="form-section">
+            <h2 class="form-section-title">Client Biography</h2>
+
+            <div class="form-field-group">
+              <div class="d-flex justify-content-between align-items-center mb-2">
+                <label class="form-field-label mb-0">Professional Summary <span
+                    class="required-asterisk">*</span></label>
+                <span class="char-counter" [class.counter-valid]="(bio || '').trim().length >= 50">
+                  <i class="bi bi-chat-left-dots-fill me-1"></i>
+                  {{ (bio || '').trim().length }} / 50 min char
+                </span>
+              </div>
+
+              <div class="glass-input-wrapper textarea-wrapper" [class.has-error]="errorMessages.bio">
+                <textarea rows="6" id="client-bio" class="glass-textarea-control"
+                  placeholder="Share a brief introduction about yourself, your background, what projects you are building, or what qualities you value in freelancers..."
+                  [(ngModel)]="bio" (input)="validateField('bio')" (blur)="validateField('bio')"></textarea>
+              </div>
+
+              <div class="bio-validation-footer mt-2">
+                <small class="error-msg-text" *ngIf="errorMessages.bio">
+                  <i class="bi bi-exclamation-circle-fill"></i> {{ errorMessages.bio }}
+                </small>
+                <small class="counter-hint" *ngIf="!errorMessages.bio && (bio || '').trim().length < 50">
+                  Please write at least {{ 50 - (bio || '').trim().length }} more characters to continue.
+                </small>
+                <small class="counter-success" *ngIf="!errorMessages.bio && (bio || '').trim().length >= 50">
+                  <i class="bi bi-check-circle-fill me-1"></i> Looks great!
+                </small>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ─── STEP 3: COMPANY & ORGANIZATION ─── -->
+    <div class="step-content scrollable-step" *ngIf="currentStep === 3 && !isSubmitting && !isSuccess">
+      <div class="title-section">
+        <h1 class="page-title">Company & Organization Details</h1>
+        <p class="page-subtitle">Optional business information. If you're hiring as an individual, you can skip this
+          step.</p>
+      </div>
+
+      <div class="form-container-card">
+        <div class="form-section">
+          <div class="mb-3">
+            <h2 class="form-section-title mb-0">Business Profile</h2>
+          </div>
+
+          <div class="form-grid-modern">
+            <!-- Company Name -->
+            <div class="form-field-group">
+              <label class="form-field-label">Company Name <span class="optional">(Optional)</span></label>
+              <div class="glass-input-wrapper" [class.has-error]="errorMessages.companyname">
+                <i class="bi bi-buildings glass-input-icon"></i>
+                <input type="text" id="client-company-name" class="glass-input-control"
+                  placeholder="e.g. Acme Innovations" [(ngModel)]="companyName" (input)="validateField('companyname')"
+                  (blur)="validateField('companyname')">
+              </div>
+              <small class="error-msg-text" *ngIf="errorMessages.companyname">
+                <i class="bi bi-exclamation-circle-fill"></i> {{ errorMessages.companyname }}
+              </small>
+            </div>
+
+            <!-- Company Type -->
+            <div class="form-field-group">
+              <label class="form-field-label">Company Type <span class="optional">(Optional)</span></label>
+              <div class="glass-input-wrapper">
+                <i class="bi bi-briefcase glass-input-icon"></i>
+                <select id="client-company-type" class="glass-select-control" [(ngModel)]="companyType">
+                  <option value="">Select Company Type</option>
+                  <option *ngFor="let ct of companyTypes" [value]="ct.value">{{ ct.label }}</option>
+                </select>
+                <i class="bi bi-chevron-down glass-select-arrow"></i>
+              </div>
+            </div>
+          </div>
+
+          <!-- Company Address -->
+          <div class="form-grid-modern single-col mt-3">
+            <div class="form-field-group">
+              <div class="d-flex justify-content-between align-items-center mb-2">
+                <label class="form-field-label mb-0">Company Address <span class="optional">(Optional)</span></label>
+                <span class="char-counter">{{ (companyAddress || '').length }} / 250 max</span>
+              </div>
+              <div class="glass-input-wrapper textarea-wrapper" [class.has-error]="errorMessages.companyaddress">
+                <i class="bi bi-geo-alt glass-input-icon" style="top: 18px;"></i>
+                <textarea rows="2" id="client-company-address" class="glass-textarea-control ps-5"
+                  placeholder="Enter full office or registered address" maxlength="250" [(ngModel)]="companyAddress"
+                  (input)="validateField('companyaddress')" (blur)="validateField('companyaddress')"></textarea>
+              </div>
+              <small class="error-msg-text" *ngIf="errorMessages.companyaddress">
+                <i class="bi bi-exclamation-circle-fill"></i> {{ errorMessages.companyaddress }}
+              </small>
+            </div>
+          </div>
+
+          <div class="form-grid-modern mt-3">
+            <!-- City -->
+            <div class="form-field-group">
+              <label class="form-field-label">City <span class="optional">(Optional)</span></label>
+              <div class="glass-input-wrapper" [class.has-error]="errorMessages.city">
+                <i class="bi bi-building-add glass-input-icon"></i>
+                <input type="text" id="client-city" class="glass-input-control" placeholder="e.g. San Francisco"
+                  [(ngModel)]="city" (input)="validateField('city')" (blur)="validateField('city')">
+              </div>
+              <small class="error-msg-text" *ngIf="errorMessages.city">
+                <i class="bi bi-exclamation-circle-fill"></i> {{ errorMessages.city }}
+              </small>
+            </div>
+
+            <!-- State / Province -->
+            <div class="form-field-group">
+              <label class="form-field-label">State / Province <span class="optional">(Optional)</span></label>
+              <div class="glass-input-wrapper" [class.has-error]="errorMessages.state">
+                <i class="bi bi-map glass-input-icon"></i>
+                <input type="text" id="client-state" class="glass-input-control" placeholder="e.g. California"
+                  [(ngModel)]="state" (input)="validateField('state')" (blur)="validateField('state')">
+              </div>
+              <small class="error-msg-text" *ngIf="errorMessages.state">
+                <i class="bi bi-exclamation-circle-fill"></i> {{ errorMessages.state }}
+              </small>
+            </div>
+          </div>
+
+          <!-- Postal Code -->
+          <div class="form-grid-modern single-col mt-3">
+            <div class="form-field-group">
+              <label class="form-field-label">Postal / Zip Code <span class="optional">(Optional)</span></label>
+              <div class="glass-input-wrapper">
+                <i class="bi bi-pin-map glass-input-icon"></i>
+                <input type="text" id="client-pincode" class="glass-input-control" placeholder="e.g. 94105"
+                  [(ngModel)]="pincode">
+              </div>
+            </div>
+          </div>
+
+          <!-- Company Description -->
+          <div class="form-grid-modern single-col mt-3">
+            <div class="form-field-group">
+              <div class="d-flex justify-content-between align-items-center mb-2">
+                <label class="form-field-label mb-0">Company Overview <span class="optional">(Optional)</span></label>
+                <span class="char-counter">{{ (companyDescription || '').length }} / 250 max</span>
+              </div>
+              <div class="glass-input-wrapper textarea-wrapper" [class.has-error]="errorMessages.companydescrptn">
+                <textarea rows="3" id="client-company-descrptn" class="glass-textarea-control"
+                  placeholder="Brief description of your products, industry, or mission (20-250 characters)"
+                  maxlength="250" [(ngModel)]="companyDescription" (input)="validateField('companydescrptn')"
+                  (blur)="validateField('companydescrptn')"></textarea>
+              </div>
+              <small class="error-msg-text" *ngIf="errorMessages.companydescrptn">
+                <i class="bi bi-exclamation-circle-fill"></i> {{ errorMessages.companydescrptn }}
+              </small>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- ─── STEP 4: ONLINE PRESENCE ─── -->
+    <div class="step-content static-step" *ngIf="currentStep === 4 && !isSubmitting && !isSuccess">
+      <div class="title-section step4-title">
+        <h1 class="page-title">Online & Social Presence</h1>
+        <p class="page-subtitle">Connect your social profiles to build credibility with the talent network.</p>
+      </div>
+
+      <div class="form-container-card social-container-card">
+        <div class="form-section mb-0">
+          <div class="social-header-row">
+            <div>
+              <h2 class="form-section-title mb-0">Social Links</h2>
+              <span class="form-section-sub">Public profiles and links (all optional)</span>
+            </div>
+            <span class="badge-optional-pill">Optional</span>
+          </div>
+
+          <div class="form-grid-modern social-grid">
+            <!-- LinkedIn -->
+            <div class="form-field-group">
+              <label class="form-field-label" for="client-linkedin">LinkedIn Profile</label>
+              <div class="glass-input-wrapper" [class.has-error]="errorMessages.linkedin">
+                <i class="bi bi-linkedin glass-input-icon"></i>
+                <input type="url" id="client-linkedin" class="glass-input-control"
+                  placeholder="https://linkedin.com/in/username" [(ngModel)]="linkedinUrl"
+                  (input)="validateField('linkedin')" (blur)="validateField('linkedin')">
+              </div>
+              <small class="error-msg-text" *ngIf="errorMessages.linkedin">
+                <i class="bi bi-exclamation-circle-fill"></i> {{ errorMessages.linkedin }}
+              </small>
+            </div>
+
+            <!-- Twitter / X -->
+            <div class="form-field-group">
+              <label class="form-field-label" for="client-twitter">Twitter / X Profile</label>
+              <div class="glass-input-wrapper" [class.has-error]="errorMessages.twitter">
+                <i class="bi bi-twitter-x glass-input-icon"></i>
+                <input type="url" id="client-twitter" class="glass-input-control" placeholder="https://x.com/username"
+                  [(ngModel)]="twitterUrl" (input)="validateField('twitter')" (blur)="validateField('twitter')">
+              </div>
+              <small class="error-msg-text" *ngIf="errorMessages.twitter">
+                <i class="bi bi-exclamation-circle-fill"></i> {{ errorMessages.twitter }}
+              </small>
+            </div>
+
+            <!-- Instagram -->
+            <div class="form-field-group">
+              <label class="form-field-label" for="client-instagram">Instagram Profile</label>
+              <div class="glass-input-wrapper" [class.has-error]="errorMessages.instagram">
+                <i class="bi bi-instagram glass-input-icon"></i>
+                <input type="url" id="client-instagram" class="glass-input-control"
+                  placeholder="https://instagram.com/username" [(ngModel)]="instagramUrl"
+                  (input)="validateField('instagram')" (blur)="validateField('instagram')">
+              </div>
+              <small class="error-msg-text" *ngIf="errorMessages.instagram">
+                <i class="bi bi-exclamation-circle-fill"></i> {{ errorMessages.instagram }}
+              </small>
+            </div>
+
+            <!-- Github / Website -->
+            <div class="form-field-group">
+              <label class="form-field-label" for="client-github">GitHub / Website</label>
+              <div class="glass-input-wrapper" [class.has-error]="errorMessages.github">
+                <i class="bi bi-github glass-input-icon"></i>
+                <input type="url" id="client-github" class="glass-input-control"
+                  placeholder="https://github.com/organization" [(ngModel)]="githubUrl"
+                  (input)="validateField('github')" (blur)="validateField('github')">
+              </div>
+              <small class="error-msg-text" *ngIf="errorMessages.github">
+                <i class="bi bi-exclamation-circle-fill"></i> {{ errorMessages.github }}
+              </small>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ─── SAVING / LOADING SCREEN OVERLAY (Matching Freelancer Onboarding) ─── -->
+    <div class="saving-screen" *ngIf="isSubmitting || isSuccess">
+      <div class="saving-content">
+
+        <!-- Loading State -->
+        <div class="spinner-wrapper" *ngIf="isSubmitting && !isSuccess">
+          <div class="spinner"></div>
+        </div>
+
+        <!-- Success State -->
+        <div class="success-wrapper" *ngIf="isSuccess">
+          <span class="material-icons icon-success">check_circle</span>
+        </div>
+
+        <div class="loading-text-container">
+          <h2 class="creative-loading-title">
+            {{ isSuccess ? "Profile Completed Successfully" : "Setting up your profile" }}
+          </h2>
+          <p class="creative-loading-subtitle">
+            {{ isSuccess ? "Welcome to Kansbe. Redirecting to your dashboard..." : "Please wait a moment while we process your information." }}
+          </p>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- ─── Footer Navigation ─── -->
+  <footer class="onboarding-footer" *ngIf="!isSubmitting && !isSuccess">
+    <button class="btn-back" (click)="onBack()" type="button" id="client-onboarding-back-btn">
+      <span class="material-icons">arrow_back</span>
+      Back
+    </button>
+
+    <div class="footer-info">
+      <!-- Step 1 Validation Guidance -->
+      <span *ngIf="!canContinue() && currentStep === 1" class="validation-hint">
+        <span class="material-icons hint-icon">info</span>
+        <span *ngIf="!fullName.trim()">Full name is required</span>
+        <span *ngIf="fullName.trim() && errorMessages.fullname">{{ errorMessages.fullname }}</span>
+        <span
+          *ngIf="fullName.trim() && !errorMessages.fullname && (!contactNumber.trim() || contactNumber.trim().length !== 10)">10-digit
+          contact number is required</span>
+        <span *ngIf="fullName.trim() && !errorMessages.fullname && contactNumber.trim().length === 10 && !gender">Please
+          select gender</span>
+        <span
+          *ngIf="fullName.trim() && !errorMessages.fullname && contactNumber.trim().length === 10 && gender && !dateOfBirth">Date
+          of birth is required</span>
+        <span
+          *ngIf="fullName.trim() && !errorMessages.fullname && contactNumber.trim().length === 10 && gender && dateOfBirth && errorMessages.dob">{{
+          errorMessages.dob }}</span>
+        <span
+          *ngIf="fullName.trim() && !errorMessages.fullname && contactNumber.trim().length === 10 && gender && dateOfBirth && !errorMessages.dob && !nationality">Nationality
+          is required</span>
+        <span
+          *ngIf="fullName.trim() && !errorMessages.fullname && contactNumber.trim().length === 10 && gender && dateOfBirth && !errorMessages.dob && nationality && !country">Country
+          of residence is required</span>
+      </span>
+
+      <!-- Step 2 Validation Guidance -->
+      <span *ngIf="!canContinue() && currentStep === 2" class="validation-hint">
+        <span class="material-icons hint-icon">info</span>
+        <span>Bio must be at least 50 characters</span>
+      </span>
+
+      <!-- Step 3 Guidance -->
+      <span *ngIf="!canContinue() && currentStep === 3" class="validation-hint">
+        <span class="material-icons hint-icon">info</span>
+        <span>Please correct the errors above or click "Skip for now"</span>
+      </span>
+
+      <!-- Step 4 Guidance -->
+      <span *ngIf="!canContinue() && currentStep === 4" class="validation-hint">
+        <span class="material-icons hint-icon">info</span>
+        <span>Please ensure entered links are valid URLs or click "Skip for now"</span>
+      </span>
+    </div>
+
+    <div class="footer-actions">
+      <button *ngIf="currentStep === 3 || currentStep === 4" class="btn-skip" (click)="onSkip()" type="button">
+        Skip
+      </button>
+
+      <button class="btn-next" [class.enabled]="canContinue()" [disabled]="!canContinue() || isSubmitting || isSuccess"
+        (click)="onNext()" type="button" id="client-onboarding-next-btn">
+        <ng-container *ngIf="currentStep < totalSteps">
+          Next
+          <span class="material-icons">arrow_forward</span>
+        </ng-container>
+        <ng-container *ngIf="currentStep === totalSteps">
+          Complete Profile
+          <span class="material-icons">check</span>
+        </ng-container>
+      </button>
+    </div>
+  </footer>
+
+</div>
+
+<!-- ─── Avatar Selection Modal - Removed: using name initials instead ─── -->
+<!-- <div class="avatar-modal-overlay" *ngIf="isAvatarModalOpen">
+  <div class="avatar-modal-content glass-modal">
+    <div class="modal-header glass-header">
+      <h2>CHOOSE YOUR CLIENT AVATAR</h2>
+      <button class="btn-close-modal" (click)="closeAvatarModal()">
+        <span class="material-icons">close</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <p class="avatar-subtitle">Pick an avatar that represents your presence across Kansbe.</p>
+      <div class="avatar-grid">
+        <div class="avatar-item" *ngFor="let avatar of avatars" [class.selected]="selectedAvatar?.id === avatar.id"
+          (click)="selectAvatar(avatar)">
+          <img [src]="avatar.image" [alt]="avatar.name">
+          <div class="selected-glow"></div>
+          <div class="selected-indicator" *ngIf="selectedAvatar?.id === avatar.id">
+            <span class="material-icons">check_circle</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div> -->

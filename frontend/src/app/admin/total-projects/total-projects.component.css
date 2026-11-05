@@ -1,0 +1,516 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap');
+
+* {
+
+    box-sizing: border-box;
+}
+
+.main-admin-wrapper {
+    background: #f8fafc;
+    min-height: 100vh;
+}
+
+.projects-page {
+    background: transparent;
+    padding: 10px;
+}
+
+/* HEADER */
+
+.header {
+    max-width: 1100px;
+    margin: auto;
+    margin-bottom: 30px;
+}
+
+/* Back button */
+
+.back-btn {
+    border: 1px solid #ddd;
+    margin: 20px;
+    padding: 10px 16px;
+    border-radius: 8px;
+    font-weight: 600;
+    background: white;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.back-btn:hover {
+    background: #f4f4f4;
+}
+
+
+.title-section h1 {
+    font-size: 36px;
+    margin: 0;
+    font-weight: 600;
+}
+
+.title-section p {
+    color: #777;
+    margin-top: 5px;
+}
+
+/* FILTER */
+
+.filter-search-bar {
+    max-width: 1100px;
+    margin: auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.tabs {
+    display: flex;
+    background: #eee;
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.tab {
+    padding: 10px 18px;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.tab.active {
+    background: #ff2d2d;
+    color: white;
+}
+
+/* SEARCH */
+
+.search-area {
+    display: flex;
+    gap: 10px;
+}
+
+.search-area input {
+    padding: 10px 15px;
+    border-radius: 10px;
+    border: 1px solid #ddd;
+    width: 220px;
+}
+
+.search-.manager-select:focus {
+    border-color: #ff2d2d;
+    outline: none;
+}
+
+/* Multi-Manager Selection */
+.manager-selection-area {
+    margin-top: 20px;
+    padding: 15px;
+    background: #fdfdfd;
+    border: 1px dashed #eee;
+    border-radius: 12px;
+}
+
+.selection-title {
+    font-size: 11px;
+    font-weight: 700;
+    color: #888;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 12px;
+}
+
+.manager-chips-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.manager-chip {
+    padding: 6px 14px;
+    border-radius: 50px;
+    border: 1.5px solid #eee;
+    background: #fff;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: 600;
+    color: #555;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    user-select: none;
+}
+
+.manager-chip:hover {
+    border-color: #ff2d2d;
+    background: #fffafa;
+}
+
+.manager-chip.selected {
+    background: #ff2d2d;
+    color: #fff;
+    border-color: #ff2d2d;
+    box-shadow: 0 4px 10px rgba(255, 45, 45, 0.15);
+}
+
+.manager-chip i {
+    font-size: 14px;
+}
+
+.manager-list-display {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 5px;
+}
+
+.manager-badge {
+    background: #f1f1f1;
+    color: #333;
+    padding: 3px 10px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 600;
+    border-left: 3px solid #ff2d2d;
+}
+
+.search-btn {
+    background: #ff2d2d;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+/* PROJECT CONTAINER */
+
+.projects-container {
+    max-width: 1100px;
+    margin: auto;
+}
+
+/* CARD */
+
+.project-card {
+    background: white;
+    padding: 25px;
+    border-radius: 16px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    margin-bottom: 25px;
+    transition: 0.2s;
+}
+
+.project-card:hover {
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+}
+
+/* TOP */
+
+.card-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.project-left {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.icon-box {
+    width: 45px;
+    height: 45px;
+    background: #f1f1f1;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.project-id {
+    font-size: 13px;
+    color: #777;
+}
+
+/* DAYS BADGE */
+
+.days-badge {
+    padding: 8px 16px;
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 30px;
+}
+
+.days-badge p {
+    margin: 0;
+    font-size: 13px;
+    color: #000;
+}
+
+.days-badge b {
+    font-size: 16px;
+}
+
+/* DETAILS */
+
+.project-details {
+    display: flex;
+    gap: 40px;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+}
+
+.label {
+    font-size: 12px;
+    color: #999;
+    text-transform: uppercase;
+    margin-bottom: 5px;
+}
+
+.tech-tag {
+    background: #eef1f6;
+    padding: 5px 12px;
+    border-radius: 8px;
+}
+
+.budget {
+    font-weight: 600;
+}
+
+.description {
+    max-width: 450px;
+    color: #555;
+}
+
+/* ACTIONS */
+
+.card-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.buttons {
+    display: flex;
+    gap: 10px;
+}
+
+.accept-btn {
+    background: #2ecc71;
+    border: none;
+    padding: 10px 18px;
+    border-radius: 10px;
+    color: white;
+    cursor: pointer;
+}
+
+.reject-btn {
+    background: #ff4d4d;
+    border: none;
+    padding: 10px 18px;
+    border-radius: 10px;
+    color: white;
+    cursor: pointer;
+}
+
+.accepted {
+    color: #2ecc71;
+    font-weight: 600;
+}
+
+.rejected {
+    color: #ff4d4d;
+    font-weight: 600;
+}
+
+.manager-section {
+    margin-top: 20px;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.manager-select {
+    padding: 10px 16px;
+    border-radius: 10px;
+    border: 1.5px solid #000;
+    background: white;
+    font-size: 14px;
+    font-weight: 600;
+    color: #000;
+    cursor: pointer;
+    min-width: 200px;
+    transition: 0.2s;
+}
+
+.manager-select:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.manager-select:focus {
+    outline: none;
+    border-color: #ff2d2d;
+}
+
+/* RESPONSIVE */
+
+@media(max-width:768px) {
+
+    .card-top {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+
+    .project-details {
+        flex-direction: column;
+    }
+
+}
+
+/* ===============================
+   TABLET (1024px)
+================================*/
+
+@media (max-width:1024px) {
+
+    .title-section h1 {
+        font-size: 30px;
+    }
+
+    .filter-search-bar {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .search-area input {
+        width: 200px;
+    }
+
+    .projects-container,
+    .header {
+        padding: 0 15px;
+    }
+
+    .project-details {
+        gap: 25px;
+    }
+
+}
+
+
+/* ===============================
+   TABLET / MOBILE (768px)
+================================*/
+
+@media (max-width:768px) {
+
+    .title-section h1 {
+        font-size: 26px;
+    }
+
+    .filter-search-bar {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .tabs {
+        width: 100%;
+        justify-content: space-between;
+    }
+
+    .search-area {
+        width: 100%;
+    }
+
+    .search-area input {
+        width: 100%;
+    }
+
+    .card-top {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+    }
+
+    .days-badge {
+        padding: 6px 12px;
+    }
+
+    .project-details {
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .description {
+        max-width: 100%;
+    }
+
+}
+
+
+/* ===============================
+   MOBILE (480px)
+================================*/
+
+@media (max-width:480px) {
+
+    .title-section h1 {
+        font-size: 22px;
+    }
+
+    .title-section p {
+        font-size: 14px;
+    }
+
+    .back-btn {
+        padding: 8px 12px;
+        font-size: 14px;
+    }
+
+    .project-card {
+        padding: 18px;
+    }
+
+    .project-left {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .icon-box {
+        width: 40px;
+        height: 40px;
+    }
+
+    .days-badge {
+        padding: 5px 10px;
+    }
+
+    .card-actions {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .buttons {
+        width: 100%;
+    }
+
+    .accept-btn,
+    .reject-btn {
+        flex: 1;
+        width: 100%;
+    }
+
+    .manager-select {
+        width: 100%;
+    }
+
+}@media (max-width: 600px) { .manager-section { justify-content: center !important; width: 100% !important; margin: 15px 0 !important; } .manager-select { min-width: 100% !important; margin: 0 !important; } }
+.main-admin-wrapper { overflow-x: hidden !important; width: 100%; } .projects-page { overflow-x: hidden !important; width: 100%; box-sizing: border-box; } @media (max-width: 600px) { .manager-section { justify-content: center !important; width: 100%; padding: 0 !important; } .manager-select { width: 100% !important; min-width: 0 !important; max-width: 100% !important; } .card-top, .project-details, .card-actions, .buttons { flex-direction: column !important; width: 100% !important; gap: 15px !important; } .accept-btn, .reject-btn { width: 100% !important; } }

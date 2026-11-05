@@ -1,0 +1,251 @@
+/* ============================================================
+   FREELANCER CLIENT VIEW (client-facing resume sheet)
+   ============================================================ */
+:host {
+  display: block;
+  font-family: 'Poppins', sans-serif;
+  min-height: 100vh;
+  background: #f4f6fb;
+}
+
+.ccv-wrap {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 32px 20px 56px;
+}
+
+/* ---- States ---- */
+.ccv-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding: 64px 24px;
+  background: #ffffff;
+  border: 1px solid #e4e8f0;
+  border-radius: 14px;
+  color: #5b6478;
+  font-size: 14px;
+}
+
+.ccv-state-error {
+  color: #b3261e;
+}
+
+.ccv-state-icon {
+  font-size: 34px;
+}
+
+.ccv-spinner {
+  width: 26px;
+  height: 26px;
+  border: 3px solid #d6dcef;
+  border-top-color: #3d5afe;
+  border-radius: 50%;
+  animation: ccv-spin 0.8s linear infinite;
+}
+
+@keyframes ccv-spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ---- Sheet ---- */
+.ccv-sheet {
+  background: #ffffff;
+  border: 1px solid #e4e8f0;
+  border-radius: 16px;
+  box-shadow: 0 4px 18px rgba(20, 30, 60, 0.06);
+  padding: 28px 36px 32px;
+}
+
+.ccv-toolbar {
+  display: flex;
+  justify-content: flex-start;
+  margin-bottom: 10px;
+}
+
+.ccv-btn-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: none;
+  border: 1px solid #d8deeb;
+  border-radius: 8px;
+  padding: 7px 14px;
+  font-size: 13px;
+  color: #46517a;
+  cursor: pointer;
+}
+
+.ccv-btn-back:hover {
+  background: #f2f5fc;
+}
+
+.ccv-btn-back .material-icons {
+  font-size: 16px;
+}
+
+/* ---- Header ---- */
+.ccv-header {
+  text-align: left;
+}
+
+.ccv-name {
+  font-size: 28px;
+  font-weight: 600;
+  color: #17203a;
+  margin: 0;
+}
+
+.ccv-title {
+  font-size: 15.5px;
+  color: #3d5afe;
+  font-weight: 500;
+  margin: 6px 0 0;
+}
+
+.ccv-id {
+  font-size: 12.5px;
+  color: #8a92a6;
+  margin: 6px 0 0;
+}
+
+.ccv-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 14px;
+  font-size: 12.5px;
+  font-weight: 500;
+  padding: 6px 12px;
+  border-radius: 999px;
+}
+
+.ccv-status .material-icons {
+  font-size: 16px;
+}
+
+.ccv-status-passed {
+  background: #e5f6ec;
+  color: #1c7a45;
+}
+
+.ccv-status-warnings {
+  background: #fff4dd;
+  color: #93610b;
+}
+
+.ccv-status-blocked {
+  background: #fdeaea;
+  color: #b3261e;
+}
+
+.ccv-divider {
+  height: 1px;
+  background: #eef1f7;
+  margin: 22px 0;
+}
+
+/* ---- Sections ---- */
+.ccv-section {
+  margin-bottom: 24px;
+}
+
+.ccv-section-title {
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #6b7390;
+  margin: 0 0 12px;
+  padding-bottom: 6px;
+  border-bottom: 2px solid #f0f3f9;
+}
+
+.ccv-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.ccv-pill {
+  background: #eef2ff;
+  border: 1px solid #dbe2fb;
+  color: #35408f;
+  font-size: 13px;
+  padding: 5px 12px;
+  border-radius: 999px;
+}
+
+.ccv-pill-alt {
+  background: #eaf7f1;
+  border-color: #d1ecdf;
+  color: #1c7a45;
+}
+
+.ccv-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.ccv-list-item {
+  position: relative;
+  padding: 7px 0 7px 18px;
+  font-size: 14px;
+  color: #2f3850;
+  line-height: 1.55;
+}
+
+.ccv-list-item::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 15px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #3d5afe;
+}
+
+.ccv-item-icon {
+  font-size: 16px;
+  color: #d99a06;
+  vertical-align: -3px;
+  margin-right: 8px;
+}
+
+.ccv-list-item:has(.ccv-item-icon)::before {
+  display: none;
+}
+
+.ccv-list-item:has(.ccv-item-icon) {
+  padding-left: 0;
+}
+
+/* ---- Footer ---- */
+.ccv-footer {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 28px;
+  padding-top: 16px;
+  border-top: 1px solid #eef1f7;
+  font-size: 12.5px;
+  color: #8a92a6;
+}
+
+.ccv-footer .material-icons {
+  font-size: 15px;
+}
+
+/* ---- Responsive ---- */
+@media (max-width: 640px) {
+  .ccv-sheet {
+    padding: 22px 20px 26px;
+  }
+
+  .ccv-name {
+    font-size: 23px;
+  }
+}

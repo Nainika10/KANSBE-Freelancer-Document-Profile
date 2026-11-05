@@ -1,0 +1,8 @@
+{
+    "/api": {
+        "target": "https://kansbe.com/api",
+        "secure": true,
+        "changeOrigin": true
+    }
+}
+

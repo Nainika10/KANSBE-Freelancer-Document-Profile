@@ -1,0 +1,774 @@
+html,
+body {
+  min-height: 100%;
+  background-color: #060606;
+  color: #ffffff;
+  overflow-x: hidden;
+  scrollbar-width: thin;
+  /* Firefox */
+  scrollbar-color: rgba(255, 255, 255, 0.28) #060606;
+}
+
+body.modal-open,
+html.modal-open {
+  overflow: hidden !important;
+  touch-action: none;
+}
+
+/* Professional Sleek Grey Scrollbar across all browsers */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #060606;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.22);
+  border-radius: 6px;
+  border: 2px solid #060606;
+  transition: background 0.2s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.45);
+}
+
+::-webkit-scrollbar-thumb:active {
+  background: rgba(255, 255, 255, 0.65);
+}
+
+:root {
+  /* Font Family */
+  --font-primary: 'Poppins', sans-serif;
+  --font-mono: 'Courier New', Courier, monospace;
+
+  /* Typography Scale */
+  --text-xs: 12px;
+  --text-sm: 13px;
+  --text-base: 14px;
+  --text-lg: 16px;
+  --text-xl: 20px;
+  --text-2xl: 24px;
+  --text-3xl: 32px;
+
+  /* Font Weights */
+  --font-regular: 400;
+  --font-medium: 500;
+  --font-semibold: 600;
+  --font-bold: 700;
+
+  /* Line Heights */
+  --leading-none: 1;
+  --leading-tight: 1.2;
+  --leading-normal: 1.5;
+  --leading-loose: 1.7;
+
+  /* Kansbe Standard Responsive Breakpoints 
+     Use these values in component media queries to ensure a unified layout system:
+     - Desktop Base: > 1024px
+     - Tablet (Landscape/Large): <= 1024px
+     - Tablet (Portrait): <= 768px
+     - Mobile (Large): <= 480px
+     - Mobile (Small): <= 375px
+  */
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-primary);
+  font-size: var(--text-base);
+  line-height: var(--leading-normal);
+  color: #333;
+  /* Default fallback */
+  padding-top: env(safe-area-inset-top);
+  padding-bottom: env(safe-area-inset-bottom);
+  padding-left: env(safe-area-inset-left);
+  padding-right: env(safe-area-inset-right);
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  line-height: var(--leading-tight);
+  font-weight: var(--font-semibold);
+}
+
+/* ─── Global Modals & Skill Management Styles ─── */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: none;
+  /* Master Switch: Off by default */
+  -webkit-backdrop-filter: none;
+  z-index: 4900;
+  /* Just below modals */
+  display: none;
+  /* Hidden by default */
+  align-items: flex-start;
+  justify-content: center;
+  overflow-y: auto;
+  padding: 60px 20px;
+  transition: backdrop-filter 0.3s ease;
+}
+
+/* Master Switch: Enable blur ONLY when body has modal-open */
+body.modal-open .modal-overlay {
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.modal-overlay.show {
+  display: flex !important;
+}
+
+/* ============================================
+   REFINED MODAL SUITE (High Fidelity Xerox)
+   ============================================ */
+
+.schedule-modal-refined {
+  position: relative;
+  background: white;
+  z-index: 5001;
+  border-radius: 24px;
+  width: 100%;
+  max-width: 580px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-shadow: 0 30px 90px rgba(0, 0, 0, 0.25);
+  animation: modalScaleIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.modal-header-refined {
+  padding: 24px 30px;
+  border-bottom: 2px solid #f8f8f8;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.modal-body-refined {
+  padding: 24px 30px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  flex: 1;
+  max-height: 70vh;
+  /* Internal scroll for premium feel */
+}
+
+.modal-body-refined::-webkit-scrollbar {
+  width: 5px;
+}
+
+.modal-body-refined::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.modal-body-refined::-webkit-scrollbar-thumb {
+  background: #e8e8e8;
+  border-radius: 20px;
+}
+
+.modal-body-refined::-webkit-scrollbar-thumb:hover {
+  background: #FF0100;
+}
+
+.modal-footer-refined {
+  padding: 24px 30px;
+  background-color: #fffdfd;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-top: 1px solid #f0f0f0;
+}
+
+.close-btn-wrapper-lux {
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: #f8f9fa;
+  color: #555;
+  transition: all 0.2s;
+  cursor: pointer;
+}
+
+.close-btn-wrapper-lux:hover {
+  background: #ff0100;
+  color: #fff;
+  transform: rotate(90deg);
+}
+
+.member-chip-standard {
+  background: white;
+  border: 1.5px solid #eaeaea;
+  border-radius: 12px;
+  padding: 8px 14px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.02);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+}
+
+.member-chip-standard:hover:not(.active) {
+  border-color: #ff010066;
+  background-color: #fffafb;
+}
+
+.member-chip-standard.active {
+  border-color: #ff0100;
+  background-color: #fff5f5;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(255, 1, 0, 0.12);
+}
+
+.member-chip-standard.active .chip-name {
+  color: #FF0100;
+}
+
+.form-control-lux {
+  border: 1.5px solid #eaeaea;
+  border-radius: 12px;
+  padding: 12px 18px;
+  font-size: 1rem;
+  font-weight: 500;
+  color: #333;
+  transition: all 0.2s;
+  outline: none;
+  width: 100%;
+  background-color: #fcfcfc;
+}
+
+.form-control-lux:focus {
+  border-color: #ff0100;
+  background-color: #fff;
+  box-shadow: 0 0 0 4px rgba(255, 1, 0, 0.05);
+}
+
+.btn-cancel-lux {
+  background: transparent;
+  border: none;
+  color: #1a1a1a;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  text-transform: uppercase;
+}
+
+.btn-cancel-lux:hover {
+  opacity: 0.7;
+  transform: translateX(-2px);
+}
+
+.btn-schedule-lux {
+  background: #FF0100;
+  color: white;
+  border: none;
+  padding: 12px 30px;
+  border-radius: 50px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-size: 13px;
+  box-shadow: 0 8px 20px rgba(255, 1, 0, 0.2);
+  transition: all 0.3s;
+}
+
+.btn-schedule-lux:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 25px rgba(255, 1, 0, 0.3);
+}
+
+.chip-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.chip-info {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.chip-name {
+  font-size: 12px;
+  font-weight: 700;
+  color: #1a1a1a;
+}
+
+.chip-role {
+  font-size: 9px;
+  font-weight: 700;
+  color: #888;
+  text-transform: uppercase;
+}
+
+@keyframes modalScaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95) translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+@keyframes modalSlideIn {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -46%) scale(0.96);
+  }
+
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+
+.project-detail-modal,
+.skill-modal,
+.notif-detail-modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -45%);
+  background: white;
+  z-index: 5001;
+  /* Ensure above overlay (4900) */
+  border-radius: 20px;
+  width: 90%;
+  max-width: 480px;
+  display: none;
+  opacity: 0;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.15), 0 0 0 1px rgba(0, 0, 0, 0.04);
+  overflow: hidden;
+}
+
+.project-detail-modal.show,
+.skill-modal.show,
+.notif-detail-modal.show {
+  display: block;
+  opacity: 1;
+  transform: translate(-50%, -50%);
+  animation: modalSlideIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.skill-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 24px 18px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+  background: linear-gradient(135deg, #fff 0%, #fafafa 100%);
+}
+
+.skill-modal-icon {
+  width: 40px;
+  height: 40px;
+  background: linear-gradient(135deg, #FF0100, #cc0000);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 12px rgba(255, 1, 0, 0.3);
+  flex-shrink: 0;
+}
+
+.skill-modal-icon i {
+  font-size: 18px;
+  color: white;
+}
+
+.skill-modal-close {
+  width: 32px;
+  height: 32px;
+  border: none;
+  background: rgba(0, 0, 0, 0.05);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s;
+  color: #666;
+}
+
+.skill-modal-close:hover {
+  background: rgba(255, 1, 0, 0.1);
+  color: #FF0100;
+}
+
+.skill-modal-body {
+  padding: 20px 24px 24px;
+  max-height: 70vh;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: #FF0100 transparent;
+}
+
+.skill-modal-body::-webkit-scrollbar {
+  width: 4px;
+}
+
+.skill-modal-body::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.skill-modal-body::-webkit-scrollbar-thumb {
+  background: #FF0100;
+  border-radius: 4px;
+}
+
+.section-label {
+  display: flex;
+  align-items: center;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: #333;
+  margin-bottom: 12px;
+}
+
+.section-sublabel {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  color: #888;
+  display: block;
+  margin-bottom: 8px;
+}
+
+.skills-chips-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+
+.skill-chip {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #f8f8f8;
+  border: 1px solid #eee;
+  border-radius: 10px;
+  padding: 6px 10px 6px 12px;
+  transition: all 0.2s;
+}
+
+.skill-chip:hover {
+  border-color: rgba(255, 1, 0, 0.2);
+  background: #fff5f5;
+  box-shadow: 0 2px 8px rgba(255, 1, 0, 0.08);
+}
+
+.skill-chip-info {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.skill-chip-name {
+  font-size: 12px;
+  font-weight: 700;
+  color: #1a1a1a;
+  line-height: 1;
+}
+
+.skill-chip-level {
+  font-size: 9px;
+  font-weight: 600;
+  color: #FF0100;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.skill-chip-delete {
+  width: 20px;
+  height: 20px;
+  border: none;
+  background: rgba(0, 0, 0, 0.08);
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s;
+  color: #666;
+  font-size: 12px;
+  flex-shrink: 0;
+}
+
+.skill-chip-delete:hover {
+  background: #FF0100;
+  color: white;
+}
+
+.no-skills-empty {
+  text-align: center;
+  padding: 20px;
+  background: #fafafa;
+  border-radius: 12px;
+  border: 1.5px dashed #eee;
+  margin-bottom: 16px;
+}
+
+.skill-modal-divider {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, #eee, transparent);
+  margin: 20px 0;
+}
+
+.skill-input-group {
+  margin-bottom: 16px;
+}
+
+.skill-input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.skill-input-icon {
+  position: absolute;
+  left: 14px;
+  color: #aaa;
+  font-size: 15px;
+  z-index: 1;
+}
+
+.skill-text-input {
+  width: 100%;
+  padding: 11px 14px 11px 40px;
+  border: 1.5px solid #e8e8e8;
+  border-radius: 12px;
+  font-size: 13px;
+  font-family: 'Poppins', sans-serif;
+  background: #fafafa;
+  transition: all 0.2s;
+  outline: none;
+  color: #1a1a1a;
+}
+
+.skill-text-input:focus {
+  border-color: #FF0100;
+  background: white;
+  box-shadow: 0 0 0 3px rgba(255, 1, 0, 0.08);
+}
+
+.skill-text-input::placeholder {
+  color: #bbb;
+}
+
+.proficiency-section {
+  margin-bottom: 20px;
+}
+
+.proficiency-pills {
+  display: flex;
+  gap: 8px;
+}
+
+.proficiency-pill {
+  flex: 1;
+  padding: 8px 6px;
+  border: 1.5px solid #e8e8e8;
+  border-radius: 10px;
+  background: #fafafa;
+  font-size: 11px;
+  font-weight: 700;
+  color: #666;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.proficiency-pill:hover {
+  border-color: rgba(255, 1, 0, 0.3);
+  background: #fff5f5;
+  color: #FF0100;
+}
+
+.proficiency-pill.active {
+  border-color: #FF0100;
+  background: linear-gradient(135deg, #FF0100, #cc0000);
+  color: white;
+  box-shadow: 0 4px 12px rgba(255, 1, 0, 0.25);
+  transform: translateY(-1px);
+}
+
+.skill-add-btn {
+  width: 100%;
+  padding: 12px;
+  background: linear-gradient(135deg, #FF0100, #cc0000);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-size: 13px;
+  font-weight: 700;
+  font-family: 'Poppins', sans-serif;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 14px rgba(255, 1, 0, 0.3);
+}
+
+.skill-add-btn:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(255, 1, 0, 0.4);
+}
+
+.skill-add-btn:disabled {
+  background: #ddd;
+  color: #999;
+  box-shadow: none;
+  cursor: not-allowed;
+}
+
+.confirm-delete-modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: white;
+  z-index: 9999;
+  border-radius: 20px;
+  width: 90%;
+  max-width: 320px;
+  padding: 32px 28px;
+  text-align: center;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.2);
+  animation: modalSlideIn 0.25s ease;
+}
+
+.confirm-delete-icon {
+  width: 56px;
+  height: 56px;
+  background: rgba(255, 1, 0, 0.08);
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 16px;
+  font-size: 24px;
+}
+
+.btn-confirm-cancel {
+  padding: 10px 16px;
+  background: #f5f5f5;
+  border: none;
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 700;
+  color: #555;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: 'Poppins', sans-serif;
+}
+
+.btn-confirm-cancel:hover {
+  background: #e8e8e8;
+}
+
+.btn-confirm-delete {
+  padding: 10px 16px;
+  background: linear-gradient(135deg, #FF0100, #cc0000);
+  border: none;
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 700;
+  color: white;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: 'Poppins', sans-serif;
+  box-shadow: 0 4px 12px rgba(255, 1, 0, 0.3);
+}
+
+.btn-confirm-delete:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(255, 1, 0, 0.4);
+}
+
+/* ─── Avatar Initials (WhatsApp Style) ─── */
+.avatar-initials {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  color: white !important;
+  font-weight: bold !important;
+  background: linear-gradient(135deg, #FF0100 0%, #ff4d4d 100%) !important;
+  text-transform: uppercase !important;
+  user-select: none !important;
+  flex-shrink: 0 !important;
+  border-radius: 50% !important;
+}
+
+/* ============================================================
+   CROSS-DEVICE & SAFARI MOBILE COMPATIBILITY SYSTEM
+   ============================================================ */
+
+/* 1. iOS Safari Auto-Zoom Prevention:
+   On iOS Safari, any input/select/textarea with font-size < 16px triggers
+   automatic viewport zoom on tap. Guaranteeing 16px on mobile prevents
+   unwanted zooming across the entire application without breaking desktop styling. */
+@media screen and (max-width: 1024px) {
+  input[type="text"],
+  input[type="email"],
+  input[type="password"],
+  input[type="number"],
+  input[type="tel"],
+  input[type="url"],
+  input[type="search"],
+  select,
+  textarea {
+    font-size: 16px !important;
+  }
+}
+
+/* 2. Touch Momentum Scrolling for WebKit / iOS Safari */
+.custom-scrollbar,
+.feed-stream-container,
+.modal-body-refined,
+.skill-modal-body,
+.modal-body-scroll {
+  -webkit-overflow-scrolling: touch;
+}
+
+/* 3. Safe Area Padding Utility for Notches / Dynamic Island */
+.safe-area-top {
+  padding-top: max(0px, env(safe-area-inset-top));
+}
+
+.safe-area-bottom {
+  padding-bottom: max(0px, env(safe-area-inset-bottom));
+}
+
+.safe-area-x {
+  padding-left: max(0px, env(safe-area-inset-left));
+  padding-right: max(0px, env(safe-area-inset-right));
+}

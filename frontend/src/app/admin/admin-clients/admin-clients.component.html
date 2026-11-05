@@ -1,0 +1,212 @@
+<button class="back-btn" (click)="goBack()">↩ Back</button>
+<div class="page-container">
+
+  <!-- Header -->
+  <div class="header">
+    <div class="header-title-row">
+      <h1>Client Portfolio</h1>
+      <span class="count-badge" *ngIf="cli.length > 0">{{ cli.length }} Results</span>
+    </div>
+    <p class="subtitle">Browse Our Valuable Clients</p>
+  </div>
+
+  <!-- Search Section -->
+  <div class="search-section">
+
+    <div class="search-box">
+      <span class="icon">🔍</span>
+      <input type="text" [(ngModel)]="searchText" (input)="onSearch()" placeholder="Search clients...">
+    </div>
+
+    <button class="filter-btn">Search</button>
+
+  </div>
+
+  <!-- Client Cards -->
+
+  <div class="client-card cursor-pointer" *ngFor="let c of cli" (click)="openModal(c)">
+
+    <!-- Card Header -->
+    <div class="card-header">
+
+      <div class="profile">
+
+        <img src="https://randomuser.me/api/portraits/men/32.jpg" class="profile-img">
+
+        <div>
+          <h3>{{c.fullname}}</h3>
+          <p>ID: {{c.c_id}}</p>
+        </div>
+
+      </div>
+
+      <span class="rating">⭐ 4.8</span>
+
+    </div>
+
+    <!-- Card Body -->
+    <div class="card-body">
+
+      <div class="company">
+        <p class="label">COMPANY</p>
+        <p>{{c.companyname}}</p>
+      </div>
+
+      <div class="budget">
+        <p class="label">BUDGET RANGE</p>
+        <p>{{c.budget}}</p>
+      </div>
+
+    </div>
+
+    <!-- Card Footer -->
+    <div class="card-footer">
+
+      <span class="email">{{c.email}}</span>
+
+    </div>
+
+  </div>
+
+</div>
+
+<!-- Client Details Modal -->
+<div class="modal-overlay" *ngIf="selectedClient" (click)="closeModal()">
+  <div class="modal-content-custom" (click)="$event.stopPropagation()">
+    
+    <div class="modal-header-custom">
+      <div class="d-flex align-items-center gap-3">
+        <img src="https://randomuser.me/api/portraits/men/32.jpg" class="modal-profile-img">
+        <div>
+          <h2 class="mb-1 text-dark fw-bold">{{selectedClient.fullname}}</h2>
+          <p class="modal-id mb-0 text-secondary small fw-semibold">Client ID: {{selectedClient.c_id}}</p>
+        </div>
+      </div>
+      <button class="close-btn-custom" (click)="closeModal()"><i class="bi bi-x-lg"></i></button>
+    </div>
+
+    <div class="modal-body-custom scrollable-content">
+      
+      <!-- Personal Details -->
+      <div class="info-section">
+        <h4 class="section-title"><i class="bi bi-person-lines-fill text-danger me-2"></i> Personal Details</h4>
+        <div class="info-grid">
+          <div class="info-item">
+            <span class="info-label">Email</span>
+            <span class="info-value text-dark fw-medium">{{selectedClient.email || 'N/A'}}</span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">Username</span>
+            <span class="info-value text-dark fw-medium">{{selectedClient.username || 'N/A'}}</span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">Contact</span>
+            <span class="info-value text-dark fw-medium">{{selectedClient.contact || 'N/A'}}</span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">DOB</span>
+            <span class="info-value text-dark fw-medium">{{ (selectedClient.dob | date:'mediumDate') || 'N/A'}}</span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">Gender</span>
+            <span class="info-value text-dark fw-medium">{{selectedClient.gender || 'N/A'}}</span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">Nationality</span>
+            <span class="info-value text-dark fw-medium">{{selectedClient.nationality || 'N/A'}}</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Company Details -->
+      <div class="info-section mt-4">
+        <h4 class="section-title"><i class="bi bi-building text-danger me-2"></i> Company Information</h4>
+        <div class="info-grid">
+          <div class="info-item">
+            <span class="info-label">Company Name</span>
+            <span class="info-value fw-bold text-dark">{{selectedClient.companyname || 'N/A'}}</span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">Company Type</span>
+            <span class="info-value text-dark fw-medium">{{selectedClient.companytype || 'N/A'}}</span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">Reg. Number</span>
+            <span class="info-value text-dark fw-medium">{{selectedClient.companyregno || 'N/A'}}</span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">Website</span>
+            <span class="info-value text-primary fw-medium">{{selectedClient.companywebsite || 'N/A'}}</span>
+          </div>
+          <div class="info-item" style="grid-column: span 2;">
+            <span class="info-label">Description</span>
+            <span class="info-value text-muted" style="font-size: 13px;">{{selectedClient.companydescrptn || 'No description provided.'}}</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Address & Location -->
+      <div class="info-section mt-4">
+        <h4 class="section-title"><i class="bi bi-geo-alt-fill text-danger me-2"></i> Address & Location</h4>
+        <div class="info-grid">
+          <div class="info-item" style="grid-column: span 2;">
+            <span class="info-label">Company Address</span>
+            <span class="info-value text-dark fw-medium">{{selectedClient.companyaddress || 'N/A'}}</span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">City</span>
+            <span class="info-value text-dark fw-medium">{{selectedClient.city || 'N/A'}}</span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">State</span>
+            <span class="info-value text-dark fw-medium">{{selectedClient.state || 'N/A'}}</span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">Country</span>
+            <span class="info-value text-dark fw-medium">{{selectedClient.country || 'N/A'}}</span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">Pincode</span>
+            <span class="info-value text-dark fw-medium">{{selectedClient.pincode || 'N/A'}}</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- System & Social Info -->
+      <div class="info-section mt-4">
+        <h4 class="section-title"><i class="bi bi-info-circle-fill text-danger me-2"></i> System & Additional Info</h4>
+        <div class="info-grid">
+          <div class="info-item">
+            <span class="info-label">Verified</span>
+            <span class="info-value">
+              <span class="badge" [ngClass]="selectedClient.isverfied ? 'bg-success' : 'bg-warning text-dark'">
+                {{selectedClient.isverfied ? 'Yes' : 'No'}}
+              </span>
+            </span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">Profile Completion</span>
+            <span class="info-value fw-bold" [ngClass]="selectedClient.profile_completion >= 80 ? 'text-success' : 'text-warning'">
+              {{selectedClient.profile_completion || 0}}%
+            </span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">Registered On</span>
+            <span class="info-value text-dark fw-medium">{{selectedClient.createdAt | date:'mediumDate'}}</span>
+          </div>
+        </div>
+        
+        <div class="social-links mt-3" *ngIf="selectedClient.linkedin || selectedClient.twitter || selectedClient.instagram || selectedClient.facebook">
+          <span class="info-label d-block mb-2">Social Links:</span>
+          <div class="d-flex gap-3 fs-5">
+            <a *ngIf="selectedClient.linkedin" [href]="selectedClient.linkedin" target="_blank" class="text-primary"><i class="bi bi-linkedin"></i></a>
+            <a *ngIf="selectedClient.twitter" [href]="selectedClient.twitter" target="_blank" class="text-info"><i class="bi bi-twitter"></i></a>
+            <a *ngIf="selectedClient.instagram" [href]="selectedClient.instagram" target="_blank" class="text-danger"><i class="bi bi-instagram"></i></a>
+            <a *ngIf="selectedClient.facebook" [href]="selectedClient.facebook" target="_blank" class="text-primary"><i class="bi bi-facebook"></i></a>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>

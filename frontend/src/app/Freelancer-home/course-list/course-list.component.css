@@ -1,0 +1,720 @@
+/* ============================================================
+   POPPINS FONT STANDARDIZATION (400 REGULAR)
+   ============================================================ */
+:host {
+  font-family: 'Poppins', sans-serif !important;
+}
+
+:host *:not(i):not([class*="fa-"]):not([class*="bi-"]):not(.material-icons):not([class*="material-"]) {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 400;
+}
+
+h1, h2, h3, h4, h5, h6,
+input, textarea, select, button,
+.form-control, label, p,
+span:not(.material-icons):not([class*="material-"]):not([class*="fa-"]):not([class*="bi-"]),
+a, li, td, th {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 400;
+}
+
+.material-icons,
+.material-icons-outlined,
+.material-symbols-outlined,
+[class*="material-icons"],
+[class*="material-symbols"] {
+  font-family: 'Material Icons' !important;
+  font-weight: normal !important;
+  font-style: normal !important;
+  display: inline-block;
+  line-height: 1;
+  text-transform: none;
+  letter-spacing: normal;
+  word-wrap: normal;
+  white-space: nowrap;
+  direction: ltr;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+
+
+/* ═════════════════════════════════════════════════════════════════
+   KANSBE COURSE LIST - PIXEL-PERFECT LIQUID GLASS REDESIGN
+   Theme: Pure Deep Black (#060606) · Liquid Glass · Kansbe Red (#FF0100)
+   Typography: 'Poppins', sans-serif
+   Behavior: Laptop/Desktop: Fixed Viewport 1:1 Exact Layout
+             Mobile/Tablet: Responsive Touch Adaptation
+   ═════════════════════════════════════════════════════════════════ */
+
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,600&display=swap');
+
+:host {
+  display: block;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+  box-sizing: border-box;
+
+  --color-bg-primary: #060606;
+  --color-accent-red: #FF0100;
+  --color-accent-red-hover: #e00000;
+  --color-text-primary: #ffffff;
+  --color-text-secondary: #999999;
+  --color-text-muted: #777777;
+
+  /* ─── Profile Pure Liquid Glass Tokens ─── */
+  --color-card-bg: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.07) 0%,
+    rgba(255, 255, 255, 0.015) 40%,
+    rgba(255, 255, 255, 0.003) 70%,
+    rgba(255, 255, 255, 0.04) 100%
+  );
+  --color-card-bg-hover: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.12) 0%,
+    rgba(255, 255, 255, 0.035) 40%,
+    rgba(255, 255, 255, 0.008) 70%,
+    rgba(255, 255, 255, 0.08) 100%
+  );
+  
+  --color-card-border: rgba(255, 255, 255, 0.14);
+  --color-card-border-top: rgba(255, 255, 255, 0.42);
+  --color-card-border-left: rgba(255, 255, 255, 0.28);
+  --color-card-border-bottom: rgba(255, 255, 255, 0.08);
+  --color-card-border-right: rgba(255, 255, 255, 0.12);
+
+  --color-card-shadow: 
+    inset 0 1.5px 2px 0 rgba(255, 255, 255, 0.42),
+    inset 0 -1.5px 2px 0 rgba(0, 0, 0, 0.5),
+    inset 0 0 12px 0 rgba(255, 255, 255, 0.03),
+    0 16px 44px -8px rgba(0, 0, 0, 0.85),
+    0 6px 14px rgba(0, 0, 0, 0.5);
+
+  --glass-blur: blur(18px) saturate(110%) brightness(1.03);
+  --font-family: 'Poppins', sans-serif;
+}
+
+:host,
+:host * {
+  font-family: 'Poppins', sans-serif !important;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+/* ─── Page Wrapper: Fixed to Viewport (Zero Page Scrolling on Laptop) ─── */
+.course-list-page-wrapper {
+  height: 100vh;
+  height: 100dvh;
+  max-height: 100vh;
+  max-height: 100dvh;
+  background-color: var(--color-bg-primary);
+  color: var(--color-text-primary);
+  font-family: var(--font-family);
+  position: relative;
+  overflow: hidden;
+  padding-top: max(86px, calc(env(safe-area-inset-top) + 70px));
+  padding-bottom: max(16px, calc(env(safe-area-inset-bottom) + 8px));
+  padding-left: max(0px, env(safe-area-inset-left));
+  padding-right: max(0px, env(safe-area-inset-right));
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+}
+
+/* Atmospheric Character Backdrop with projectpage bi.png */
+.ambient-glow-mesh {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  height: 100dvh;
+  background-color: #060606;
+  background-image: url('/assets/projectpage bi.png');
+  background-position: left center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Main Container: Aligned 1:1 with 1240px Floating Navbar */
+.course-list-container {
+  position: relative;
+  z-index: 1;
+  width: min(100%, 1240px);
+  margin: 0 auto;
+  padding: 8px 20px 20px;
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - 86px);
+  max-height: calc(100vh - 86px);
+  gap: 16px;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+/* ═════════════════════════════════════════════════════════════
+   TOP HEADER ROW (EXACT 1:1 ALIGNMENT ON LAPTOP)
+   ═════════════════════════════════════════════════════════════ */
+.course-list-header-row {
+  display: grid;
+  grid-template-columns: 250px 1fr auto;
+  gap: 24px;
+  align-items: center;
+  flex-shrink: 0;
+  padding-bottom: 2px;
+}
+
+.btn-back-link {
+  background: transparent;
+  border: none;
+  color: #ffffff;
+  font-size: 22px;
+  font-weight: 400;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  padding: 0;
+  transition: all 0.2s ease;
+  font-family: inherit;
+}
+
+.btn-back-link:hover {
+  color: #FF0100;
+  transform: translateX(-3px);
+}
+
+.btn-back-link i {
+  font-size: 20px;
+}
+
+.header-center-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.header-main-title {
+  font-size: 16px;
+  font-weight: 400;
+  color: #ffffff;
+  margin: 0 0 2px 0;
+  letter-spacing: -0.2px;
+}
+
+.header-main-sub {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.7);
+  margin: 0;
+  font-weight: 400;
+}
+
+/* Search Bar */
+.header-search-wrap {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 24px;
+  padding: 7px 16px;
+  width: 350px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  transition: all 0.2s ease;
+}
+
+.header-search-wrap:focus-within {
+  border-color: rgba(255, 1, 0, 0.6);
+  background: rgba(255, 255, 255, 0.08);
+  box-shadow: 0 0 14px rgba(255, 1, 0, 0.25);
+}
+
+.header-search-icon {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 13px;
+}
+
+.header-search-input {
+  background: transparent;
+  border: none;
+  outline: none;
+  color: #ffffff;
+  font-size: 12px;
+  width: 100%;
+  font-family: inherit;
+}
+
+.header-search-input::placeholder {
+  color: rgba(255, 255, 255, 0.45);
+}
+
+/* ═════════════════════════════════════════════════════════════
+   TWO-COLUMN BODY: LEFT SIDEBAR & RIGHT SCROLLABLE GRID
+   ═════════════════════════════════════════════════════════════ */
+.course-list-body-grid {
+  display: grid;
+  grid-template-columns: 250px 1fr;
+  gap: 24px;
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+}
+
+/* ─── Left Sidebar Filters (Clean, Non-Scrolling Liquid Glass) ─── */
+.course-filter-sidebar {
+  background: var(--color-card-bg);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--color-card-border);
+  border-top: 1.5px solid var(--color-card-border-top);
+  border-left: 1.5px solid var(--color-card-border-left);
+  border-radius: 20px;
+  padding: 22px 18px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  box-shadow: var(--color-card-shadow);
+  height: fit-content;
+  max-height: 100%;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.filter-block {
+  display: flex;
+  flex-direction: column;
+}
+
+.filter-block-title {
+  font-size: 11px;
+  font-weight: 400;
+  color: #ffffff;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  margin: 0 0 12px 0;
+}
+
+.filter-pills-wrap {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+}
+
+.filter-pill-btn {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #d0d0d0;
+  font-size: 11px;
+  font-weight: 400;
+  padding: 5px 12px;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: inherit;
+  white-space: nowrap;
+}
+
+.filter-pill-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+  border-color: rgba(255, 255, 255, 0.25);
+}
+
+.filter-pill-btn.active {
+  background: #FF0100;
+  border-color: #FF0100;
+  color: #ffffff;
+  font-weight: 400;
+  box-shadow: 0 0 12px rgba(255, 1, 0, 0.5);
+}
+
+/* ─── Right Content Area (Internal Scrollable Panel Only) ─── */
+.course-catalog-scroll-panel {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding-right: 8px;
+  padding-bottom: 24px;
+}
+
+/* Custom Sleek Scrollbar */
+.custom-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.16) transparent;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+  width: 5px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.16);
+  border-radius: 999px;
+  transition: background 0.2s ease;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.38);
+}
+
+/* 3-Column Course Grid on Laptop */
+.course-cards-grid-3 {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+/* ─── Individual Course Card ─── */
+.course-catalog-card {
+  background: var(--color-card-bg);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--color-card-border);
+  border-top: 1.5px solid var(--color-card-border-top);
+  border-left: 1.5px solid var(--color-card-border-left);
+  border-radius: 18px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  box-shadow: var(--color-card-shadow);
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.course-catalog-card:hover {
+  background: var(--color-card-bg-hover);
+  transform: translateY(-4px);
+  border-color: rgba(255, 255, 255, 0.3);
+  box-shadow: 
+    inset 0 1.5px 2px 0 rgba(255, 255, 255, 0.55),
+    0 22px 48px rgba(0, 0, 0, 0.9);
+}
+
+.catalog-card-thumb {
+  height: 155px;
+  width: 100%;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-color: #1a1a1a;
+  position: relative;
+  border-radius: 18px 18px 0 0;
+}
+
+.catalog-level-pill {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  background: #ffffff;
+  color: #000000;
+  font-size: 9.5px;
+  font-weight: 400;
+  padding: 3px 8px;
+  border-radius: 6px;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+.catalog-card-body {
+  padding: 14px 16px 16px;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.catalog-card-top-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 5px;
+}
+
+.catalog-category-tag {
+  color: #FF0100;
+  font-size: 9.5px;
+  font-weight: 400;
+  letter-spacing: 0.7px;
+  text-transform: uppercase;
+}
+
+.catalog-rating-score {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  font-weight: 400;
+  color: #ffffff;
+}
+
+.catalog-rating-score i {
+  color: #f5a623;
+}
+
+.rating-count-text {
+  color: rgba(255, 255, 255, 0.6);
+  font-weight: 400;
+  font-size: 10.5px;
+}
+
+.catalog-card-title {
+  font-size: 14.5px;
+  font-weight: 400;
+  color: #ffffff;
+  line-height: 1.3;
+  margin: 0 0 6px 0;
+  min-height: 38px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  letter-spacing: -0.1px;
+}
+
+.catalog-card-instructor {
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.7);
+  margin: 0 0 8px 0;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.catalog-card-instructor i {
+  color: rgba(255, 255, 255, 0.55);
+}
+
+.catalog-card-meta {
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.7);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+
+.catalog-card-meta i {
+  color: rgba(255, 255, 255, 0.55);
+}
+
+.meta-item {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.catalog-card-skills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 14px;
+}
+
+.skill-micro-pill {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 6px;
+  padding: 2px 7px;
+  font-size: 9.5px;
+  color: #d0d0d0;
+}
+
+.btn-catalog-action {
+  width: 100%;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: #ffffff;
+  border-radius: 12px;
+  padding: 8.5px 0;
+  font-size: 12px;
+  font-weight: 400;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin-top: auto;
+  font-family: inherit;
+}
+
+.btn-catalog-action:hover {
+  background: #FF0100;
+  border-color: #FF0100;
+  color: #ffffff;
+  box-shadow: 0 0 14px rgba(255, 1, 0, 0.5);
+}
+
+/* Progress Section */
+.catalog-card-progress {
+  margin-bottom: 12px;
+}
+
+.progress-info-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 10.5px;
+  color: rgba(255, 255, 255, 0.7);
+  margin-bottom: 4px;
+}
+
+.progress-bar-track {
+  height: 4px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.progress-bar-fill {
+  height: 100%;
+  background: #FF0100;
+}
+
+/* States */
+.catalog-loading-box,
+.catalog-empty-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+  text-align: center;
+  color: #888888;
+}
+
+.catalog-spinner {
+  width: 36px;
+  height: 36px;
+  border: 3px solid rgba(255, 255, 255, 0.1);
+  border-top-color: #FF0100;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  margin-bottom: 14px;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.btn-clear-filters-glass {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  color: #ffffff;
+  border-radius: 20px;
+  padding: 8px 20px;
+  font-size: 12px;
+  font-weight: 400;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin-top: 14px;
+}
+
+.btn-clear-filters-glass:hover {
+  background: #FF0100;
+  border-color: #FF0100;
+}
+
+/* ═════════════════════════════════════════════════════════════
+   RESPONSIVE MEDIA QUERIES (ONLY FOR TABLETS & MOBILES)
+   ═════════════════════════════════════════════════════════════ */
+
+/* Tablets / Medium Viewports (Below 900px) */
+@media (max-width: 900px) {
+  :host, .course-list-page-wrapper {
+    height: auto;
+    min-height: 100vh;
+    min-height: 100dvh;
+    overflow-y: auto;
+  }
+
+  /* Prevent iOS Safari auto-zoom on search */
+  .header-search-input,
+  input,
+  textarea,
+  select {
+    font-size: 16px !important;
+  }
+
+  .course-list-container {
+    height: auto;
+    max-height: none;
+    padding: 10px 16px 36px;
+    gap: 16px;
+    overflow: visible;
+  }
+
+  .course-list-header-row {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+  }
+
+  .header-search-wrap {
+    width: 100%;
+  }
+
+  .course-list-body-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    overflow: visible;
+  }
+
+  .course-filter-sidebar {
+    width: 100%;
+    max-height: none;
+    padding: 14px 16px;
+    gap: 14px;
+  }
+
+  .filter-pills-wrap {
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+
+  .filter-pills-wrap::-webkit-scrollbar {
+    display: none;
+  }
+
+  .course-cards-grid-3 {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+  }
+
+  .course-catalog-scroll-panel {
+    overflow: visible;
+    padding-right: 0;
+  }
+}
+
+/* Mobile Screens (Below 600px) */
+@media (max-width: 600px) {
+  .course-cards-grid-3 {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+
+  .btn-back-link {
+    font-size: 18px;
+  }
+
+  .header-main-title {
+    font-size: 17px;
+  }
+}

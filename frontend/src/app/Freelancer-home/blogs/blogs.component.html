@@ -1,0 +1,102 @@
+<main class="container py-5 mt-4" *ngIf="data">
+  <div class="row justify-content-center">
+
+    <!-- Back Button -->
+    <div class="col-12 col-lg-8 mb-4">
+      <button class="btn btn-link text-decoration-none text-dark fw-bold px-0
+                     d-inline-flex align-items-center gap-2 hover-red" routerLink="/home/freelancer-dash">
+        <i class="bi bi-arrow-left"></i> Back to Dashboard
+      </button>
+    </div>
+
+    <!-- Loading State -->
+    <div class="col-12 col-lg-8 text-center py-5" *ngIf="isLoading">
+      <div class="spinner-border text-danger" role="status"></div>
+      <p class="text-muted mt-3">Loading article...</p>
+    </div>
+
+    <!-- Blog Content -->
+    <div class="col-12 col-lg-8" *ngIf="!isLoading && blogData">
+
+      <!-- Category Badge -->
+      <span class="badge bg-danger bg-opacity-10 text-danger rounded-pill
+                   px-3 py-2 mb-3 fw-bold x-small-text text-uppercase">
+        {{ blogData.category?.[0] || 'Technology' }}
+      </span>
+
+      <!-- Title -->
+      <h1 class="fw-bolder text-dark mb-3" style="font-size: 2.2rem; letter-spacing: -1px; line-height: 1.2;">
+        {{ blogData.title }}
+      </h1>
+
+      <!-- Meta: Author & Date -->
+      <div class="d-flex align-items-center gap-3 text-secondary small mb-4">
+        <div class="d-flex align-items-center gap-2">
+          <div class="bg-dark text-white rounded-circle d-flex align-items-center
+                      justify-content-center" style="width:32px; height:32px;">
+            <span class="fw-bold" style="font-size:12px;">K</span>
+          </div>
+          <span class="fw-bold text-dark">{{ blogData.author || 'KANSBE News' }}</span>
+        </div>
+        <span>•</span>
+        <span>{{ blogData.published }}</span>
+      </div>
+
+      <!-- Hero Image -->
+      <div class="mb-4 rounded-4 overflow-hidden shadow-sm" style="max-height: 420px;">
+        <img [src]="blogData.image || 'assets/hero-bg.png'" class="w-100 img-fluid"
+          style="object-fit: cover; max-height: 420px; display: block;" alt="Article image"
+          (error)="blogData.image = 'assets/hero-bg.png'">
+      </div>
+
+      <!-- Description -->
+      <div class="bg-light rounded-4 p-4 mb-4 border-start border-danger border-4">
+        <p class="mb-0 text-dark lh-lg" style="font-size: 1.1rem;">
+          {{ blogData.description }}
+        </p>
+      </div>
+
+      <!-- Live article notice + Read Full Article button -->
+      <div *ngIf="isLiveArticle && blogData.url" class="card border-0 shadow-sm rounded-4 p-4 text-center mb-5">
+        <i class="bi bi-newspaper text-danger mb-3" style="font-size: 2rem;"></i>
+        <h5 class="fw-bold text-dark mb-2">Read the Full Article</h5>
+        <p class="text-secondary small mb-4">
+          This article is sourced from an external publication.
+          Click below to read the complete story on the original site.
+        </p>
+        <a [href]="blogData.url" target="_blank" rel="noopener noreferrer"
+          class="btn btn-danger rounded-pill px-5 fw-bold py-2">
+          Read Full Article &nbsp;<i class="bi bi-box-arrow-up-right"></i>
+        </a>
+      </div>
+
+      <!-- Action Footer -->
+      <div class="border-top pt-4 d-flex justify-content-between
+                  align-items-center flex-wrap gap-3 mb-5">
+        <div class="d-flex gap-2">
+          <button class="btn btn-light rounded-circle shadow-sm"
+            style="width:44px; height:44px; display:grid; place-items:center;">
+            <i class="bi bi-hand-thumbs-up-fill text-secondary"></i>
+          </button>
+          <button class="btn btn-light rounded-circle shadow-sm"
+            style="width:44px; height:44px; display:grid; place-items:center;">
+            <i class="bi bi-bookmark-fill text-secondary"></i>
+          </button>
+        </div>
+        <div class="d-flex align-items-center gap-3">
+          <span class="fw-bold text-secondary small text-uppercase">Share</span>
+          <div class="d-flex gap-2">
+            <button class="btn btn-dark rounded-circle" style="width:40px; height:40px;">
+              <i class="bi bi-linkedin"></i>
+            </button>
+            <button class="btn btn-dark rounded-circle" style="width:40px; height:40px;">
+              <i class="bi bi-twitter-x"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</main>
+<app-error-message *ngIf="!data"></app-error-message>

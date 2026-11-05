@@ -1,0 +1,509 @@
+<div class="app-container" *ngIf="data">
+  <!-- Blur background overlay for the whole page -->
+  <div class="blur-bg"></div>
+
+  <div class="admin-dashboard-container" [class.no-scroll]="isAddGroupOpen || sidebarOpen">
+
+    <!-- Cinematic Backdrop Overlay -->
+    <div class="sidebar-overlay" *ngIf="sidebarOpen" (click)="toggleSidebar()"></div>
+
+    <!-- ELITE FIXED MOBILE HEADER -->
+    <div class="mobile-header">
+      <button class="hamburger-btn" (click)="toggleSidebar()">
+        <i class="fas" [ngClass]="sidebarOpen ? 'fa-times' : 'fa-bars'"></i>
+      </button>
+
+      <div class="mobile-actions">
+        <!-- Notification Hub Relocated to Mobile Header -->
+        <div class="notification-wrapper mobile-notif">
+          <button class="notification-btn" (click)="toggleNotificationMenu()">
+            <i class="fas fa-bell"></i>
+            <span class="notification-badge" *ngIf="unreadNotificationCount > 0">
+              {{ unreadNotificationCount }}
+            </span>
+          </button>
+
+          <div class="notification-dropdown mobile-dropdown" [class.show]="isNotificationMenuOpen">
+            <div class="dropdown-header">
+              <h4>Notifications</h4>
+              <button class="btn-text-link" (click)="markAllAsRead()">Mark all as read</button>
+            </div>
+            <div class="notification-list">
+              <ng-container *ngFor="let notification of notifications">
+                <div class="notification-item" *ngFor="let n of notification.messages" (click)="openNotification(n)">
+                  <div class="unread-dot" *ngIf="!n.isread"></div>
+                  <div class="notif-icon-box"><i class="fas fa-bell"></i></div>
+                  <div class="notification-content">
+                    <div class="notification-title">{{ n.title }}</div>
+                    <div class="notification-time">{{ n.time }}</div>
+                  </div>
+                </div>
+              </ng-container>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SIDE DRAWER -->
+    <div class="sidebar" [class.sidebar-active]="sidebarOpen">
+      <div class="sidebar-top-hud">
+        <div class="logo-container">
+          <img src="assets/pics.png" alt="Portal Logo" class="sidebar-logo">
+        </div>
+        <button class="drawer-close" (click)="toggleSidebar()">
+          <i class="fas fa-arrow-left"></i>
+        </button>
+      </div>
+
+      <ul class="nav-list">
+        <li class="nav-item">
+          <a href="alpha" class="nav-link active">
+            <span class="nav-icon"><i class="fas fa-th-large"></i></span>
+            <span class="nav-text">Dashboard</span>
+          </a>
+        </li>
+        <li class="nav-item" *ngIf="userRole === 'admin'">
+          <a href="alpha-projects" class="nav-link">
+            <span class="nav-icon"><i class="fas fa-briefcase"></i></span>
+            <span class="nav-text">Projects</span>
+          </a>
+        </li>
+        <li class="nav-item" *ngIf="userRole === 'admin'">
+          <a href="alpha-totalprojects" class="nav-link">
+            <span class="nav-icon"><i class="fas fa-chart-pie"></i></span>
+            <span class="nav-text">Analytics</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="alpha-clients" class="nav-link">
+            <span class="nav-icon"><i class="fas fa-user-tie"></i></span>
+            <span class="nav-text">Clients</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="alpha-freelancers" class="nav-link">
+            <span class="nav-icon"><i class="fas fa-users-cog"></i></span>
+            <span class="nav-text">Freelancers</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="alpha-learning" class="nav-link">
+            <span class="nav-icon"><i class="fas fa-book-open"></i></span>
+            <span class="nav-text">Learning</span>
+          </a>
+        </li>
+        <li class="nav-item" *ngIf="userRole === 'admin'">
+          <a href="alpha-settings" class="nav-link">
+            <span class="nav-icon"><i class="fas fa-sliders"></i></span>
+            <span class="nav-text">Settings</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="alpha-password" class="nav-link">
+            <span class="nav-icon"><i class="fas fa-key"></i></span>
+            <span class="nav-text">Change Password</span>
+          </a>
+        </li>
+      </ul>
+
+      <div class="sidebar-profile">
+        <div class="sidebar-user">
+          <div class="user-icon-wrapper">
+            <img src="../../assets/image5.jpg" alt="Profile">
+          </div>
+          <div class="user-details">
+            <span class="user-name">{{ admin }}</span>
+            <span class="user-status">Online Status</span>
+          </div>
+        </div>
+
+        <button class="sidebar-logout" (click)="logout()">
+          <i class="fas fa-sign-out-alt"></i>
+          <span class="logout-text">Logout</span>
+        </button>
+      </div>
+    </div>
+
+    <div class="main-content">
+
+      <header class="dashboard-header">
+        <div class="header-title">
+          <p class="greeting">Welcome back,</p>
+          <h1>Admin Command Center</h1>
+        </div>
+
+        <div class="header-actions">
+          <div class="notification-wrapper">
+            <button class="notification-btn" (click)="toggleNotificationMenu()">
+              <i class="fas fa-bell"></i>
+              <span class="notification-badge" *ngIf="unreadNotificationCount > 0">
+                {{ unreadNotificationCount }}
+              </span>
+            </button>
+
+            <!-- 🔔 Notification Dropdown -->
+            <div class="notification-dropdown" [class.show]="isNotificationMenuOpen">
+              <div class="dropdown-header">
+                <h4>Notifications</h4>
+                <button class="btn-text-link" (click)="markAllAsRead()" *ngIf="unreadNotificationCount > 0">
+                  Mark all as read
+                </button>
+              </div>
+
+              <div class="notification-list">
+                <ng-container *ngFor="let notification of notifications">
+                  <div class="notification-item" *ngFor="let n of notification.messages" [class.unread]="!n.isread"
+                    (click)="openNotification(n)">
+
+                    <div class="unread-dot" *ngIf="!n.isread"></div>
+
+                    <div class="notif-icon-box">
+                      <i class="fas fa-bell"></i>
+                    </div>
+
+                    <div class="notification-content">
+                      <div class="notification-title">{{ n.title }}</div>
+                      <div class="notification-message-snippet">{{ n.message | slice:0:45 }}{{ n.message.length > 45 ? '...' : '' }}</div>
+                      <div class="notification-time">{{ n.time }}</div>
+                      <span class="mark-read-small" *ngIf="!n.isread">Mark as read</span>
+                    </div>
+                  </div>
+                </ng-container>
+
+                <div class="no-notifications" *ngIf="notifications.length === 0">
+                  <i class="fas fa-bell-slash"></i>
+                  <span>No new notifications.</span>
+                </div>
+              </div>
+
+              <div class="dropdown-footer">
+                <a href="javascript:void(0)" class="view-all-link">View All Notifications</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <!-- Add Group Modal -->
+      <div class="modal-overlay" *ngIf="isAddGroupOpen" (click)="closeAddGroup()"></div>
+      <div class="modal-container" *ngIf="isAddGroupOpen" role="dialog" aria-modal="true">
+        <div class="modal-header">
+          <h3>{{ isEditingGroup ? 'Edit Group' : 'Create New Group' }}</h3>
+          <button class="modal-close" (click)="closeAddGroup()">
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+
+        <div class="modal-body">
+          <form (submit)="onSubmitGroup(); $event.preventDefault();">
+            <div class="form-group">
+              <label class="form-label">Group Name</label>
+              <div class="form-input read-only">{{ groupForm.name }}</div>
+            </div>
+
+            <div class="form-group grid-2">
+              <div>
+                <label class="form-label">Project Manager</label>
+                <div class="form-input read-only">{{ groupForm.managerName }}</div>
+              </div>
+              <div>
+                <label class="form-label">Project ID</label>
+                <div class="form-input read-only">#{{ currentProjectId }}</div>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Freelancers Pool</label>
+              <div class="search-wrapper">
+                <div class="search-input-container">
+                  <input type="text" class="form-input" [(ngModel)]="freelancerSearchText" name="freelancerSearch"
+                    placeholder="Type name to search..." (input)="filterFreelancers()"
+                    (focus)="showFreelancerDropdown = true" autocomplete="off" />
+
+                  <!-- Dropdown -->
+                  <div *ngIf="showFreelancerDropdown && filteredFreelancersList.length > 0"
+                    class="freelancer-search-dropdown">
+                    <div *ngFor="let f of filteredFreelancersList" (mousedown)="selectFreelancer(f)">
+                      <i class="fas fa-user-circle"></i>
+                      <span>{{ f.fullname }}</span>
+                      <small style="color: #666; margin-left: 5px;">(#{{ f.fl_id }})</small>
+                    </div>
+                  </div>
+                </div>
+                <button type="button" class="btn btn-primary btn-add-inline" (click)="addFreelancerToList()"
+                  [disabled]="!selectedFreelancerToAdd">
+                  <i class="fas fa-plus"></i> Add
+                </button>
+              </div>
+
+              <!-- Selected Members Area -->
+              <div class="added-freelancers">
+                <div class="chip" *ngFor="let fid of groupForm.freelancers">
+                  <span class="chip-text">{{ getFreelancerName(fid) }}</span>
+                  <button type="button" class="chip-remove" (click)="removeFreelancerFromList(fid)">
+                    <i class="fas fa-times"></i>
+                  </button>
+                </div>
+
+                <div *ngIf="groupForm.freelancers.length === 0" class="hint-small">
+                  No freelancers assigned to this group yet.
+                </div>
+              </div>
+            </div>
+
+            <div class="modal-actions">
+              <button type="button" class="btn btn-muted" (click)="closeAddGroup()">Cancel</button>
+              <button type="submit" class="btn btn-primary btn-large">
+                {{ isEditingGroup ? 'Update Group Details' : 'Create Group' }}
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <!-- 🔔 Notification Modal -->
+      <div class="notification-modal" [class.show]="selectedNotification" *ngIf="selectedNotification">
+        <div class="notification-modal-overlay" (click)="closeNotification()"></div>
+        <div class="notification-modal-container">
+          <div class="notification-modal-content">
+            <div class="notification-modal-header">
+              <div class="notification-modal-title">
+                <span class="notification-modal-icon">
+                  <span class="material-symbols-outlined" style="color:#FF1000; font-size:24px;">notifications</span>
+                </span>
+                <h3>Notification Details</h3>
+              </div>
+              <button class="notification-modal-close" (click)="closeNotification()">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <line x1="18" y1="6" x2="6" y2="18"></line>
+                  <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+              </button>
+            </div>
+            <div class="notification-modal-body">
+              <div class="notification-modal-info">
+                <div class="notification-modal-subject">
+                  <h4>{{ selectedNotification.title }}</h4>
+                  <span class="notification-modal-time">{{ selectedNotification.time }}</span>
+                </div>
+                <div class="notification-modal-message">
+                  {{ selectedNotification.message }}
+                </div>
+              </div>
+              <div class="notification-modal-actions">
+                <button class="notification-modal-action secondary" (click)="closeNotification()">Close</button>
+                <button class="notification-modal-action mark-read" *ngIf="!selectedNotification.isread"
+                  (click)="markAsRead(selectedNotification.id)">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M20 6L9 17l-5-5" />
+                  </svg>
+                  Mark as Read
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- 🔔 Notification Modal End -->
+
+      <!-- Summary Cards -->
+      <div class="summary-grid">
+        <div class="summary-card">
+          <div class="card-icon total">
+            <i class="fas fa-project-diagram"></i>
+          </div>
+          <div class="stats">
+            <h3>{{ totalProjects }}</h3>
+            <p>Total Projects</p>
+          </div>
+        </div>
+        <div class="summary-card">
+          <div class="card-icon accepted">
+            <i class="fas fa-check-circle"></i>
+          </div>
+          <div class="stats">
+            <h3>{{ pendingProjects }}</h3>
+            <p>Accepted Projects</p>
+          </div>
+        </div>
+        <div class="summary-card">
+          <div class="card-icon ongoing">
+            <i class="fas fa-spinner"></i>
+          </div>
+          <div class="stats">
+            <h3>{{ receivedProjects }}</h3>
+            <p>Ongoing Projects</p>
+          </div>
+        </div>
+        <div class="summary-card">
+          <div class="card-icon pending">
+            <i class="fas fa-hourglass-start"></i>
+          </div>
+          <div class="stats">
+            <h3>{{ assignedProjects }}</h3>
+            <p>Not Accepted Projects</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Projects Section -->
+      <div class="projects-container">
+        <div class="section-header">
+          <div class="title-group">
+            <h2>Project Pipeline</h2>
+            <span class="count-badge">{{ projects.length }} active</span>
+          </div>
+
+          <div class="search-controls">
+            <div class="premium-search">
+              <i class="fas fa-search"></i>
+              <input type="text" [(ngModel)]="searchQuery" (input)="onSearch()"
+                placeholder="Search projects, client ID or categories..." class="search-input">
+              <button class="clear-icon" *ngIf="searchQuery" (click)="clearSearch()">
+                <i class="fas fa-times-circle"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="project-grid">
+          <!-- Empty State -->
+          <div class="no-projects-assigned" *ngIf="filteredProjects.length === 0">
+            <div class="empty-state-content">
+              <div class="empty-icon">
+                <i class="fas fa-folder-open"></i>
+              </div>
+              <h4>No Projects Found</h4>
+              <p *ngIf="userRole === 'manager'">It seems there are no projects currently assigned to you.</p>
+              <p *ngIf="userRole !== 'manager'">No projects match your current search or filters.</p>
+            </div>
+          </div>
+
+          <div class="project-item-card" *ngFor="let project of filteredProjects">
+            <div class="item-header">
+              <div class="project-info">
+                <span class="p-id">#{{project.p_id}}</span>
+                <h3>{{ project.title }}</h3>
+              </div>
+              <div class="category" [attr.data-category]="project.category">
+                {{ project.category }}
+              </div>
+            </div>
+
+            <div class="item-body">
+              <div class="detail">
+                <span class="label">Client</span>
+                <span class="value">{{ project.c_id }}</span>
+              </div>
+              <div class="detail">
+                <span class="label">Budget</span>
+                <span class="value budget">{{ project.budget }}</span>
+              </div>
+              <div class="detail">
+                <span class="label">Start Date</span>
+                <span class="value">{{ (project.start_date || project.startDate) | date:'yyyy-MM-dd' }}</span>
+              </div>
+              <div class="detail">
+                <span class="label">End Date</span>
+                <span class="value">{{ (project.end_date || project.endDate) | date:'yyyy-MM-dd' }}</span>
+              </div>
+              <div class="detail">
+                <span class="label">Duration</span>
+                <span class="value">{{ project.duration }}</span>
+              </div>
+              <div class="detail">
+                <span class="label">Total Budget</span>
+                <span class="value budget">{{ project.total_budget || project.totalBudget || 'N/A' }}</span>
+              </div>
+              <div class="detail">
+                <span class="label">Freelancers Needed</span>
+                <span class="value">{{ project.freelancersNeeded || 1 }}</span>
+              </div>
+
+              <!-- Manager Editable Actuals -->
+              <div class="group-section" style="margin-top: 15px; border-top: 1px dashed #ddd; padding-top: 10px;">
+                <p class="label" style="color:#ef2f2c;">ACTUAL METRICS (MANAGER)</p>
+                <div class="actuals-grid" style="display: grid; gap: 8px; margin-bottom: 10px;">
+                  <div class="detail" style="align-items: center;">
+                    <span class="label" style="min-width: 80px;">Start Date</span>
+                    <input type="date" [(ngModel)]="project.actualStartDate" class="form-input" style="padding: 4px; font-size: 13px;" [min]="(project.start_date || project.startDate) | date:'yyyy-MM-dd'" [max]="(project.end_date || project.endDate) | date:'yyyy-MM-dd'" />
+                  </div>
+                  <div class="detail" style="align-items: center;">
+                    <span class="label" style="min-width: 80px;">End Date</span>
+                    <input type="date" [(ngModel)]="project.actualEndDate" class="form-input" style="padding: 4px; font-size: 13px;" [min]="(project.actualStartDate || project.start_date || project.startDate) | date:'yyyy-MM-dd'" [max]="(project.end_date || project.endDate) | date:'yyyy-MM-dd'" />
+                  </div>
+                  <div class="detail" style="align-items: center;">
+                    <span class="label" style="min-width: 80px;">Budget</span>
+                    <input type="text" [value]="formatBudget(project.actualBudget)" (input)="onBudgetChange($event, project)" class="form-input" placeholder="$0.00" style="padding: 4px; font-size: 13px;" (keydown)="preventAlphabets($event)" />
+                  </div>
+                  <div class="detail" style="align-items: center;">
+                    <span class="label" style="min-width: 80px;">Freelancers</span>
+                    <input type="number" min="1" [(ngModel)]="project.freelancersNeeded" class="form-input" placeholder="1" style="padding: 4px; font-size: 13px;" />
+                  </div>
+                </div>
+                <button class="btn-group-edit" (click)="saveActuals(project)" style="width: 100%; border-radius: 4px;">
+                  <i class="fas fa-save"></i> Save Actuals
+                </button>
+              </div>
+              <div class="detail">
+                <span class="label">Assigned To</span>
+                <span class="value">{{project.assignedto || 'None'}}</span>
+              </div>
+
+              <div class="group-section">
+                <p class="label">GROUP MEMBERS</p>
+                <ng-container *ngIf="project.group_members?.length; else noGroup">
+                  <div class="member-chips">
+                    <button class="btn-group-edit" *ngFor="let p of project.group_members"
+                      (click)="updategroup(project,p)">
+                      <i class="fas fa-edit"></i> Edit Group
+                    </button>
+                  </div>
+                </ng-container>
+                <ng-template #noGroup>
+                  <button class="btn-add-group" (click)="openAddGroup(project)">
+                    <i class="fas fa-plus"></i> Initialize Group
+                  </button>
+                </ng-template>
+              </div>
+            </div>
+
+            <div class="item-footer">
+              <div class="accepted-info">
+                <span class="badge" *ngIf="hasAcceptedFreelancer(project)">
+                  <i class="fas fa-check-double"></i> Accepted
+                </span>
+              </div>
+              <div class="actions">
+                <button *ngIf="hasAcceptedFreelancer(project)" class="btn-portal" (click)="projectPortal(project.p_id)">
+                  Portal
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Pagination -->
+        <div class="modern-pagination">
+          <button (click)="prevPage()" [disabled]="currentPage === 1">
+            <i class="fas fa-chevron-left"></i>
+          </button>
+          <div class="page-info">
+            <span>Page</span>
+            <strong>{{ currentPage }}</strong>
+            <span>of {{ totalPages }}</span>
+          </div>
+          <button (click)="nextPage()" [disabled]="currentPage === totalPages">
+            <i class="fas fa-chevron-right"></i>
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+<app-error-message *ngIf="!data"></app-error-message>

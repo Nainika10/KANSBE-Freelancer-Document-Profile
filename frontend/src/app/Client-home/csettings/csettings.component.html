@@ -1,0 +1,796 @@
+<!-- Header logic handled by Navbar Layout Component -->
+
+<div class="settings-page-wrapper" *ngIf="data">
+  <!-- Ambient Photo Glow Mesh on Right -->
+  <div class="ambient-glow-mesh"></div>
+
+  <!-- Main Container -->
+  <main class="settings-main-container">
+    <!-- Large Rounded Glass Outer Shell -->
+    <div class="settings-outer-shell">
+
+      <!-- ═════════════════════════════════════════════════════════
+           LEFT SIDEBAR: IDENTITY, PROGRESS & NAVIGATION TABS
+           ═════════════════════════════════════════════════════════ -->
+      <aside class="settings-sidebar-panel">
+        <div class="sidebar-glass-card">
+
+          <!-- Centered Identity Block -->
+          <div class="sidebar-identity-block">
+            <div class="sidebar-avatar-circle">
+              <img *ngIf="profileDeatails.p_pic && !profileDeatails.p_pic.includes('placeholder')" [src]="profileDeatails.p_pic" class="sidebar-avatar-img" alt="Profile">
+              <span *ngIf="!profileDeatails.p_pic || profileDeatails.p_pic.includes('placeholder')">
+                {{ (profileDeatails.fullname.charAt(0) || 'C').toUpperCase() }}
+              </span>
+            </div>
+            <h3 class="sidebar-user-name">{{ profileDeatails.fullname || 'Client Partner' }}</h3>
+            <p class="sidebar-user-meta">
+              <span class="meta-role">{{ profileDeatails.companyname || 'Client Partner' }}</span>
+              <span class="meta-separator">•</span>
+              <span class="meta-location">
+                <i class="bi bi-geo-alt-fill text-white"></i> {{ profileDeatails.country || 'India' }}
+              </span>
+            </p>
+          </div>
+
+          <!-- Account Strength High-Tech Glass Widget -->
+          <div class="sidebar-strength-widget">
+            <div class="strength-header-row">
+              <div class="strength-title-group">
+                <i class="bi bi-shield-check text-white me-1"></i>
+                <h4 class="sidebar-block-title">Account Strength</h4>
+              </div>
+              <div class="strength-badge-pill">
+                <span>Strong Profile</span>
+              </div>
+            </div>
+            <div class="strength-metric-row">
+              <div class="strength-number-wrap">
+                <div class="strength-val-line">
+                  <span class="strength-number">{{ getProfileCompletion() }}</span>
+                  <span class="strength-percent-sign">%</span>
+                </div>
+                <span class="strength-subtext">Profile Verified</span>
+              </div>
+              <div class="strength-ring-wrap">
+                <svg class="strength-svg-ring" viewBox="0 0 54 54">
+                  <circle class="ring-bg-track" cx="27" cy="27" r="22" />
+                  <circle class="ring-progress-arc" cx="27" cy="27" r="22" stroke-dasharray="138.2"
+                    [style.stroke-dashoffset]="138.2 - (138.2 * getProfileCompletion()) / 100" />
+                </svg>
+              </div>
+            </div>
+          </div>
+
+          <!-- Verification Progress Block -->
+          <div class="sidebar-verification-block">
+            <h4 class="sidebar-block-title">Verification Progress</h4>
+            <ul class="verification-list">
+              <!-- Basic Identity -->
+              <li class="verification-item">
+                <span class="verification-label">Basic Identity</span>
+                <div class="verification-badge" [class.badge-completed]="profileDeatails.fullname && profileDeatails.contact"
+                  [class.badge-pending]="!profileDeatails.fullname || !profileDeatails.contact">
+                  <i class="bi bi-check-lg" *ngIf="profileDeatails.fullname && profileDeatails.contact"></i>
+                </div>
+              </li>
+              <!-- Company Set Up -->
+              <li class="verification-item">
+                <span class="verification-label">Company Set Up</span>
+                <div class="verification-badge"
+                  [class.badge-completed]="profileDeatails.companyname && profileDeatails.companytype"
+                  [class.badge-pending]="!profileDeatails.companyname || !profileDeatails.companytype">
+                  <i class="bi bi-check-lg"
+                    *ngIf="profileDeatails.companyname && profileDeatails.companytype"></i>
+                </div>
+              </li>
+              <!-- Detailed Biography -->
+              <li class="verification-item">
+                <span class="verification-label">Detailed Biography</span>
+                <div class="verification-badge"
+                  [class.badge-completed]="(profileDeatails.bio || '').trim().length >= 50"
+                  [class.badge-pending]="(profileDeatails.bio || '').trim().length < 50">
+                  <i class="bi bi-check-lg" *ngIf="(profileDeatails.bio || '').trim().length >= 50"></i>
+                </div>
+              </li>
+              <!-- Social Presence -->
+              <li class="verification-item">
+                <span class="verification-label">Social Presence</span>
+                <div class="verification-badge"
+                  [class.badge-completed]="profileDeatails.linkedin || profileDeatails.twitter || profileDeatails.instagram || profileDeatails.facebook"
+                  [class.badge-pending]="!profileDeatails.linkedin && !profileDeatails.twitter && !profileDeatails.instagram && !profileDeatails.facebook">
+                  <i class="bi bi-check-lg"
+                    *ngIf="profileDeatails.linkedin || profileDeatails.twitter || profileDeatails.instagram || profileDeatails.facebook"></i>
+                </div>
+              </li>
+              <!-- Financial Accounts -->
+              <li class="verification-item">
+                <span class="verification-label">Financial Accounts</span>
+                <div class="verification-badge" [class.badge-completed]="!enable" [class.badge-pending]="enable">
+                  <i class="bi bi-check-lg" *ngIf="!enable"></i>
+                </div>
+              </li>
+              <!-- Account Security -->
+              <li class="verification-item">
+                <span class="verification-label">Account Security</span>
+                <div class="verification-badge" [class.badge-completed]="profileDeatails.email" [class.badge-pending]="!profileDeatails.email">
+                  <i class="bi bi-check-lg" *ngIf="profileDeatails.email"></i>
+                </div>
+              </li>
+            </ul>
+          </div>
+
+          <!-- Bottom Navigation Tabs Stack -->
+          <nav class="sidebar-nav-stack">
+            <button type="button" class="sidebar-tab-btn" [class.tab-active]="activeSection === 'profile'"
+              (click)="setActiveSection('profile')">
+              <i class="bi bi-person sidebar-tab-icon"></i>
+              <span class="sidebar-tab-text">Profile Settings</span>
+            </button>
+            <button type="button" class="sidebar-tab-btn" [class.tab-active]="activeSection === 'password'"
+              (click)="setActiveSection('password')">
+              <i class="bi bi-shield sidebar-tab-icon"></i>
+              <span class="sidebar-tab-text">Security Settings</span>
+            </button>
+            <button type="button" class="sidebar-tab-btn" [class.tab-active]="activeSection === 'banking'"
+              (click)="setActiveSection('banking')">
+              <i class="bi bi-bank sidebar-tab-icon"></i>
+              <span class="sidebar-tab-text">Banking Details</span>
+            </button>
+          </nav>
+
+        </div>
+      </aside>
+
+      <!-- ═════════════════════════════════════════════════════════
+           RIGHT CONTENT AREA: HEADER CARD & SECTION FORM CARDS
+           ═════════════════════════════════════════════════════════ -->
+      <section class="settings-content-panel">
+
+        <!-- HEADER CARD (SHARED ACROSS TABS) -->
+        <header class="settings-header-card">
+          <div class="header-titles-col">
+            <h1 class="header-main-title">
+              {{ activeSection === 'profile' ? 'Profile Settings' : (activeSection === 'password' ? 'Security Settings' : 'Banking Details') }}
+            </h1>
+            <p class="header-subtitle">
+              {{ activeSection === 'profile' ? 'Manage your personal, company, and public profile information.' : (activeSection === 'password' ? 'Update your password and manage your account security settings.' : 'Update your disbursement accounts and financial preferences for the Kansbe network.') }}
+            </p>
+          </div>
+
+          <div class="header-actions-col">
+            <!-- Profile Action Buttons -->
+            <ng-container *ngIf="activeSection === 'profile'">
+              <button type="button" class="btn-glass-secondary" *ngIf="!isEdit" (click)="enabledit()">
+                <i class="bi bi-pencil-square"></i>
+                <span>Edit Details</span>
+              </button>
+              <button type="button" class="btn-glass-secondary" *ngIf="isEdit" (click)="cancelEdit()">
+                <i class="bi bi-x-lg"></i>
+                <span>Cancel</span>
+              </button>
+              <button type="button" class="btn-solid-red" (click)="updateDetails()"
+                [disabled]="!isEdit || !isFormValid()">
+                <i class="bi bi-floppy-fill"></i>
+                <span>Save Changes</span>
+              </button>
+            </ng-container>
+
+            <!-- Security Action Buttons -->
+            <ng-container *ngIf="activeSection === 'password'">
+              <button type="button" class="btn-solid-red" (click)="onChangePassword()"
+                [disabled]="changePasswordForm.invalid || isChangingPassword">
+                <span>{{ isChangingPassword ? 'Updating...' : 'Update Password' }}</span>
+              </button>
+            </ng-container>
+
+            <!-- Banking Action Buttons -->
+            <ng-container *ngIf="activeSection === 'banking'">
+              <button type="button" class="btn-glass-secondary" *ngIf="!isBank" (click)="enableBank()">
+                <i class="bi bi-pencil-square"></i>
+                <span>Edit Details</span>
+              </button>
+              <button type="button" class="btn-glass-secondary" *ngIf="isBank" (click)="cancelBankEdit()">
+                <i class="bi bi-x-lg"></i>
+                <span>Cancel</span>
+              </button>
+              <button type="button" class="btn-solid-red" (click)="handleBankSubmit()"
+                [disabled]="!isBank || !isBankFormValid()">
+                <i class="bi bi-lock-fill"></i>
+                <span>{{ button }}</span>
+              </button>
+            </ng-container>
+          </div>
+        </header>
+
+        <!-- ═══ TAB 1: PROFILE SETTINGS ═══ -->
+        <div class="tab-content-wrapper" *ngIf="activeSection === 'profile'">
+
+          <!-- Form Card 1: Personal Information -->
+          <div class="form-glass-card personal-info-glass-card">
+            <div class="card-section-heading">
+              <i class="bi bi-person card-heading-icon"></i>
+              <h2 class="card-heading-title">Personal Information</h2>
+            </div>
+            <div class="card-heading-divider"></div>
+
+            <div class="form-grid-2col">
+              <!-- Full Name -->
+              <div class="form-field-group">
+                <label class="form-field-label">Full Name <span class="required-asterisk">*</span></label>
+                <div class="glass-input-wrapper" [class.has-error]="errorMessages.fullname && isEdit">
+                  <i class="bi bi-person glass-input-icon"></i>
+                  <input type="text" class="glass-input-control" [(ngModel)]="profileDeatails.fullname"
+                    placeholder="Enter your full name" (ngModelChange)="validateField('fullname', $event)"
+                    (blur)="validateField('fullname', profileDeatails.fullname)"
+                    [disabled]="!isEdit">
+                </div>
+                <small class="error-msg-text" *ngIf="errorMessages.fullname && isEdit">
+                  <i class="bi bi-exclamation-circle-fill"></i> {{ errorMessages.fullname }}
+                </small>
+              </div>
+
+              <!-- Username -->
+              <div class="form-field-group">
+                <label class="form-field-label">Username</label>
+                <div class="glass-input-wrapper" [class.has-error]="errorMessages.username && isEdit">
+                  <i class="bi bi-person-badge glass-input-icon"></i>
+                  <input type="text" class="glass-input-control" [(ngModel)]="profileDeatails.username"
+                    placeholder="Enter your username" (ngModelChange)="validateField('username', $event)"
+                    (blur)="validateField('username', profileDeatails.username)"
+                    [disabled]="!isEdit">
+                </div>
+                <small class="error-msg-text" *ngIf="errorMessages.username && isEdit">
+                  <i class="bi bi-exclamation-circle-fill"></i> {{ errorMessages.username }}
+                </small>
+              </div>
+
+              <!-- Email Address -->
+              <div class="form-field-group">
+                <label class="form-field-label">Email Address <span class="required-asterisk">*</span></label>
+                <div class="glass-input-wrapper readonly-input">
+                  <i class="bi bi-envelope glass-input-icon"></i>
+                  <input type="email" class="glass-input-control" [(ngModel)]="profileDeatails.email" readonly>
+                </div>
+                <small class="email-note-text">
+                  <i class="bi bi-info-circle-fill me-1"></i> Note: No changes can be made to the registered email address.
+                </small>
+              </div>
+
+              <!-- Contact Number -->
+              <div class="form-field-group">
+                <label class="form-field-label">Contact Number <span class="required-asterisk">*</span></label>
+                <div class="glass-input-wrapper" [class.has-error]="errorMessages.contact && isEdit">
+                  <i class="bi bi-telephone glass-input-icon"></i>
+                  <input type="tel" class="glass-input-control" [(ngModel)]="profileDeatails.contact"
+                    placeholder="Enter contact number" maxlength="10" (ngModelChange)="validateField('contact', $event)"
+                    (blur)="validateField('contact', profileDeatails.contact)"
+                    (keypress)="allowOnlyNumbers($event)"
+                    [disabled]="!isEdit">
+                </div>
+                <small class="error-msg-text" *ngIf="errorMessages.contact && isEdit">
+                  <i class="bi bi-exclamation-circle-fill"></i> {{ errorMessages.contact }}
+                </small>
+              </div>
+
+              <!-- Gender -->
+              <div class="form-field-group gender-container" [class.dropdown-active]="showGenderDropdown">
+                <label class="form-field-label">Gender <span class="required-asterisk">*</span></label>
+                <div class="glass-input-wrapper cursor-pointer" [class.has-error]="errorMessages.gender && isEdit"
+                  (click)="isEdit ? (showGenderDropdown = !showGenderDropdown) : null">
+                  <i class="bi bi-gender-ambiguous glass-input-icon"></i>
+                  <input type="text" class="glass-input-control cursor-pointer" [(ngModel)]="profileDeatails.gender"
+                    placeholder="Select Gender" readonly (blur)="validateField('gender', profileDeatails.gender)" [disabled]="!isEdit">
+                  <i class="bi bi-chevron-down glass-select-arrow"></i>
+                </div>
+                <!-- Gender Dropdown -->
+                <div class="glass-dropdown-menu" *ngIf="showGenderDropdown && filteredGenders.length > 0">
+                  <div class="glass-dropdown-option" *ngFor="let g of filteredGenders" (mousedown)="selectGender(g); $event.preventDefault()">
+                    {{ g }}
+                  </div>
+                </div>
+                <small class="error-msg-text" *ngIf="errorMessages.gender && isEdit">
+                  <i class="bi bi-exclamation-circle-fill"></i> {{ errorMessages.gender }}
+                </small>
+              </div>
+
+              <!-- Date of Birth -->
+              <div class="form-field-group dob-picker-container" [class.dropdown-active]="showDatePicker">
+                <label class="form-field-label">Date of Birth <span class="required-asterisk">*</span></label>
+                <div class="glass-input-wrapper cursor-pointer" [class.has-error]="errorMessages.dob && isEdit" (click)="isEdit ? toggleDatePicker() : null">
+                  <i class="bi bi-calendar4 glass-input-icon"></i>
+                  <input type="text" class="glass-input-control cursor-pointer" [value]="profileDeatails.dob"
+                    placeholder="YYYY-MM-DD" readonly (blur)="validateDob()" [disabled]="!isEdit">
+                  <i class="bi bi-chevron-down glass-select-arrow"></i>
+                </div>
+                <!-- DOB Picker Dropdown -->
+                <div class="glass-datepicker-menu" *ngIf="showDatePicker && isEdit" (click)="$event.stopPropagation()">
+                  <div class="datepicker-selectors-row">
+                    <select class="glass-date-select" [(ngModel)]="selectedMonth" (change)="generateCalendar()">
+                      <option *ngFor="let m of months; let i = index" [ngValue]="i">{{ m }}</option>
+                    </select>
+                    <select class="glass-date-select" [(ngModel)]="selectedYear" (change)="generateCalendar()">
+                      <option *ngFor="let y of years" [ngValue]="y">{{ y }}</option>
+                    </select>
+                  </div>
+                  <div class="datepicker-grid-days">
+                    <div *ngFor="let day of calendarDays" class="datepicker-day-cell" (click)="selectDate(day)"
+                      [class.active-day]="isDateActive(day)" [class.disabled-day]="!isDateSelectable(day)">
+                      {{ day }}
+                    </div>
+                  </div>
+                </div>
+                <small class="error-msg-text" *ngIf="errorMessages.dob && isEdit">
+                  <i class="bi bi-exclamation-circle-fill"></i> {{ errorMessages.dob }}
+                </small>
+              </div>
+
+              <!-- Nationality -->
+              <div class="form-field-group nationality-container" [class.dropdown-active]="showNationalityDropdown">
+                <label class="form-field-label">Nationality <span class="required-asterisk">*</span></label>
+                <div class="glass-input-wrapper" [class.has-error]="errorMessages.nationality && isEdit">
+                  <i class="bi bi-globe glass-input-icon"></i>
+                  <input type="text" class="glass-input-control" [(ngModel)]="profileDeatails.nationality"
+                    placeholder="Nationality" (input)="onNationalityInput($event)" (focus)="onNationalityInput($event)"
+                    (ngModelChange)="validateField('nationality', $event)" (blur)="validateField('nationality', profileDeatails.nationality)"
+                    [disabled]="!isEdit">
+                </div>
+                <!-- Nationality Dropdown -->
+                <div class="glass-dropdown-menu" *ngIf="showNationalityDropdown && filteredNationalities.length > 0">
+                  <div class="glass-dropdown-option" *ngFor="let nat of filteredNationalities"
+                    (mousedown)="selectNationality(nat); $event.preventDefault()">
+                    {{ nat }}
+                  </div>
+                </div>
+                <small class="error-msg-text" *ngIf="errorMessages.nationality && isEdit">
+                  <i class="bi bi-exclamation-circle-fill"></i> {{ errorMessages.nationality }}
+                </small>
+              </div>
+
+              <!-- Country -->
+              <div class="form-field-group country-container" [class.dropdown-active]="showCountryDropdown">
+                <label class="form-field-label">Country <span class="required-asterisk">*</span></label>
+                <div class="glass-input-wrapper" [class.has-error]="errorMessages.country && isEdit">
+                  <i class="bi bi-flag glass-input-icon"></i>
+                  <input type="text" class="glass-input-control" [(ngModel)]="profileDeatails.country" placeholder="Country"
+                    (input)="onCountryInput($event)" (focus)="onCountryInput($event)"
+                    (ngModelChange)="validateField('country', $event)" (blur)="validateField('country', profileDeatails.country)"
+                    [disabled]="!isEdit">
+                  <i class="bi bi-chevron-down glass-select-arrow"></i>
+                </div>
+                <!-- Country Dropdown -->
+                <div class="glass-dropdown-menu" *ngIf="showCountryDropdown && filteredCountries.length > 0">
+                  <div class="glass-dropdown-option" *ngFor="let country of filteredCountries"
+                    (mousedown)="selectCountry(country); $event.preventDefault()">
+                    {{ country }}
+                  </div>
+                </div>
+                <small class="error-msg-text" *ngIf="errorMessages.country && isEdit">
+                  <i class="bi bi-exclamation-circle-fill"></i> {{ errorMessages.country }}
+                </small>
+              </div>
+
+              <!-- About You / Bio (Full Width inside Personal Information) -->
+              <div class="form-field-group full-width-col">
+                <div class="d-flex justify-content-between align-items-center mb-1">
+                  <label class="form-field-label mb-0">About You <span class="required-asterisk">*</span></label>
+                  <span class="field-counter-text" [class.text-success]="(profileDeatails.bio || '').length >= 50">
+                    {{ (profileDeatails.bio || '').length }} / 50 min chars
+                  </span>
+                </div>
+                <div class="glass-input-wrapper textarea-wrapper bio-textarea-wrapper" [class.has-error]="errorMessages.bio && isEdit">
+                  <textarea class="glass-textarea-control bio-textarea-control" [(ngModel)]="profileDeatails.bio" rows="6"
+                    placeholder="Tell freelancers about yourself, your company's culture, and your mission (minimum 50 characters)..."
+                    (ngModelChange)="validateField('bio', $event)" (blur)="validateField('bio', profileDeatails.bio)"
+                    [disabled]="!isEdit"></textarea>
+                </div>
+                <div class="d-flex justify-content-between align-items-center mt-1">
+                  <small class="error-msg-text" *ngIf="errorMessages.bio && isEdit">
+                    <i class="bi bi-exclamation-circle-fill"></i> {{ errorMessages.bio }}
+                  </small>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Form Card 2: Company Information (Client Specific) -->
+          <div class="form-glass-card mt-4 company-info-glass-card">
+            <div class="card-section-heading">
+              <i class="bi bi-building card-heading-icon"></i>
+              <h2 class="card-heading-title">Company Information</h2>
+            </div>
+            <div class="card-heading-divider"></div>
+
+            <div class="form-grid-2col">
+              <!-- Company Name -->
+              <div class="form-field-group">
+                <label class="form-field-label">Company Name</label>
+                <div class="glass-input-wrapper" [class.has-error]="errorMessages.companyname && isEdit">
+                  <i class="bi bi-buildings glass-input-icon"></i>
+                  <input type="text" class="glass-input-control" [(ngModel)]="profileDeatails.companyname"
+                    placeholder="Enter company name" (ngModelChange)="validateField('companyname', $event)"
+                    (blur)="validateField('companyname', profileDeatails.companyname)"
+                    [disabled]="!isEdit">
+                </div>
+                <small class="error-msg-text" *ngIf="errorMessages.companyname && isEdit">
+                  <i class="bi bi-exclamation-circle-fill"></i> {{ errorMessages.companyname }}
+                </small>
+              </div>
+
+              <!-- Company Type -->
+              <div class="form-field-group">
+                <label class="form-field-label">Company Type</label>
+                <div class="glass-input-wrapper" [class.has-error]="errorMessages.companytype && isEdit">
+                  <i class="bi bi-briefcase glass-input-icon"></i>
+                  <select class="glass-select-control" [(ngModel)]="profileDeatails.companytype"
+                    [disabled]="!isEdit" (ngModelChange)="validateField('companytype', $event)"
+                    (blur)="validateField('companytype', profileDeatails.companytype)">
+                    <option value="" class="glass-option">Select company type</option>
+                    <option value="sole_proprietorship" class="glass-option">Sole Proprietorship</option>
+                    <option value="partnership" class="glass-option">Partnership</option>
+                    <option value="private_limited" class="glass-option">Private Limited</option>
+                    <option value="public_limited" class="glass-option">Public Limited</option>
+                    <option value="llc" class="glass-option">Limited Liability Company (LLC)</option>
+                    <option value="corporation" class="glass-option">Corporation</option>
+                  </select>
+                </div>
+                <small class="error-msg-text" *ngIf="errorMessages.companytype && isEdit">
+                  <i class="bi bi-exclamation-circle-fill"></i> {{ errorMessages.companytype }}
+                </small>
+              </div>
+
+              <!-- Company Address (Full Width) -->
+              <div class="form-field-group full-width-col">
+                <div class="d-flex justify-content-between align-items-center mb-1">
+                  <label class="form-field-label mb-0">Company Address</label>
+                  <span class="field-counter-text">{{ (profileDeatails.companyaddress || '').length }} / 250 max</span>
+                </div>
+                <div class="glass-input-wrapper textarea-wrapper" [class.has-error]="errorMessages.companyaddress && isEdit">
+                  <textarea class="glass-textarea-control" [(ngModel)]="profileDeatails.companyaddress" rows="2"
+                    placeholder="Enter complete company address..." maxlength="250"
+                    (ngModelChange)="validateField('companyaddress', $event)"
+                    (blur)="validateField('companyaddress', profileDeatails.companyaddress)"
+                    [disabled]="!isEdit"></textarea>
+                </div>
+                <small class="error-msg-text" *ngIf="errorMessages.companyaddress && isEdit">
+                  <i class="bi bi-exclamation-circle-fill"></i> {{ errorMessages.companyaddress }}
+                </small>
+              </div>
+
+              <!-- City -->
+              <div class="form-field-group">
+                <label class="form-field-label">City</label>
+                <div class="glass-input-wrapper" [class.has-error]="errorMessages.city && isEdit">
+                  <i class="bi bi-building-add glass-input-icon"></i>
+                  <input type="text" class="glass-input-control" [(ngModel)]="profileDeatails.city"
+                    placeholder="Enter city" (ngModelChange)="validateField('city', $event)"
+                    (blur)="validateField('city', profileDeatails.city)"
+                    [disabled]="!isEdit">
+                </div>
+                <small class="error-msg-text" *ngIf="errorMessages.city && isEdit">
+                  <i class="bi bi-exclamation-circle-fill"></i> {{ errorMessages.city }}
+                </small>
+              </div>
+
+              <!-- State / Province -->
+              <div class="form-field-group">
+                <label class="form-field-label">State / Province</label>
+                <div class="glass-input-wrapper" [class.has-error]="errorMessages.state && isEdit">
+                  <i class="bi bi-map glass-input-icon"></i>
+                  <input type="text" class="glass-input-control" [(ngModel)]="profileDeatails.state"
+                    placeholder="Enter state" (ngModelChange)="validateField('state', $event)"
+                    (blur)="validateField('state', profileDeatails.state)"
+                    [disabled]="!isEdit">
+                </div>
+                <small class="error-msg-text" *ngIf="errorMessages.state && isEdit">
+                  <i class="bi bi-exclamation-circle-fill"></i> {{ errorMessages.state }}
+                </small>
+              </div>
+
+              <!-- Postal Code -->
+              <div class="form-field-group">
+                <label class="form-field-label">Postal Code</label>
+                <div class="glass-input-wrapper">
+                  <i class="bi bi-pin-map glass-input-icon"></i>
+                  <input type="text" class="glass-input-control" [(ngModel)]="profileDeatails.pincode"
+                    placeholder="Enter postal code" [disabled]="!isEdit">
+                </div>
+              </div>
+
+              <!-- Company Description (Full Width) -->
+              <div class="form-field-group full-width-col">
+                <div class="d-flex justify-content-between align-items-center mb-1">
+                  <label class="form-field-label mb-0">Company Description</label>
+                  <span class="field-counter-text">{{ (profileDeatails.companydescrptn || '').length }} / 250 max</span>
+                </div>
+                <div class="glass-input-wrapper textarea-wrapper desc-textarea-wrapper" [class.has-error]="errorMessages.companydescrptn && isEdit">
+                  <textarea class="glass-textarea-control desc-textarea-control" [(ngModel)]="profileDeatails.companydescrptn" rows="6"
+                    placeholder="Brief description of your company's business and services..." maxlength="250"
+                    (ngModelChange)="validateField('companydescrptn', $event)"
+                    (blur)="validateField('companydescrptn', profileDeatails.companydescrptn)"
+                    [disabled]="!isEdit"></textarea>
+                </div>
+                <small class="error-msg-text" *ngIf="errorMessages.companydescrptn && isEdit">
+                  <i class="bi bi-exclamation-circle-fill"></i> {{ errorMessages.companydescrptn }}
+                </small>
+              </div>
+            </div>
+          </div>
+
+          <!-- Form Card 3: Social Presence -->
+          <div class="form-glass-card mt-4 social-glass-card">
+            <div class="card-section-heading">
+              <i class="bi bi-share card-heading-icon"></i>
+              <h2 class="card-heading-title">Social Presence</h2>
+            </div>
+            <div class="card-heading-divider"></div>
+
+            <div class="form-grid-2col">
+              <!-- LinkedIn -->
+              <div class="form-field-group">
+                <label class="form-field-label">LinkedIn URL</label>
+                <div class="glass-input-wrapper" [class.has-error]="errorMessages.linkedin && isEdit">
+                  <i class="bi bi-linkedin glass-input-icon"></i>
+                  <input type="text" class="glass-input-control" [(ngModel)]="profileDeatails.linkedin"
+                    placeholder="linkedin.com/in/username" (ngModelChange)="validateField('linkedin', $event)"
+                    (blur)="validateField('linkedin', profileDeatails.linkedin)"
+                    [disabled]="!isEdit">
+                </div>
+                <small class="error-msg-text" *ngIf="errorMessages.linkedin && isEdit">
+                  <i class="bi bi-exclamation-circle-fill"></i> {{ errorMessages.linkedin }}
+                </small>
+              </div>
+
+              <!-- Twitter / X -->
+              <div class="form-field-group">
+                <label class="form-field-label">Twitter (X) URL</label>
+                <div class="glass-input-wrapper" [class.has-error]="errorMessages.twitter && isEdit">
+                  <i class="bi bi-twitter-x glass-input-icon"></i>
+                  <input type="text" class="glass-input-control" [(ngModel)]="profileDeatails.twitter"
+                    placeholder="twitter.com/username" (ngModelChange)="validateField('twitter', $event)"
+                    (blur)="validateField('twitter', profileDeatails.twitter)"
+                    [disabled]="!isEdit">
+                </div>
+                <small class="error-msg-text" *ngIf="errorMessages.twitter && isEdit">
+                  <i class="bi bi-exclamation-circle-fill"></i> {{ errorMessages.twitter }}
+                </small>
+              </div>
+
+              <!-- Instagram -->
+              <div class="form-field-group">
+                <label class="form-field-label">Instagram URL</label>
+                <div class="glass-input-wrapper" [class.has-error]="errorMessages.instagram && isEdit">
+                  <i class="bi bi-instagram glass-input-icon"></i>
+                  <input type="text" class="glass-input-control" [(ngModel)]="profileDeatails.instagram"
+                    placeholder="instagram.com/username" (ngModelChange)="validateField('instagram', $event)"
+                    (blur)="validateField('instagram', profileDeatails.instagram)"
+                    [disabled]="!isEdit">
+                </div>
+                <small class="error-msg-text" *ngIf="errorMessages.instagram && isEdit">
+                  <i class="bi bi-exclamation-circle-fill"></i> {{ errorMessages.instagram }}
+                </small>
+              </div>
+
+              <!-- GitHub / Facebook -->
+              <div class="form-field-group">
+                <label class="form-field-label">GitHub / Website URL</label>
+                <div class="glass-input-wrapper" [class.has-error]="errorMessages.facebook && isEdit">
+                  <i class="bi bi-github glass-input-icon"></i>
+                  <input type="text" class="glass-input-control" [(ngModel)]="profileDeatails.facebook"
+                    placeholder="github.com/username" (ngModelChange)="validateField('facebook', $event)"
+                    (blur)="validateField('facebook', profileDeatails.facebook)"
+                    [disabled]="!isEdit">
+                </div>
+                <small class="error-msg-text" *ngIf="errorMessages.facebook && isEdit">
+                  <i class="bi bi-exclamation-circle-fill"></i> {{ errorMessages.facebook }}
+                </small>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- ═══ TAB 2: SECURITY SETTINGS ═══ -->
+        <div class="tab-content-wrapper" *ngIf="activeSection === 'password'">
+          <div class="form-glass-card">
+            <div class="card-section-heading">
+              <i class="bi bi-lock card-heading-icon"></i>
+              <div>
+                <h2 class="card-heading-title">Change Password</h2>
+                <p class="card-heading-subtext">Use at least eight characters with a number and a symbol.</p>
+              </div>
+            </div>
+            <div class="card-heading-divider"></div>
+
+            <form [formGroup]="changePasswordForm" class="stacked-password-form">
+              <!-- Current Password -->
+              <div class="form-field-group">
+                <label class="form-field-label">Current Password <span class="required-asterisk">*</span></label>
+                <div class="glass-input-wrapper">
+                  <input [type]="showCurrentPwd ? 'text' : 'password'" class="glass-input-control"
+                    formControlName="currentPassword" placeholder="Enter Current Password"
+                    [(ngModel)]="profileDeatails.currentpassword"
+                    autocomplete="current-password">
+                  <i class="bi glass-pwd-toggle cursor-pointer" [ngClass]="showCurrentPwd ? 'bi-eye' : 'bi-eye-slash'"
+                    (click)="showCurrentPwd = !showCurrentPwd"></i>
+                </div>
+                <small class="error-msg-text"
+                  *ngIf="changePasswordForm.get('currentPassword')?.touched && changePasswordForm.get('currentPassword')?.invalid">
+                  <i class="bi bi-exclamation-circle-fill"></i> Current password is required
+                </small>
+              </div>
+
+              <!-- New Password -->
+              <div class="form-field-group">
+                <label class="form-field-label">New Password <span class="required-asterisk">*</span></label>
+                <div class="glass-input-wrapper">
+                  <input [type]="showNewPwd ? 'text' : 'password'" class="glass-input-control"
+                    formControlName="newPassword" placeholder="Create New Password" autocomplete="new-password">
+                  <i class="bi glass-pwd-toggle cursor-pointer" [ngClass]="showNewPwd ? 'bi-eye' : 'bi-eye-slash'"
+                    (click)="showNewPwd = !showNewPwd"></i>
+                </div>
+
+                <!-- Rules Checklist -->
+                <div class="password-rules-inline mt-2" *ngIf="changePasswordForm.get('newPassword')?.value">
+                  <span [class.valid]="hasMinLength()">{{ hasMinLength() ? '✔' : '✖' }} 8+ chars</span>
+                  <span class="dot">•</span>
+                  <span [class.valid]="hasUppercase()">{{ hasUppercase() ? '✔' : '✖' }} Uppercase</span>
+                  <span class="dot">•</span>
+                  <span [class.valid]="hasLowercase()">{{ hasLowercase() ? '✔' : '✖' }} Lowercase</span>
+                  <span class="dot">•</span>
+                  <span [class.valid]="hasNumber()">{{ hasNumber() ? '✔' : '✖' }} Number</span>
+                  <span class="dot">•</span>
+                  <span [class.valid]="hasSpecialChar()">{{ hasSpecialChar() ? '✔' : '✖' }} Special</span>
+                </div>
+                <small class="error-msg-text"
+                  *ngIf="changePasswordForm.get('newPassword')?.touched && changePasswordForm.get('newPassword')?.invalid">
+                  <i class="bi bi-exclamation-circle-fill"></i> Please satisfy all password requirements
+                </small>
+              </div>
+
+              <!-- Confirm New Password -->
+              <div class="form-field-group">
+                <label class="form-field-label">Confirm New Password <span class="required-asterisk">*</span></label>
+                <div class="glass-input-wrapper">
+                  <input [type]="showConfirmPwd ? 'text' : 'password'" class="glass-input-control"
+                    formControlName="confirmPassword" placeholder="Confirm New Password"
+                    [(ngModel)]="profileDeatails.changepassword"
+                    autocomplete="new-password">
+                  <i class="bi glass-pwd-toggle cursor-pointer" [ngClass]="showConfirmPwd ? 'bi-eye' : 'bi-eye-slash'"
+                    (click)="showConfirmPwd = !showConfirmPwd"></i>
+                </div>
+                <small class="error-msg-text"
+                  *ngIf="changePasswordForm.get('confirmPassword')?.touched && changePasswordForm.hasError('passwordsMismatch')">
+                  <i class="bi bi-exclamation-circle-fill"></i> Passwords do not match
+                </small>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <!-- ═══ TAB 3: BANKING DETAILS ═══ -->
+        <div class="tab-content-wrapper" *ngIf="activeSection === 'banking'">
+          <div class="form-glass-card">
+            <div class="card-section-heading">
+              <i class="bi bi-lock card-heading-icon"></i>
+              <div>
+                <h2 class="card-heading-title">Manage Your Banking Details</h2>
+                <p class="card-heading-subtext">Your information is encrypted and used only for secure financial operations.</p>
+              </div>
+            </div>
+            <div class="card-heading-divider"></div>
+
+            <form [formGroup]="bankingForm" class="form-grid-2col">
+              <!-- Bank Name -->
+              <div class="form-field-group">
+                <label class="form-field-label">Bank Name <span class="required-asterisk">*</span></label>
+                <div class="glass-input-wrapper">
+                  <i class="bi bi-bank glass-input-icon"></i>
+                  <input type="text" class="glass-input-control" formControlName="bankName"
+                    placeholder="e.g. JPMorgan Chase" [(ngModel)]="bankDetails.bankname"
+                    [disabled]="!isBank"
+                    (ngModelChange)="validateBankField('bankname', $event)"
+                    (blur)="validateBankField('bankname', bankDetails.bankname)">
+                </div>
+                <small class="error-msg-text" *ngIf="bankErrorMessages.bankname">
+                  <i class="bi bi-exclamation-circle-fill"></i> {{ bankErrorMessages.bankname }}
+                </small>
+              </div>
+
+              <!-- Account Holder Name -->
+              <div class="form-field-group">
+                <label class="form-field-label">Account Holder Name <span class="required-asterisk">*</span></label>
+                <div class="glass-input-wrapper">
+                  <i class="bi bi-person-bounding-box glass-input-icon"></i>
+                  <input type="text" class="glass-input-control" formControlName="accountHolder"
+                    placeholder="e.g. Johnathan Doe" [(ngModel)]="bankDetails.acholdername"
+                    [disabled]="!isBank"
+                    (ngModelChange)="validateBankField('acholdername', $event)"
+                    (blur)="validateBankField('acholdername', bankDetails.acholdername)">
+                </div>
+                <small class="error-msg-text" *ngIf="bankErrorMessages.acholdername">
+                  <i class="bi bi-exclamation-circle-fill"></i> {{ bankErrorMessages.acholdername }}
+                </small>
+              </div>
+
+              <!-- Account Number -->
+              <div class="form-field-group">
+                <label class="form-field-label">Account Number <span class="required-asterisk">*</span></label>
+                <div class="glass-input-wrapper">
+                  <i class="bi bi-credit-card-2-front glass-input-icon"></i>
+                  <input type="text" class="glass-input-control" placeholder="••••••••••••"
+                    [disabled]="!isBank" [value]="displayAccountNumber" (input)="onAccountNumberInput($event)"
+                    (focus)="revealAccountNumber()"
+                    (blur)="maskDisplayedAccountNumber(); validateBankField('acnumber', bankDetails.acnumber || '')"
+                    inputmode="numeric" maxlength="24">
+                </div>
+                <small class="error-msg-text" *ngIf="bankErrorMessages.acnumber">
+                  <i class="bi bi-exclamation-circle-fill"></i> {{ bankErrorMessages.acnumber }}
+                </small>
+              </div>
+
+              <!-- IFSC Code -->
+              <div class="form-field-group">
+                <label class="form-field-label">IFSC Code / SWIFT <span class="required-asterisk">*</span></label>
+                <div class="glass-input-wrapper">
+                  <i class="bi bi-hash glass-input-icon"></i>
+                  <input type="text" class="glass-input-control" formControlName="ifsc"
+                    placeholder="e.g. CHASEUS33" [(ngModel)]="bankDetails.ifsc"
+                    [disabled]="!isBank"
+                    (ngModelChange)="validateBankField('ifsc', $event)"
+                    (blur)="validateBankField('ifsc', bankDetails.ifsc)">
+                </div>
+                <small class="error-msg-text" *ngIf="bankErrorMessages.ifsc">
+                  <i class="bi bi-exclamation-circle-fill"></i> {{ bankErrorMessages.ifsc }}
+                </small>
+              </div>
+
+              <!-- Branch Name (Full Width) -->
+              <div class="form-field-group full-width-col">
+                <label class="form-field-label">Branch Name <span class="required-asterisk">*</span></label>
+                <div class="glass-input-wrapper">
+                  <i class="bi bi-signpost-split glass-input-icon"></i>
+                  <input type="text" class="glass-input-control" formControlName="branchName"
+                    placeholder="e.g. Manhattan Corporate Branch" [(ngModel)]="bankDetails.branchname"
+                    [disabled]="!isBank"
+                    (ngModelChange)="validateBankField('branchname', $event)"
+                    (blur)="validateBankField('branchname', bankDetails.branchname)">
+                </div>
+                <small class="error-msg-text" *ngIf="bankErrorMessages.branchname">
+                  <i class="bi bi-exclamation-circle-fill"></i> {{ bankErrorMessages.branchname }}
+                </small>
+              </div>
+
+              <!-- Footer Security & Reset Actions -->
+              <div class="form-field-group full-width-col mt-3">
+                <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 pt-3 border-top border-secondary border-opacity-25">
+                  <div class="d-flex align-items-center gap-2">
+                    <div class="modal-icon-badge" style="width: 32px; height: 32px; font-size: 14px;">
+                      <i class="bi bi-shield-check text-success"></i>
+                    </div>
+                    <span class="text-secondary small">Financial information is end-to-end encrypted.</span>
+                  </div>
+
+                  <div class="d-flex gap-2" *ngIf="isBank">
+                    <button type="button" class="btn-glass-secondary" (click)="onBankingReset()">
+                      Reset Info
+                    </button>
+                    <button type="button" class="btn-glass-secondary" (click)="cancelBankEdit()">
+                      Cancel
+                    </button>
+                    <button type="button" class="btn-solid-red" (click)="handleBankSubmit()" [disabled]="!isBankFormValid()">
+                      {{ button }}
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+
+      </section>
+    </div>
+  </main>
+</div>
+
+<app-error-message *ngIf="!data"></app-error-message>

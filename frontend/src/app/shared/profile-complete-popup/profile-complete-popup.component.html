@@ -1,0 +1,45 @@
+<div class="popup-overlay" *ngIf="visible" (click)="onClose()">
+  <div class="popup-card animate-pop" (click)="$event.stopPropagation()">
+    <!-- Close Button -->
+    <button class="popup-close-btn" (click)="onClose()" aria-label="Close">
+      <i class="bi bi-x-lg"></i>
+    </button>
+
+    <!-- Icon -->
+    <div class="popup-icon-wrapper">
+      <div class="icon-ring">
+        <i class="bi bi-person-exclamation"></i>
+      </div>
+    </div>
+
+    <!-- Title -->
+    <h2 class="popup-title">{{ title }}</h2>
+
+    <!-- Message -->
+    <p class="popup-message">{{ message }}</p>
+
+    <!-- Missing Fields List -->
+    <div class="missing-fields-container" *ngIf="missingFields.length > 0">
+      <p class="missing-fields-label">
+        <i class="bi bi-exclamation-triangle-fill me-1"></i>
+        Missing Information:
+      </p>
+      <div class="missing-fields-list">
+        <span class="missing-field-tag" *ngFor="let field of missingFields">
+          <i class="bi bi-circle-fill me-1" style="font-size: 5px; vertical-align: middle;"></i>
+          {{ field }}
+        </span>
+      </div>
+    </div>
+
+    <!-- Actions -->
+    <div class="popup-actions">
+      <button class="btn-navigate" (click)="onNavigate()">
+        <i class="bi bi-gear-fill me-2"></i>{{ settingsLabel }}
+      </button>
+      <button class="btn-dismiss" (click)="onClose()">
+        Maybe Later
+      </button>
+    </div>
+  </div>
+</div>

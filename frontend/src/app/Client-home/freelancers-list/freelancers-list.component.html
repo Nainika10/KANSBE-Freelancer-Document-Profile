@@ -1,0 +1,142 @@
+<!-- Ambient Photographic Glow Backdrop -->
+<div class="ambient-glow-mesh"></div>
+
+<div class="fl-page-wrapper">
+  <div class="fl-page-content">
+
+    <!-- Header Section -->
+    <div class="fl-header-section">
+      <button type="button" class="fl-btn-back" routerLink="/home/client-projects">
+        <i class="bi bi-arrow-left"></i> Back
+      </button>
+
+      <div class="fl-title-row">
+        <div class="fl-title-col">
+          <h1 class="fl-project-title">{{ projectTitle }}</h1>
+          <p class="fl-subtitle">Select Freelancers</p>
+        </div>
+        <div class="fl-badges-group">
+          <span class="fl-badge-counter" [class.fl-counter-full]="limitReached">
+            <i class="bi bi-person-check-fill"></i> {{ membersAccepted }} / {{ freelancersNeeded }} Selected
+          </span>
+          <span class="fl-badge-available" *ngIf="freelancers.length > 0">
+            {{ freelancers.length }} AVAILABLE
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Limit Reached Banner -->
+    <div *ngIf="limitReached" class="fl-limit-banner">
+      <div class="fl-limit-banner-icon">
+        <i class="bi bi-check-circle-fill"></i>
+      </div>
+      <div class="fl-limit-banner-content">
+        <h4 class="fl-limit-banner-title">Required Freelancers Selected!</h4>
+        <p class="fl-limit-banner-desc">
+          {{ limitMessage || ('You have selected ' + membersAccepted + ' of ' + freelancersNeeded + ' required
+          freelancer(s) for this project.') }}
+        </p>
+      </div>
+    </div>
+
+    <!-- Empty / Scanning Loading State -->
+    <div *ngIf="freelancers.length === 0" class="fl-empty-state">
+      <div class="fl-empty-card">
+        <div class="fl-empty-icon-wrap">
+          <div class="fl-empty-icon-frame">
+            <i class="bi bi-person-check-fill"></i>
+          </div>
+        </div>
+
+        <h2 class="fl-empty-title">
+          {{ progress < 100 ? 'Identifying Expert Matches' : 'Finding the Best Freelancers for You!' }} </h2>
+
+            <p class="fl-empty-subtitle">
+              {{ progress < 100
+                ? 'We are currently reviewing our global talent pool to identify the professionals who best align with your project objectives and technical requirements.'
+                : 'We are handpicking top-tier freelancers for your project. We will notify you very shortly as soon as your custom talent matches are ready!'
+                }} </p>
+
+                <div class="fl-scanning-indicator" *ngIf="progress < 100">
+                  <div class="fl-scan-bar-wrap">
+                    <div class="fl-scan-bar-labels">
+                      <span class="fl-scan-label">Scanning Talent Pool</span>
+                      <span class="fl-scan-pct">{{ progress }}%</span>
+                    </div>
+                    <div class="fl-scan-bar-track">
+                      <div class="fl-scan-bar-fill" [style.width.%]="progress"></div>
+                    </div>
+                  </div>
+                  <p class="fl-scan-status-text">SECURELY FETCHING TALENT PROFILES...</p>
+                </div>
+      </div>
+
+      <!-- Assurance Card -->
+      <div class="fl-assurance-card">
+        <div class="fl-assurance-icon"><i class="bi bi-shield-check"></i></div>
+        <div class="fl-assurance-text">
+          <h6>Verified Professionals Only</h6>
+          <p>Every expert in our pool undergoes rigorous skill verification and background checks.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Freelancer Cards Grid/Stack (Matching Design Reference) -->
+    <div class="fl-cards-section" *ngIf="freelancers.length > 0">
+      <div *ngFor="let freelancer of freelancers" class="fl-freelancer-card">
+
+        <!-- Left Column: Avatar, ID, Name, Role, Match Info -->
+        <div class="fl-card-left">
+          <div class="fl-avatar-circle">
+            <img *ngIf="freelancer.avatar && !freelancer.avatar.includes('placeholder')" [src]="freelancer.avatar"
+              [alt]="freelancer.name">
+            <div *ngIf="!freelancer.avatar || freelancer.avatar.includes('placeholder')" class="fl-avatar-initials">
+              {{ getInitials(freelancer.name) }}
+            </div>
+          </div>
+
+          <div class="fl-info-col">
+            <span class="fl-freelancer-id">ID: {{ freelancer.id }}</span>
+            <h3 class="fl-freelancer-name">{{ freelancer.name }}</h3>
+            <span class="fl-freelancer-role">{{ freelancer.title || 'VERIFIED FREELANCER' }}</span>
+            <p class="fl-match-line">
+              <i class="bi bi-bag-check-fill"></i> Matching your project needs
+            </p>
+            <span class="fl-match-badge">{{ freelancer.matchPercentage || 95 }}% Match</span>
+          </div>
+        </div>
+
+        <!-- Center Column: Key Skills Pills -->
+        <div class="fl-card-center">
+          <h4 class="fl-skills-label">KEY SKILLS</h4>
+          <div class="fl-skills-badges" *ngIf="freelancer.skills && freelancer.skills.length > 0; else noSkillsTpl">
+            <span *ngFor="let skill of freelancer.skills" class="fl-skill-pill">{{ skill }}</span>
+          </div>
+          <ng-template #noSkillsTpl>
+            <p class="fl-no-skills-text">No specific skills listed</p>
+          </ng-template>
+          <button type="button" class="fl-btn-resume" (click)="viewResume(freelancer)">
+            <i class="bi bi-file-earmark-text"></i> View Resume
+          </button>
+          <button type="button" class="fl-btn-view" (click)="viewClientProfile(freelancer)">
+            <i class="bi bi-file-earmark-person"></i> View Client Profile
+          </button>
+        </div>
+
+        <!-- Right Column: Decision Action Buttons -->
+        <div class="fl-card-right">
+          <button type="button" class="fl-btn-accept" [disabled]="limitReached"
+            (click)="updateDecision(freelancer, 'accepted')">
+            <i class="bi bi-check2"></i> Accept
+          </button>
+          <!-- <button type="button" class="fl-btn-reject" (click)="updateDecision(freelancer, 'rejected')">
+            <i class="bi bi-x-lg"></i> Reject
+          </button> -->
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</div>
