@@ -1,0 +1,10 @@
+fastapi
+uvicorn
+python-multipart
+python-dotenv
+anyio
+pymupdf
+python-docx
+presidio-analyzer
+presidio-anonymizer
+spacy
